@@ -8,6 +8,9 @@ public class CharacterMovementController : MonoBehaviour
     [SerializeField] private CharacterStatesData characterStatesData;
     [SerializeField] private CharacterObjectService characterObjectService;
     [SerializeField] private CharacterObjectsData characterObjectsData;
+    [SerializeField] private CharacterAnimationController characterAnimationController;
+
+    private CharacterLowerAnimation _currentLowerAnimation;
 
     private void Start()
     {
@@ -18,6 +21,7 @@ public class CharacterMovementController : MonoBehaviour
     private void Update()
     {
         ApplyRotation();
+        UpdateAnimations();
     }
 
     private void FixedUpdate()
@@ -203,6 +207,65 @@ public class CharacterMovementController : MonoBehaviour
     public void Rotate(Vector3 lookInput)
     {
         characterStatesData.lookInput = lookInput;
+    }
+
+    private void UpdateAnimations()
+    {
+        if (characterAnimationController == null) return;
+
+        CharacterLowerAnimation nextAnim = DetermineLowerAnimation();
+        if (nextAnim != _currentLowerAnimation)
+        {
+            _currentLowerAnimation = nextAnim;
+            characterAnimationController.PlayLowerAnimation(_currentLowerAnimation);
+        }
+    }
+
+    private CharacterLowerAnimation DetermineLowerAnimation()
+    {
+        if (characterStatesData.flyFlag)
+        {
+            if (characterStatesData.fastFlyFlag) return CharacterLowerAnimation.fast_fly;
+
+            if (characterStatesData.inputAxes.sqrMagnitude < 0.01f) return CharacterLowerAnimation.fly_idle;
+
+            // Prioritize vertical axis for forward/backward, horizontal for strafing
+            if (Mathf.Abs(characterStatesData.inputAxes.y) >= Mathf.Abs(characterStatesData.inputAxes.x))
+            {
+                return characterStatesData.inputAxes.y > 0 ? CharacterLowerAnimation.fly_forward : CharacterLowerAnimation.fly_backward;
+            }
+            else
+            {
+                return characterStatesData.inputAxes.x > 0 ? CharacterLowerAnimation.fly_right : CharacterLowerAnimation.fly_left;
+            }
+        }
+        else
+        {
+            // If not flying and not on the ground, play jump or fall
+            if (!characterObjectService.IsGrounded)
+            {
+                return characterObjectService.Velocity.y > 0 ? CharacterLowerAnimation.jump : CharacterLowerAnimation.fall;
+            }
+
+            if (characterStatesData.inputAxes.sqrMagnitude < 0.01f) return CharacterLowerAnimation.ground_idle;
+
+            bool isSprinting = characterStatesData.sprintFlag;
+
+            if (Mathf.Abs(characterStatesData.inputAxes.y) >= Mathf.Abs(characterStatesData.inputAxes.x))
+            {
+                if (characterStatesData.inputAxes.y > 0)
+                    return isSprinting ? CharacterLowerAnimation.sprint_forward : CharacterLowerAnimation.walking_forward;
+                else
+                    return isSprinting ? CharacterLowerAnimation.sprint_backward : CharacterLowerAnimation.walking_backward;
+            }
+            else
+            {
+                if (characterStatesData.inputAxes.x > 0)
+                    return isSprinting ? CharacterLowerAnimation.sprint_right : CharacterLowerAnimation.walking_right;
+                else
+                    return isSprinting ? CharacterLowerAnimation.sprint_left : CharacterLowerAnimation.walking_left;
+            }
+        }
     }
 
     [ContextMenu("Test Knock Away")]

@@ -101,7 +101,20 @@ public class CharacterObjectService : MonoBehaviour
     {
         if (direction == Vector3.zero) return;
 
-        transform.up = direction;
+        Vector3 flightUp = direction.normalized;
+        Vector3 worldRelativeUp = Vector3.up;
+
+        // Avoid gimbal lock/zero cross product when flying perfectly vertical
+        if (Mathf.Abs(Vector3.Dot(flightUp, worldRelativeUp)) > 0.99f)
+        {
+            worldRelativeUp = Vector3.forward;
+        }
+
+        // Calculate a stable 'chest' direction that prevents the character from rolling/spinning
+        Vector3 shoulders = Vector3.Cross(flightUp, worldRelativeUp).normalized;
+        Vector3 chest = Vector3.Cross(shoulders, flightUp).normalized * -1;
+
+        transform.rotation = Quaternion.LookRotation(chest, flightUp);
     }
 
     public void Dash(Vector3 direction, float force, float duration)
