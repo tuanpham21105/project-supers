@@ -1,0 +1,76 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraController : MonoBehaviour
+{
+    private Transform horizontalRotator;
+    private Transform verticalRotator;
+    private Transform cameraObject;
+    [SerializeField] private Transform character;
+    private float yaw;
+    private float pitch;
+    [SerializeField] private float cameraRadius = 0.2f;
+    [SerializeField] private Vector3 offset = new Vector3(0, 1.5f, -5f);
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        horizontalRotator = transform;
+        verticalRotator = transform.GetChild(0);
+        cameraObject = verticalRotator.GetChild(0);
+
+        // Initialize from current rotation
+        yaw = horizontalRotator.eulerAngles.y;
+        pitch = verticalRotator.localEulerAngles.x;
+        if (pitch > 180) pitch -= 360;
+    }
+
+    void LateUpdate()
+    {
+        if (character != null)
+        {
+            horizontalRotator.position = character.position;
+        }
+
+        HandleCameraCollision();
+    }
+
+    private void HandleCameraCollision()
+    {
+        // Direction from pivot to desired camera position based on offset
+        Vector3 desiredLocalPos = offset;
+        Vector3 desiredWorldPos = verticalRotator.TransformPoint(desiredLocalPos);
+        Vector3 dir = (desiredWorldPos - verticalRotator.position).normalized;
+        float maxDistance = offset.magnitude;
+
+        int layerMask = ~LayerMask.GetMask("Character");
+        RaycastHit hit;
+
+        if (Physics.SphereCast(verticalRotator.position, cameraRadius, dir, out hit, maxDistance, layerMask))
+        {
+            // If we hit something, place camera at hit point (slightly offset forward to avoid clipping into the hit wall)
+            cameraObject.position = hit.point + (verticalRotator.position - hit.point).normalized * 0.1f;
+        }
+        else
+        {
+            // Otherwise, stay at default offset
+            cameraObject.localPosition = desiredLocalPos;
+        }
+    }
+
+    public Vector3 GetCameraDirection()
+    {
+        return verticalRotator.forward;
+    }
+
+    public void Rotate(Vector2 lookInput)
+    {
+        yaw += lookInput.x;
+        pitch -= lookInput.y;
+        pitch = Mathf.Clamp(pitch, -89f, 89f);
+
+        horizontalRotator.rotation = Quaternion.Euler(0, yaw, 0);
+        verticalRotator.localRotation = Quaternion.Euler(pitch, 0, 0);
+    }
+}
