@@ -27,6 +27,8 @@ public class CharacterMovementController : MonoBehaviour
 
     private void ApplyRotation()
     {
+        if (characterStatesData.knockAwayFlag) return;
+
         Vector3 lookDir = characterStatesData.lookInput;
 
         if (characterStatesData.fastFlyFlag)
@@ -42,6 +44,8 @@ public class CharacterMovementController : MonoBehaviour
 
     private void HandleMovement()
     {
+        if (characterStatesData.knockAwayFlag) return;
+
         Vector3 moveDirection = GetCurrentMoveDirection();
         characterStatesData.direction = moveDirection;
 
@@ -199,5 +203,31 @@ public class CharacterMovementController : MonoBehaviour
     public void Rotate(Vector3 lookInput)
     {
         characterStatesData.lookInput = lookInput;
+    }
+
+    [ContextMenu("Test Knock Away")]
+    public void KnockAwayTest()
+    {
+        // For testing, push character back relative to current facing
+        Vector3 pushDirection = -characterObjectService.CharacterTransform.forward;
+        // Also add a little upward lift for flair
+        pushDirection += Vector3.up * 1f;
+        StartCoroutine(KnockAwayCoroutine(pushDirection.normalized, 200f, 0.8f));
+    }
+
+    private IEnumerator KnockAwayCoroutine(Vector3 direction, float force, float duration)
+    {
+        characterStatesData.knockAwayFlag = true;
+
+        // Reset input states to prevent immediate movement after knockback ends
+        characterStatesData.inputAxes = Vector2.zero;
+        characterStatesData.moveFlag = false;
+
+        // Apply knockback force
+        characterObjectService.ApplyForce(direction * force);
+
+        yield return new WaitForSeconds(duration);
+
+        characterStatesData.knockAwayFlag = false;
     }
 }

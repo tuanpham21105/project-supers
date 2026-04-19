@@ -8,6 +8,8 @@ public class CharacterObjectService : MonoBehaviour
     [SerializeField] private CharacterController characterController;
 
     [SerializeField] private bool gravity;
+    [SerializeField] private float impactBuildUpSpeed = 10f;
+    [SerializeField] private float impactDecaySpeed = 1f;
 
     public bool IsGrounded => characterController.isGrounded;
     public Transform CharacterTransform => transform;
@@ -15,6 +17,7 @@ public class CharacterObjectService : MonoBehaviour
 
     private float _verticalVelocity;
     private Vector3 _impactForce;
+    private Vector3 _targetImpactForce;
     private Vector3 _dashForce;
     private float _dashTimer;
     private Vector3 _horizontalMove;
@@ -44,11 +47,15 @@ public class CharacterObjectService : MonoBehaviour
         combinedMove.y += _verticalVelocity;
 
         // 3. Handle Impact Forces
-        if (_impactForce.magnitude > 0.2f)
+        // Build up towards the target force
+        _impactForce = Vector3.MoveTowards(_impactForce, _targetImpactForce, impactBuildUpSpeed * Time.fixedDeltaTime);
+        // Decay the target force over time
+        _targetImpactForce = Vector3.Lerp(_targetImpactForce, Vector3.zero, impactDecaySpeed * Time.fixedDeltaTime);
+
+        if (_impactForce.magnitude > 0.1f)
         {
             combinedMove += _impactForce;
         }
-        _impactForce = Vector3.Lerp(_impactForce, Vector3.zero, 5f * Time.fixedDeltaTime);
 
         // 4. Handle Dash
         if (_dashTimer > 0)
@@ -80,7 +87,7 @@ public class CharacterObjectService : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        _impactForce += force;
+        _targetImpactForce += force;
     }
 
     public void RotateToDirection(Vector3 direction)
