@@ -1100,6 +1100,7 @@ MonoBehaviour:
   gravity: 1
   impactBuildUpSpeed: 24
   impactDecaySpeed: 2
+  rotationSpeed: 2
 --- !u!114 &1656352639
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -43,7 +43,7 @@ public class CharacterAnimationController : MonoBehaviour
     {
         if (animator != null)
         {
-            animator.CrossFade(animation.ToString(), 0.1f);
+            animator.CrossFade(animation.ToString(), 0.3f);
         }
     }
 }

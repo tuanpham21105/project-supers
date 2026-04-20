@@ -10,6 +10,7 @@ public class CharacterObjectService : MonoBehaviour
     [SerializeField] private bool gravity;
     [SerializeField] private float impactBuildUpSpeed = 10f;
     [SerializeField] private float impactDecaySpeed = 1f;
+    [SerializeField] private float rotationSpeed = 10f;
 
     public bool IsGrounded => characterController.isGrounded;
     public Transform CharacterTransform => transform;
@@ -114,8 +115,10 @@ public class CharacterObjectService : MonoBehaviour
         Vector3 shoulders = Vector3.Cross(flightUp, worldRelativeUp).normalized;
         Vector3 chest = Vector3.Cross(shoulders, flightUp).normalized * -1;
 
-        transform.rotation = Quaternion.LookRotation(chest, flightUp);
+        Quaternion targetRotation = Quaternion.LookRotation(chest, flightUp);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
     }
+
 
     public void Dash(Vector3 direction, float force, float duration)
     {
