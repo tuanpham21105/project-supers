@@ -17,6 +17,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public bool flyUpInput;
     public bool flyDownInput;
     public bool normalAttackInput;
+    public bool strikeAttackInput;
     public float verticalRotationInput;
     public float horizontalRotationInput;
 
@@ -37,7 +38,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     {
         keybinds = PlayerKeyboardAndMouseKeybindsData.playerKeyboardAndMouseKeybindsData;
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        Cursor.visible = false;
     }
 
     private void OnDisable()
@@ -60,6 +61,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         FlyDownInput();
         NormalAttackInput();
         RotationInput();
+        StrikeAttackInput();
     }
 
     private void FixedUpdate()
@@ -162,7 +164,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     public override void NormalAttackInput()
     {
-        bool currentInput = ProcessInput(keybinds.attackKey, normalAttackInput);
+        bool currentInput = ProcessInput(keybinds.normalAttackKey, normalAttackInput);
         if (currentInput != normalAttackInput)
         {
             normalAttackInput = currentInput;
@@ -170,6 +172,18 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
         if (normalAttackInput)
             characterAttackController.StartNormalAttack();
+    }
+
+    public override void StrikeAttackInput()
+    {
+        bool currentInput = ProcessInput(keybinds.strikeAttackKey, strikeAttackInput);
+        if (currentInput != strikeAttackInput)
+        {
+            strikeAttackInput = currentInput;
+        }
+
+        if (strikeAttackInput)
+            characterAttackController.StartStrikeAttack();
     }
 
     public override void RotationInput()

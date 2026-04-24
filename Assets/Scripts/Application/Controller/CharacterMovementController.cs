@@ -62,6 +62,10 @@ public class CharacterMovementController : MonoBehaviour
         // Skip normal movement if dashing to prevent force accumulation
         if (characterStatesData.dashFlag) return;
 
+        // Prevent movement during strike attacks
+        if (characterStatesData.strikeAttackStartFlag || characterStatesData.strikeAttackOngoingFlag || characterStatesData.strikeAttackEndFlag)
+            return;
+
         float currentSpeed = 0;
 
         if (characterStatesData.flyFlag)
@@ -221,8 +225,17 @@ public class CharacterMovementController : MonoBehaviour
         }
     }
 
+    public void ForceRefreshBodyAnimation()
+    {
+        _currentBodyAnimation = (CharacterBodyAnimation)(-1); // Use an invalid value to force update
+        UpdateAnimations();
+    }
+
     private CharacterBodyAnimation DetermineBodyAnimation()
     {
+        if (characterStatesData.strikeAttackStartFlag || characterStatesData.strikeAttackOngoingFlag || characterStatesData.strikeAttackEndFlag)
+            return _currentBodyAnimation;
+
         if (characterStatesData.flyFlag)
         {
             if (characterStatesData.attackFlag) return CharacterBodyAnimation.fly_forward;

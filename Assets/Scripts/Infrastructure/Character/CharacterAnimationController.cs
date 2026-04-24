@@ -20,13 +20,15 @@ public enum CharacterBodyAnimation
     fly_left,
     fast_fly,
     jump,
-    fall
+    fall,
+    strike_attack_1,
+    strike_attack_2
 }
 
 public enum CharacterUpperAnimation
 {
     normal_attack_1,
-    normal_attack_2
+    normal_attack_2,
 }
 
 public class CharacterAnimationController : MonoBehaviour
@@ -38,6 +40,13 @@ public class CharacterAnimationController : MonoBehaviour
     {
         CharacterUpperAnimation.normal_attack_1,
         CharacterUpperAnimation.normal_attack_2
+    };
+
+    private int strikeAttackComboIndex = 0;
+    private List<CharacterBodyAnimation> strikeAttackCombo = new List<CharacterBodyAnimation>
+    {
+        CharacterBodyAnimation.strike_attack_1,
+        CharacterBodyAnimation.strike_attack_2
     };
 
     // Start is called before the first frame update
@@ -52,11 +61,14 @@ public class CharacterAnimationController : MonoBehaviour
 
     }
 
-    public void PlayBodyAnimation(CharacterBodyAnimation animation)
+    public void PlayBodyAnimation(CharacterBodyAnimation animation, float normalizedTimeOffset = -1f)
     {
         if (animator != null)
         {
-            animator.CrossFade(animation.ToString(), 0.3f, 0);
+            if (normalizedTimeOffset >= 0)
+                animator.CrossFade(animation.ToString(), 0.1f, 0, normalizedTimeOffset);
+            else
+                animator.CrossFade(animation.ToString(), 0.3f, 0);
         }
     }
 
@@ -90,6 +102,29 @@ public class CharacterAnimationController : MonoBehaviour
     public void ResetNormalAttackCombo()
     {
         normalAttackComboIndex = 0;
+    }
+
+    public void PlayStrikeAttack(bool isContinuing)
+    {
+        if (isContinuing)
+        {
+            strikeAttackComboIndex++;
+            if (strikeAttackComboIndex >= strikeAttackCombo.Count)
+            {
+                strikeAttackComboIndex = 0;
+            }
+        }
+        else
+        {
+            strikeAttackComboIndex = 0;
+        }
+
+        PlayBodyAnimation(strikeAttackCombo[strikeAttackComboIndex], 0f);
+    }
+
+    public void ResetStrikeAttackCombo()
+    {
+        strikeAttackComboIndex = 0;
     }
 
     public void EndUpperAnimation()

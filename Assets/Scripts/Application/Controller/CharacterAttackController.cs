@@ -23,6 +23,9 @@ public class CharacterAttackController : MonoBehaviour
                 animationEvents.OnNormalAttackOngoing += HandleNormalAttackOngoing;
                 animationEvents.OnNormalAttackEndOngoing += HandleNormalAttackEndOngoing;
                 animationEvents.OnNormalAttackEnd += HandleNormalAttackEnd;
+                animationEvents.OnStrikeAttackOngoing += HandleStrikeAttackOngoing;
+                animationEvents.OnStrikeAttackEndOngoing += HandleStrikeAttackEndOngoing;
+                animationEvents.OnStrikeAttackEnd += HandleStrikeAttackEnd;
             }
         }
     }
@@ -34,6 +37,9 @@ public class CharacterAttackController : MonoBehaviour
             animationEvents.OnNormalAttackOngoing -= HandleNormalAttackOngoing;
             animationEvents.OnNormalAttackEndOngoing -= HandleNormalAttackEndOngoing;
             animationEvents.OnNormalAttackEnd -= HandleNormalAttackEnd;
+            animationEvents.OnStrikeAttackOngoing -= HandleStrikeAttackOngoing;
+            animationEvents.OnStrikeAttackEndOngoing -= HandleStrikeAttackEndOngoing;
+            animationEvents.OnStrikeAttackEnd -= HandleStrikeAttackEnd;
         }
     }
 
@@ -43,10 +49,19 @@ public class CharacterAttackController : MonoBehaviour
 
         bool isContinuing = characterStatesData.normalAttackEndFlag;
         
-        PlayAttackAnimation(isContinuing);
+        PlayNormalAttack(isContinuing);
     }
 
-    private void PlayAttackAnimation(bool isContinuing)
+    public void StartStrikeAttack()
+    {
+        if (characterStatesData.attackFlag) return;
+
+        bool isContinuing = characterStatesData.strikeAttackEndFlag;
+
+        PlayStrikeAttack(isContinuing);
+    }
+
+    private void PlayNormalAttack(bool isContinuing)
     {
         characterStatesData.attackFlag = true;
         characterStatesData.normalAttackStartFlag = true;
@@ -56,6 +71,19 @@ public class CharacterAttackController : MonoBehaviour
         if (animationController != null)
         {
             animationController.PlayNormalAttack(isContinuing);
+        }
+    }
+
+    private void PlayStrikeAttack(bool isContinuing)
+    {
+        characterStatesData.attackFlag = true;
+        characterStatesData.strikeAttackStartFlag = true;
+        characterStatesData.strikeAttackOngoingFlag = false;
+        characterStatesData.strikeAttackEndFlag = false;
+
+        if (animationController != null)
+        {
+            animationController.PlayStrikeAttack(isContinuing);
         }
     }
 
@@ -82,6 +110,37 @@ public class CharacterAttackController : MonoBehaviour
         {
             animationController.ResetNormalAttackCombo();
             animationController.EndUpperAnimation();
+        }
+    }
+
+    private void HandleStrikeAttackOngoing()
+    {
+        characterStatesData.strikeAttackStartFlag = false;
+        characterStatesData.strikeAttackOngoingFlag = true;
+    }
+
+    private void HandleStrikeAttackEndOngoing()
+    {
+        characterStatesData.attackFlag = false;
+        characterStatesData.strikeAttackEndFlag = true;
+    }
+
+    private void HandleStrikeAttackEnd()
+    {
+        characterStatesData.attackFlag = false;
+        characterStatesData.strikeAttackStartFlag = false;
+        characterStatesData.strikeAttackOngoingFlag = false;
+        characterStatesData.strikeAttackEndFlag = false;
+
+        if (animationController != null)
+        {
+            animationController.ResetStrikeAttackCombo();
+            // Force the movement controller to refresh its animation state
+            CharacterMovementController movementController = GetComponent<CharacterMovementController>();
+            if (movementController != null)
+            {
+                movementController.ForceRefreshBodyAnimation();
+            }
         }
     }
 }

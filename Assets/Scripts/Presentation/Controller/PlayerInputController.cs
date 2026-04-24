@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class PlayerInputController : MonoBehaviour
 {
     public static PlayerInputController instance;
-    
+
     public abstract void MoveDirectionInput();
     public abstract void SprintInput();
     public abstract void DashInput();
@@ -14,6 +14,7 @@ public abstract class PlayerInputController : MonoBehaviour
     public abstract void FlyUpInput();
     public abstract void FlyDownInput();
     public abstract void NormalAttackInput();
+    public abstract void StrikeAttackInput();
     public abstract void RotationInput();
 }
 

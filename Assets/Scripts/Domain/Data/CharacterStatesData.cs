@@ -17,6 +17,9 @@ public class CharacterStatesData : MonoBehaviour
     public bool normalAttackStartFlag;
     public bool normalAttackOngoingFlag;
     public bool normalAttackEndFlag;
+    public bool strikeAttackStartFlag;
+    public bool strikeAttackOngoingFlag;
+    public bool strikeAttackEndFlag;
     public bool knockAwayFlag;
 
     public float moveSpeed;

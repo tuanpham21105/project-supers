@@ -33,7 +33,8 @@ public class PlayerKeyboardAndMouseKeybindsData : MonoBehaviour
 {
     public static PlayerKeyboardAndMouseKeybindsData playerKeyboardAndMouseKeybindsData;
 
-    private void Awake() {
+    private void Awake()
+    {
         playerKeyboardAndMouseKeybindsData = this;
     }
 
@@ -51,6 +52,7 @@ public class PlayerKeyboardAndMouseKeybindsData : MonoBehaviour
     public Keybind toggleFlyKey = new Keybind(KeyCode.Space, KeyMode.DoubleClick, ActivateAction.Toggle);
     public Keybind flyUpKey = new Keybind(KeyCode.Space, KeyMode.Click, ActivateAction.Hold);
     public Keybind flyDownKey = new Keybind(KeyCode.LeftControl, KeyMode.Click, ActivateAction.Hold);
-    public Keybind attackKey = new Keybind(KeyCode.Mouse0, KeyMode.Click, ActivateAction.Hold);
+    public Keybind normalAttackKey = new Keybind(KeyCode.Mouse0, KeyMode.Click, ActivateAction.Hold);
+    public Keybind strikeAttackKey = new Keybind(KeyCode.E, KeyMode.Click, ActivateAction.Hold);
 }
 

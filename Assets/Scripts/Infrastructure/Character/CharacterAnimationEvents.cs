@@ -7,6 +7,9 @@ public class CharacterAnimationEvents : MonoBehaviour
     public event System.Action OnNormalAttackOngoing;
     public event System.Action OnNormalAttackEndOngoing;
     public event System.Action OnNormalAttackEnd;
+    public event System.Action OnStrikeAttackOngoing;
+    public event System.Action OnStrikeAttackEndOngoing;
+    public event System.Action OnStrikeAttackEnd;
 
     public void EmitNormalAttackOngoing()
     {
@@ -21,5 +24,20 @@ public class CharacterAnimationEvents : MonoBehaviour
     public void EmitNormalAttackEnd()
     {
         OnNormalAttackEnd?.Invoke();
+    }
+
+    public void EmitStrikeAttackOngoing()
+    {
+        OnStrikeAttackOngoing?.Invoke();
+    }
+
+    public void EmitStrikeAttackEndOngoing()
+    {
+        OnStrikeAttackEndOngoing?.Invoke();
+    }
+
+    public void EmitStrikeAttackEnd()
+    {
+        OnStrikeAttackEnd?.Invoke();
     }
 }
