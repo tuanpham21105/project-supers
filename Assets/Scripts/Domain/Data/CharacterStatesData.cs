@@ -13,6 +13,10 @@ public class CharacterStatesData : MonoBehaviour
     public bool flyUpFlag;
     public bool flyDownFlag;
     public bool fastFlyFlag;
+    public bool attackFlag;
+    public bool normalAttackStartFlag;
+    public bool normalAttackOngoingFlag;
+    public bool normalAttackEndFlag;
     public bool knockAwayFlag;
 
     public float moveSpeed;

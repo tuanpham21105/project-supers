@@ -10,7 +10,7 @@ public class CharacterMovementController : MonoBehaviour
     [SerializeField] private CharacterObjectsData characterObjectsData;
     [SerializeField] private CharacterAnimationController characterAnimationController;
 
-    private CharacterLowerAnimation _currentLowerAnimation;
+    private CharacterBodyAnimation _currentBodyAnimation;
 
     private void Start()
     {
@@ -35,7 +35,7 @@ public class CharacterMovementController : MonoBehaviour
 
         Vector3 lookDir = characterStatesData.lookInput;
 
-        if (characterStatesData.fastFlyFlag)
+        if (characterStatesData.fastFlyFlag && !characterStatesData.attackFlag)
         {
             characterObjectService.FastFlyingRotate(lookDir);
         }
@@ -54,9 +54,9 @@ public class CharacterMovementController : MonoBehaviour
         characterStatesData.direction = moveDirection;
 
         // Activate fast fly flag: Flying + Sprinting + Only Forward input
-        characterStatesData.fastFlyFlag = characterStatesData.flyFlag && 
-                                         characterStatesData.sprintFlag && 
-                                         characterStatesData.inputAxes.y > 0 && 
+        characterStatesData.fastFlyFlag = characterStatesData.flyFlag &&
+                                         characterStatesData.sprintFlag &&
+                                         characterStatesData.inputAxes.y > 0 &&
                                          Mathf.Abs(characterStatesData.inputAxes.x) < 0.1f;
 
         // Skip normal movement if dashing to prevent force accumulation
@@ -68,7 +68,7 @@ public class CharacterMovementController : MonoBehaviour
         {
             if (characterStatesData.sprintFlag)
             {
-                if (characterStatesData.fastFlyFlag)
+                if (characterStatesData.fastFlyFlag && !characterStatesData.attackFlag)
                     currentSpeed = characterStatsData.flySpeed + characterStatsData.flySprintAdditionalSpeed;
                 else
                     currentSpeed = characterStatsData.flySpeed + characterStatsData.sprintAdditionalSpeed;
@@ -117,8 +117,8 @@ public class CharacterMovementController : MonoBehaviour
             if (characterStatesData.flyDownFlag) moveDirection += Vector3.down;
         }
 
-        if (characterStatesData.fastFlyFlag)
-            moveDirection = characterObjectsData.characterObject.transform.up;
+        if (characterStatesData.fastFlyFlag && !characterStatesData.attackFlag)
+            moveDirection = characterObjectsData.characterObject.transform.forward;
 
         return moveDirection.normalized;
     }
@@ -152,7 +152,7 @@ public class CharacterMovementController : MonoBehaviour
     private IEnumerator DashCoroutine()
     {
         characterStatesData.dashFlag = true;
-        
+
         // Calculate dash direction: prioritizing actual movement direction (velocity)
         Vector3 currentVelocity = characterObjectService.Velocity;
         Vector3 dashDirection = currentVelocity;
@@ -213,30 +213,32 @@ public class CharacterMovementController : MonoBehaviour
     {
         if (characterAnimationController == null) return;
 
-        CharacterLowerAnimation nextAnim = DetermineLowerAnimation();
-        if (nextAnim != _currentLowerAnimation)
+        CharacterBodyAnimation nextAnim = DetermineBodyAnimation();
+        if (nextAnim != _currentBodyAnimation)
         {
-            _currentLowerAnimation = nextAnim;
-            characterAnimationController.PlayLowerAnimation(_currentLowerAnimation);
+            _currentBodyAnimation = nextAnim;
+            characterAnimationController.PlayBodyAnimation(_currentBodyAnimation);
         }
     }
 
-    private CharacterLowerAnimation DetermineLowerAnimation()
+    private CharacterBodyAnimation DetermineBodyAnimation()
     {
         if (characterStatesData.flyFlag)
         {
-            if (characterStatesData.fastFlyFlag) return CharacterLowerAnimation.fast_fly;
+            if (characterStatesData.attackFlag) return CharacterBodyAnimation.fly_forward;
 
-            if (characterStatesData.inputAxes.sqrMagnitude < 0.01f) return CharacterLowerAnimation.fly_idle;
+            if (characterStatesData.fastFlyFlag) return CharacterBodyAnimation.fast_fly;
+
+            if (characterStatesData.inputAxes.sqrMagnitude < 0.01f) return CharacterBodyAnimation.fly_idle;
 
             // Prioritize vertical axis for forward/backward, horizontal for strafing
             if (Mathf.Abs(characterStatesData.inputAxes.y) >= Mathf.Abs(characterStatesData.inputAxes.x))
             {
-                return characterStatesData.inputAxes.y > 0 ? CharacterLowerAnimation.fly_forward : CharacterLowerAnimation.fly_backward;
+                return characterStatesData.inputAxes.y > 0 ? CharacterBodyAnimation.fly_forward : CharacterBodyAnimation.fly_backward;
             }
             else
             {
-                return characterStatesData.inputAxes.x > 0 ? CharacterLowerAnimation.fly_right : CharacterLowerAnimation.fly_left;
+                return characterStatesData.inputAxes.x > 0 ? CharacterBodyAnimation.fly_right : CharacterBodyAnimation.fly_left;
             }
         }
         else
@@ -244,26 +246,26 @@ public class CharacterMovementController : MonoBehaviour
             // If not flying and not on the ground, play jump or fall
             if (!characterObjectService.IsGrounded)
             {
-                return characterObjectService.Velocity.y > 0 ? CharacterLowerAnimation.jump : CharacterLowerAnimation.fall;
+                return characterObjectService.Velocity.y > 0 ? CharacterBodyAnimation.jump : CharacterBodyAnimation.fall;
             }
 
-            if (characterStatesData.inputAxes.sqrMagnitude < 0.01f) return CharacterLowerAnimation.ground_idle;
+            if (characterStatesData.inputAxes.sqrMagnitude < 0.01f) return CharacterBodyAnimation.ground_idle;
 
             bool isSprinting = characterStatesData.sprintFlag;
 
             if (Mathf.Abs(characterStatesData.inputAxes.y) >= Mathf.Abs(characterStatesData.inputAxes.x))
             {
                 if (characterStatesData.inputAxes.y > 0)
-                    return isSprinting ? CharacterLowerAnimation.sprint_forward : CharacterLowerAnimation.walking_forward;
+                    return isSprinting ? CharacterBodyAnimation.sprint_forward : CharacterBodyAnimation.walking_forward;
                 else
-                    return isSprinting ? CharacterLowerAnimation.sprint_backward : CharacterLowerAnimation.walking_backward;
+                    return isSprinting ? CharacterBodyAnimation.sprint_backward : CharacterBodyAnimation.walking_backward;
             }
             else
             {
                 if (characterStatesData.inputAxes.x > 0)
-                    return isSprinting ? CharacterLowerAnimation.sprint_right : CharacterLowerAnimation.walking_right;
+                    return isSprinting ? CharacterBodyAnimation.sprint_right : CharacterBodyAnimation.walking_right;
                 else
-                    return isSprinting ? CharacterLowerAnimation.sprint_left : CharacterLowerAnimation.walking_left;
+                    return isSprinting ? CharacterBodyAnimation.sprint_left : CharacterBodyAnimation.walking_left;
             }
         }
     }

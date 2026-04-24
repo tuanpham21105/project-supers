@@ -5,4 +5,5 @@ using UnityEngine;
 public class CharacterObjectsData : MonoBehaviour
 {
     public GameObject characterObject;
+    public Transform characterMesh;
 }

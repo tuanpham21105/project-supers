@@ -6,6 +6,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 {
     private PlayerKeyboardAndMouseKeybindsData keybinds;
     [SerializeField] private CharacterMovementController characterMovementController;
+    [SerializeField] private CharacterAttackController characterAttackController;
     [SerializeField] private CameraController cameraController;
 
     public Vector2 moveDirectionInput;
@@ -15,6 +16,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public bool jumpInput;
     public bool flyUpInput;
     public bool flyDownInput;
+    public bool normalAttackInput;
     public float verticalRotationInput;
     public float horizontalRotationInput;
 
@@ -35,7 +37,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     {
         keybinds = PlayerKeyboardAndMouseKeybindsData.playerKeyboardAndMouseKeybindsData;
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.visible = true;
     }
 
     private void OnDisable()
@@ -56,6 +58,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         JumpInput();
         FlyUpInput();
         FlyDownInput();
+        NormalAttackInput();
         RotationInput();
     }
 
@@ -155,6 +158,18 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
             characterMovementController.FlyDown(flyDownInput);
         }
+    }
+
+    public override void NormalAttackInput()
+    {
+        bool currentInput = ProcessInput(keybinds.attackKey, normalAttackInput);
+        if (currentInput != normalAttackInput)
+        {
+            normalAttackInput = currentInput;
+        }
+
+        if (normalAttackInput)
+            characterAttackController.StartNormalAttack();
     }
 
     public override void RotationInput()

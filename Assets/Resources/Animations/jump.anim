@@ -38,7 +38,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -63,7 +63,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh/Bip001 R Calf
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -88,7 +88,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -113,7 +113,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh/Bip001 L Calf
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -419,7 +419,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -449,7 +449,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -479,7 +479,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -509,7 +509,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh/Bip001 R Calf
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -539,7 +539,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh/Bip001 R Calf
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -569,7 +569,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh/Bip001 R Calf
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -599,7 +599,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -629,7 +629,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -659,7 +659,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -689,7 +689,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh/Bip001 L Calf
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -719,7 +719,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh/Bip001 L Calf
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -749,7 +749,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh/Bip001 L Calf
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -942,7 +942,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh/Bip001 L Calf
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -954,7 +954,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh/Bip001 L Calf
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -966,7 +966,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh/Bip001 L Calf
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -978,7 +978,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -990,7 +990,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1002,7 +1002,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 L Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 L Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1014,7 +1014,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh/Bip001 R Calf
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1026,7 +1026,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh/Bip001 R Calf
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1038,7 +1038,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh/Bip001 R Calf
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1086,7 +1086,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1098,7 +1098,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1110,7 +1110,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 R Thigh
+    path: Bip001/Bip001 Pelvis/Bip001 R Thigh
     classID: 4
     script: {fileID: 0}
     flags: 0

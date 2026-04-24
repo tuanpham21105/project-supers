@@ -13,6 +13,7 @@ public abstract class PlayerInputController : MonoBehaviour
     public abstract void JumpInput();
     public abstract void FlyUpInput();
     public abstract void FlyDownInput();
+    public abstract void NormalAttackInput();
     public abstract void RotationInput();
 }
 
