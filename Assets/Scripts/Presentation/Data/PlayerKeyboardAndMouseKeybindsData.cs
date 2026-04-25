@@ -56,6 +56,6 @@ public class PlayerKeyboardAndMouseKeybindsData : MonoBehaviour
     public Keybind normalAttackKey = new Keybind(KeyCode.Mouse0, KeyMode.Click, ActivateAction.Hold);
     public Keybind strikeAttackKey = new Keybind(KeyCode.E, KeyMode.Click, ActivateAction.Hold);
     public Keybind blockKey = new Keybind(KeyCode.Mouse1, KeyMode.Click, ActivateAction.Hold);
-    public Keybind parryKey = new Keybind(KeyCode.Mouse1, KeyMode.Click, ActivateAction.Once);
+    public Keybind deflectKey = new Keybind(KeyCode.Mouse1, KeyMode.Click, ActivateAction.Once);
 }
 

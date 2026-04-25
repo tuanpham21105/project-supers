@@ -10,6 +10,7 @@ public class CharacterAnimationEvents : MonoBehaviour
     public event System.Action OnStrikeAttackOngoing;
     public event System.Action OnStrikeAttackEndOngoing;
     public event System.Action OnStrikeAttackEnd;
+    public event System.Action OnDeflectEnd;
 
     public void EmitNormalAttackOngoing()
     {
@@ -39,5 +40,10 @@ public class CharacterAnimationEvents : MonoBehaviour
     public void EmitStrikeAttackEnd()
     {
         OnStrikeAttackEnd?.Invoke();
+    }
+
+    public void EmitDeflectEnd()
+    {
+        OnDeflectEnd?.Invoke();
     }
 }

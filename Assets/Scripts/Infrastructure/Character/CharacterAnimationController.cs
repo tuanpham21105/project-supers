@@ -30,8 +30,7 @@ public enum CharacterUpperAnimation
     normal_attack_1,
     normal_attack_2,
     block,
-    parry_1,
-    parry_2
+    deflect
 }
 
 public class CharacterAnimationController : MonoBehaviour
@@ -51,18 +50,6 @@ public class CharacterAnimationController : MonoBehaviour
         CharacterBodyAnimation.strike_attack_1,
         CharacterBodyAnimation.strike_attack_2
     };
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void PlayBodyAnimation(CharacterBodyAnimation animation, float normalizedTimeOffset = -1f)
     {

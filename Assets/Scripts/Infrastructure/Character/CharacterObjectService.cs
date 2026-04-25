@@ -10,7 +10,8 @@ public class CharacterObjectService : MonoBehaviour
     [SerializeField] private bool gravity;
     [SerializeField] private float impactBuildUpSpeed = 10f;
     [SerializeField] private float impactDecaySpeed = 1f;
-    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float fastFlyRotationSpeed = 10f;
+    [SerializeField] private float normalRotationSpeed = 360f;
 
     public bool IsGrounded => characterController.isGrounded;
     public Transform CharacterTransform => transform;
@@ -95,7 +96,8 @@ public class CharacterObjectService : MonoBehaviour
     {
         if (direction == Vector3.zero) return;
 
-        transform.forward = direction;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, normalRotationSpeed * Time.deltaTime);
     }
 
     public void FastFlyingRotate(Vector3 direction)
@@ -112,7 +114,7 @@ public class CharacterObjectService : MonoBehaviour
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(forward, up);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, fastFlyRotationSpeed * Time.fixedDeltaTime);
     }
 
 

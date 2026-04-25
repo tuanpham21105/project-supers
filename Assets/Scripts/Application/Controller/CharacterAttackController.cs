@@ -47,7 +47,7 @@ public class CharacterAttackController : MonoBehaviour
 
     public void StartNormalAttack()
     {
-        if (characterStatesData.attackFlag) return;
+        if (!characterStatesData.normalAttackEndFlag && (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag)) return;
 
         bool isContinuing = characterStatesData.normalAttackEndFlag;
         
@@ -56,7 +56,7 @@ public class CharacterAttackController : MonoBehaviour
 
     public void StartStrikeAttack()
     {
-        if (characterStatesData.attackFlag) return;
+        if (!characterStatesData.strikeAttackEndFlag && (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag)) return;
 
         bool isContinuing = characterStatesData.strikeAttackEndFlag;
 
@@ -66,10 +66,18 @@ public class CharacterAttackController : MonoBehaviour
     private void PlayNormalAttack(bool isContinuing)
     {
         if (defenseController != null) defenseController.Block(false);
+
+        // If a strike attack was in its follow-through, clean it up before starting a new attack kind
+        if (characterStatesData.strikeAttackEndFlag)
+        {
+            HandleStrikeAttackEnd();
+        }
+
         characterStatesData.attackFlag = true;
         characterStatesData.normalAttackStartFlag = true;
         characterStatesData.normalAttackOngoingFlag = false;
         characterStatesData.normalAttackEndFlag = false;
+        characterStatesData.upperActionFlag = true;
 
         if (animationController != null)
         {
@@ -80,7 +88,16 @@ public class CharacterAttackController : MonoBehaviour
     private void PlayStrikeAttack(bool isContinuing)
     {
         if (defenseController != null) defenseController.Block(false);
+
+        // If a normal attack was in its follow-through, clean it up before starting a new attack kind
+        if (characterStatesData.normalAttackEndFlag)
+        {
+            HandleNormalAttackEnd();
+        }
+
         characterStatesData.attackFlag = true;
+        characterStatesData.upperActionFlag = true;
+        characterStatesData.bodyActionFlag = true;
         characterStatesData.strikeAttackStartFlag = true;
         characterStatesData.strikeAttackOngoingFlag = false;
         characterStatesData.strikeAttackEndFlag = false;
@@ -109,6 +126,7 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.normalAttackStartFlag = false;
         characterStatesData.normalAttackOngoingFlag = false;
         characterStatesData.normalAttackEndFlag = false;
+        characterStatesData.upperActionFlag = false;
 
         if (animationController != null)
         {
@@ -135,6 +153,8 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.strikeAttackStartFlag = false;
         characterStatesData.strikeAttackOngoingFlag = false;
         characterStatesData.strikeAttackEndFlag = false;
+        characterStatesData.upperActionFlag = false;
+        characterStatesData.bodyActionFlag = false;
 
         if (animationController != null)
         {

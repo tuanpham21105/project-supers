@@ -35,7 +35,7 @@ public class CharacterMovementController : MonoBehaviour
 
         Vector3 lookDir = characterStatesData.lookInput;
 
-        if (characterStatesData.fastFlyFlag && !characterStatesData.attackFlag)
+        if (characterStatesData.fastFlyFlag && !characterStatesData.upperActionFlag)
         {
             characterObjectService.FastFlyingRotate(lookDir);
         }
@@ -63,12 +63,8 @@ public class CharacterMovementController : MonoBehaviour
         // Skip normal movement if dashing to prevent force accumulation
         if (characterStatesData.dashFlag) return;
 
-        // Prevent movement during strike attacks
-        if (
-            characterStatesData.strikeAttackStartFlag ||
-            characterStatesData.strikeAttackOngoingFlag ||
-            characterStatesData.strikeAttackEndFlag
-        )
+        // Prevent movement during body actions (like strike attacks)
+        if (characterStatesData.bodyActionFlag)
             return;
 
         float currentSpeed = 0;
@@ -77,7 +73,7 @@ public class CharacterMovementController : MonoBehaviour
         {
             if (characterStatesData.sprintFlag)
             {
-                if (characterStatesData.fastFlyFlag && !characterStatesData.attackFlag)
+                if (characterStatesData.fastFlyFlag && !characterStatesData.upperActionFlag)
                     currentSpeed = characterStatsData.flySpeed + characterStatsData.flySprintAdditionalSpeed;
                 else
                     currentSpeed = characterStatsData.flySpeed + characterStatsData.sprintAdditionalSpeed;
@@ -126,7 +122,7 @@ public class CharacterMovementController : MonoBehaviour
             if (characterStatesData.flyDownFlag) moveDirection += Vector3.down;
         }
 
-        if (characterStatesData.fastFlyFlag && !characterStatesData.attackFlag)
+        if (characterStatesData.fastFlyFlag && !characterStatesData.upperActionFlag)
             moveDirection = characterObjectsData.characterObject.transform.forward;
 
         return moveDirection.normalized;
@@ -140,8 +136,8 @@ public class CharacterMovementController : MonoBehaviour
 
     public void Jump()
     {
-        // Jump only work when on ground and not flying
-        if (!characterStatesData.flyFlag && characterObjectService.IsGrounded)
+        // Jump only work when on ground, not flying and no body actions ongoing
+        if (!characterStatesData.flyFlag && characterObjectService.IsGrounded && !characterStatesData.bodyActionFlag)
         {
             characterObjectService.SetVerticalVelocity(characterStatsData.jumpForce);
         }
@@ -154,13 +150,14 @@ public class CharacterMovementController : MonoBehaviour
 
     public void Dash()
     {
-        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag) return;
+        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) return;
         StartCoroutine(DashCoroutine());
     }
 
     private IEnumerator DashCoroutine()
     {
         characterStatesData.dashFlag = true;
+        characterStatesData.bodyActionFlag = true; // Dash is a body action
 
         // Calculate dash direction: prioritizing actual movement direction (velocity)
         Vector3 currentVelocity = characterObjectService.Velocity;
@@ -190,6 +187,7 @@ public class CharacterMovementController : MonoBehaviour
         yield return new WaitForSeconds(characterStatsData.dashDuration);
 
         characterStatesData.dashFlag = false;
+        characterStatesData.bodyActionFlag = false;
         characterStatesData.dashCooldownFlag = true;
 
         yield return new WaitForSeconds(characterStatsData.dashCooldown);
@@ -238,12 +236,12 @@ public class CharacterMovementController : MonoBehaviour
 
     private CharacterBodyAnimation DetermineBodyAnimation()
     {
-        if (characterStatesData.strikeAttackStartFlag || characterStatesData.strikeAttackOngoingFlag || characterStatesData.strikeAttackEndFlag)
+        if (characterStatesData.bodyActionFlag)
             return _currentBodyAnimation;
 
         if (characterStatesData.flyFlag)
         {
-            if (characterStatesData.attackFlag) return CharacterBodyAnimation.fly_forward;
+            if (characterStatesData.upperActionFlag) return CharacterBodyAnimation.fly_forward;
 
             if (characterStatesData.fastFlyFlag) return CharacterBodyAnimation.fast_fly;
 

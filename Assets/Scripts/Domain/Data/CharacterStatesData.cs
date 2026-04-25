@@ -22,6 +22,9 @@ public class CharacterStatesData : MonoBehaviour
     public bool strikeAttackEndFlag;
     public bool knockAwayFlag;
     public bool blockFlag;
+    public bool deflectFlag;
+    public bool upperActionFlag;
+    public bool bodyActionFlag;
 
     public float moveSpeed;
     public Vector2 inputAxes;

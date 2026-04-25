@@ -20,7 +20,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public bool normalAttackInput;
     public bool strikeAttackInput;
     public bool blockInput;
-    public bool parryInput;
+    public bool deflectInput;
     public float verticalRotationInput;
     public float horizontalRotationInput;
 
@@ -31,6 +31,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     private Dictionary<KeyCode, float> lastClickTime = new Dictionary<KeyCode, float>();
     public const float doubleClickThreshold = 0.3f;
+
+    // Hold: key must be held at least this long before activating
+    [SerializeField] private float holdThreshold = 0.2f;
+    private Dictionary<KeyCode, float> holdStartTime = new Dictionary<KeyCode, float>();
 
     private void Awake()
     {
@@ -65,15 +69,15 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         NormalAttackInput();
         RotationInput();
         StrikeAttackInput();
-        ParryInput();
+        DeflectInput();
         BlockInput();
     }
 
-    private void FixedUpdate()
-    {
-        // Physics-related logic remains here if needed, 
-        // but current implementation handles movement via Move calls triggered by inputs.
-    }
+    // private void FixedUpdate()
+    // {
+    //     // Physics-related logic remains here if needed, 
+    //     // but current implementation handles movement via Move calls triggered by inputs.
+    // }
 
     public override void MoveDirectionInput()
     {
@@ -201,20 +205,19 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         bool currentInput = ProcessInput(keybinds.blockKey, blockInput);
         if (currentInput != blockInput)
         {
+        }
             blockInput = currentInput;
             if (characterDefenseController != null) characterDefenseController.Block(blockInput);
-        }
         HandleOnceActivation(ref blockInput, keybinds.blockKey);
     }
 
-    public override void ParryInput()
+    public override void DeflectInput()
     {
-        parryInput = ProcessInput(keybinds.parryKey, parryInput);
-        if (parryInput)
+        deflectInput = ProcessInput(keybinds.deflectKey, deflectInput);
+        if (deflectInput)
         {
-            // Placeholder for Parry Action
-            // characterAttackController.Parry();
-            HandleOnceActivation(ref parryInput, keybinds.parryKey);
+            if (characterDefenseController != null) characterDefenseController.Deflect();
+            HandleOnceActivation(ref deflectInput, keybinds.deflectKey);
         }
     }
 
@@ -233,29 +236,51 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     private bool ProcessInput(Keybind keybind, bool currentState)
     {
-        bool triggered = false;
-        if (keybind.mode == KeyMode.Click) triggered = Input.GetKeyDown(keybind.key);
-        else if (keybind.mode == KeyMode.DoubleClick) triggered = CheckDoubleClick(keybind.key);
+        KeyCode key = keybind.key;
 
+        // --- Determine raw "just pressed" trigger ---
+        bool triggered = false;
+        if (keybind.mode == KeyMode.Click)           triggered = Input.GetKeyDown(key);
+        else if (keybind.mode == KeyMode.DoubleClick) triggered = CheckDoubleClick(key);
+
+        // -------------------------------------------------------
+        // TOGGLE: flip once per press, ignore key-held repeats
+        // -------------------------------------------------------
         if (keybind.action == ActivateAction.Toggle)
         {
             if (triggered) return !currentState;
             return currentState;
         }
-        else if (keybind.action == ActivateAction.Once)
+
+        // -------------------------------------------------------
+        // ONCE: true only the single frame the key goes down
+        // -------------------------------------------------------
+        if (keybind.action == ActivateAction.Once)
         {
             return triggered;
         }
-        else // Hold
+
+        // -------------------------------------------------------
+        // HOLD: key must be continuously held >= holdThreshold
+        //       before the action activates
+        // -------------------------------------------------------
+        bool keyIsDown = Input.GetKey(key);
+
+        if (!keyIsDown)
         {
-            if (triggered) return true;
-            if (currentState)
-            {
-                // Stay true as long as key is held
-                return Input.GetKey(keybind.key);
-            }
+            // Key released — reset timer and deactivate
+            holdStartTime.Remove(key);
             return false;
         }
+
+        // Key is being held — record or keep the start timestamp
+        if (triggered || !holdStartTime.ContainsKey(key))
+        {
+            holdStartTime[key] = Time.time;
+        }
+
+        // Activate only once the hold duration is met
+        return (Time.time - holdStartTime[key]) >= holdThreshold;
     }
 
     private bool CheckDoubleClick(KeyCode key)
