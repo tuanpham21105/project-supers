@@ -29,6 +29,9 @@ public enum CharacterUpperAnimation
 {
     normal_attack_1,
     normal_attack_2,
+    block,
+    parry_1,
+    parry_2
 }
 
 public class CharacterAnimationController : MonoBehaviour

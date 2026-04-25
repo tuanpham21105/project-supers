@@ -7,6 +7,7 @@ public class CharacterAttackController : MonoBehaviour
     [SerializeField] private CharacterObjectsData characterObjectsData;
     [SerializeField] private CharacterStatesData characterStatesData;
     [SerializeField] private CharacterAnimationController animationController;
+    [SerializeField] private CharacterDefenseController defenseController;
     private CharacterAnimationEvents animationEvents;
 
     void Start()
@@ -14,6 +15,7 @@ public class CharacterAttackController : MonoBehaviour
         if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
         if (characterStatesData == null) characterStatesData = GetComponentInParent<CharacterStatesData>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
+        if (defenseController == null) defenseController = GetComponent<CharacterDefenseController>();
 
         if (characterObjectsData != null && characterObjectsData.characterMesh != null)
         {
@@ -63,6 +65,7 @@ public class CharacterAttackController : MonoBehaviour
 
     private void PlayNormalAttack(bool isContinuing)
     {
+        if (defenseController != null) defenseController.Block(false);
         characterStatesData.attackFlag = true;
         characterStatesData.normalAttackStartFlag = true;
         characterStatesData.normalAttackOngoingFlag = false;
@@ -76,6 +79,7 @@ public class CharacterAttackController : MonoBehaviour
 
     private void PlayStrikeAttack(bool isContinuing)
     {
+        if (defenseController != null) defenseController.Block(false);
         characterStatesData.attackFlag = true;
         characterStatesData.strikeAttackStartFlag = true;
         characterStatesData.strikeAttackOngoingFlag = false;

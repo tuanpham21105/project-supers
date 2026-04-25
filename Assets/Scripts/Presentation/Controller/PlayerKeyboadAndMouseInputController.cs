@@ -7,6 +7,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     private PlayerKeyboardAndMouseKeybindsData keybinds;
     [SerializeField] private CharacterMovementController characterMovementController;
     [SerializeField] private CharacterAttackController characterAttackController;
+    [SerializeField] private CharacterDefenseController characterDefenseController;
     [SerializeField] private CameraController cameraController;
 
     public Vector2 moveDirectionInput;
@@ -18,6 +19,8 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public bool flyDownInput;
     public bool normalAttackInput;
     public bool strikeAttackInput;
+    public bool blockInput;
+    public bool parryInput;
     public float verticalRotationInput;
     public float horizontalRotationInput;
 
@@ -62,6 +65,8 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         NormalAttackInput();
         RotationInput();
         StrikeAttackInput();
+        ParryInput();
+        BlockInput();
     }
 
     private void FixedUpdate()
@@ -92,6 +97,11 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
             characterMovementController.Move(moveDirectionInput);
         }
+
+        HandleOnceActivation(ref _forwardInput, keybinds.forwardKey);
+        HandleOnceActivation(ref _backwardInput, keybinds.backwardKey);
+        HandleOnceActivation(ref _leftInput, keybinds.strafeLeftKey);
+        HandleOnceActivation(ref _rightInput, keybinds.strafeRightKey);
     }
 
     public override void SprintInput()
@@ -103,18 +113,18 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
             characterMovementController.Sprint(sprintInput);
         }
+
+        HandleOnceActivation(ref sprintInput, keybinds.sprintKey);
     }
 
     public override void DashInput()
     {
-        bool currentDashInput = ProcessInput(keybinds.dashKey, dashInput);
-        if (currentDashInput != dashInput)
-        {
-            dashInput = currentDashInput;
-        }
-
+        dashInput = ProcessInput(keybinds.dashKey, dashInput);
         if (dashInput)
+        {
             characterMovementController.Dash();
+            HandleOnceActivation(ref dashInput, keybinds.dashKey);
+        }
     }
 
     public override void ToggleFlyInput()
@@ -126,18 +136,18 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
             characterMovementController.ToggleFly(toggleFlyInput);
         }
+
+        HandleOnceActivation(ref toggleFlyInput, keybinds.toggleFlyKey);
     }
 
     public override void JumpInput()
     {
-        bool currentJumpInput = ProcessInput(keybinds.jumpKey, jumpInput);
-        if (currentJumpInput != jumpInput)
-        {
-            jumpInput = currentJumpInput;
-        }
-
+        jumpInput = ProcessInput(keybinds.jumpKey, jumpInput);
         if (jumpInput)
+        {
             characterMovementController.Jump();
+            HandleOnceActivation(ref jumpInput, keybinds.jumpKey);
+        }
     }
 
     public override void FlyUpInput()
@@ -149,6 +159,8 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
             characterMovementController.FlyUp(flyUpInput);
         }
+
+        HandleOnceActivation(ref flyUpInput, keybinds.flyUpKey);
     }
 
     public override void FlyDownInput()
@@ -160,30 +172,50 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
             characterMovementController.FlyDown(flyDownInput);
         }
+
+        HandleOnceActivation(ref flyDownInput, keybinds.flyDownKey);
     }
 
     public override void NormalAttackInput()
     {
-        bool currentInput = ProcessInput(keybinds.normalAttackKey, normalAttackInput);
-        if (currentInput != normalAttackInput)
-        {
-            normalAttackInput = currentInput;
-        }
-
+        normalAttackInput = ProcessInput(keybinds.normalAttackKey, normalAttackInput);
         if (normalAttackInput)
+        {
             characterAttackController.StartNormalAttack();
+            HandleOnceActivation(ref normalAttackInput, keybinds.normalAttackKey);
+        }
     }
 
     public override void StrikeAttackInput()
     {
-        bool currentInput = ProcessInput(keybinds.strikeAttackKey, strikeAttackInput);
-        if (currentInput != strikeAttackInput)
-        {
-            strikeAttackInput = currentInput;
-        }
-
+        strikeAttackInput = ProcessInput(keybinds.strikeAttackKey, strikeAttackInput);
         if (strikeAttackInput)
+        {
             characterAttackController.StartStrikeAttack();
+            HandleOnceActivation(ref strikeAttackInput, keybinds.strikeAttackKey);
+        }
+    }
+
+    public override void BlockInput()
+    {
+        bool currentInput = ProcessInput(keybinds.blockKey, blockInput);
+        if (currentInput != blockInput)
+        {
+            blockInput = currentInput;
+            if (characterDefenseController != null) characterDefenseController.Block(blockInput);
+        }
+        HandleOnceActivation(ref blockInput, keybinds.blockKey);
+    }
+
+    public override void ParryInput()
+    {
+        parryInput = ProcessInput(keybinds.parryKey, parryInput);
+        if (parryInput)
+        {
+            // Placeholder for Parry Action
+            // characterAttackController.Parry();
+            HandleOnceActivation(ref parryInput, keybinds.parryKey);
+        }
     }
 
     public override void RotationInput()
@@ -210,6 +242,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
             if (triggered) return !currentState;
             return currentState;
         }
+        else if (keybind.action == ActivateAction.Once)
+        {
+            return triggered;
+        }
         else // Hold
         {
             if (triggered) return true;
@@ -234,5 +270,13 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
             }
         }
         return false;
+    }
+
+    private void HandleOnceActivation(ref bool inputState, Keybind keybind)
+    {
+        if (inputState && keybind.action == ActivateAction.Once)
+        {
+            inputState = false;
+        }
     }
 }

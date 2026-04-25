@@ -53,17 +53,22 @@ public class CharacterMovementController : MonoBehaviour
         Vector3 moveDirection = GetCurrentMoveDirection();
         characterStatesData.direction = moveDirection;
 
-        // Activate fast fly flag: Flying + Sprinting + Only Forward input
+        // Activate fast fly flag: Flying + Sprinting + Only Forward input + NOT Blocking
         characterStatesData.fastFlyFlag = characterStatesData.flyFlag &&
                                          characterStatesData.sprintFlag &&
                                          characterStatesData.inputAxes.y > 0 &&
-                                         Mathf.Abs(characterStatesData.inputAxes.x) < 0.1f;
+                                         Mathf.Abs(characterStatesData.inputAxes.x) < 0.1f &&
+                                         !characterStatesData.blockFlag;
 
         // Skip normal movement if dashing to prevent force accumulation
         if (characterStatesData.dashFlag) return;
 
         // Prevent movement during strike attacks
-        if (characterStatesData.strikeAttackStartFlag || characterStatesData.strikeAttackOngoingFlag || characterStatesData.strikeAttackEndFlag)
+        if (
+            characterStatesData.strikeAttackStartFlag ||
+            characterStatesData.strikeAttackOngoingFlag ||
+            characterStatesData.strikeAttackEndFlag
+        )
             return;
 
         float currentSpeed = 0;

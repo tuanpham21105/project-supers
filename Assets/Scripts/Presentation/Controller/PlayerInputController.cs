@@ -16,5 +16,7 @@ public abstract class PlayerInputController : MonoBehaviour
     public abstract void NormalAttackInput();
     public abstract void StrikeAttackInput();
     public abstract void RotationInput();
+    public abstract void BlockInput();
+    public abstract void ParryInput();
 }
 
