@@ -9,6 +9,10 @@ public class CharacterDefenseController : MonoBehaviour
     [SerializeField] private CharacterAnimationController animationController;
     private CharacterAnimationEvents animationEvents;
 
+    private float lastDeflectTime;
+    private float currentDeflectSpeed = 1f;
+    [SerializeField] private float deflectComboWindow = 0.5f;
+
     void Start()
     {
         if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
@@ -20,6 +24,8 @@ public class CharacterDefenseController : MonoBehaviour
             animationEvents = characterObjectsData.characterMesh.GetComponent<CharacterAnimationEvents>();
             if (animationEvents != null)
             {
+                animationEvents.OnDeflectOngoing += HandleDeflectOngoing;
+                animationEvents.OnDeflectEndOngoing += HandleDeflectEndOngoing;
                 animationEvents.OnDeflectEnd += HandleDeflectEnd;
             }
         }
@@ -29,6 +35,8 @@ public class CharacterDefenseController : MonoBehaviour
     {
         if (animationEvents != null)
         {
+            animationEvents.OnDeflectOngoing -= HandleDeflectOngoing;
+            animationEvents.OnDeflectEndOngoing -= HandleDeflectEndOngoing;
             animationEvents.OnDeflectEnd -= HandleDeflectEnd;
         }
     }
@@ -62,17 +70,37 @@ public class CharacterDefenseController : MonoBehaviour
     {
         if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
 
-        characterStatesData.deflectFlag = true;
+        if (Time.time - lastDeflectTime < deflectComboWindow)
+        {
+            currentDeflectSpeed = Mathf.Min(currentDeflectSpeed + 0.75f, 2.5f);
+        }
+        else
+        {
+            currentDeflectSpeed = 1f;
+        }
+
+        characterStatesData.deflectFlag = false;
         characterStatesData.upperActionFlag = true;
 
         if (animationController != null)
         {
-            animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect);
+            animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect_start, currentDeflectSpeed);
         }
+    }
+
+    private void HandleDeflectOngoing()
+    {
+        characterStatesData.deflectFlag = true;
+    }
+
+    private void HandleDeflectEndOngoing()
+    {
+        characterStatesData.deflectFlag = false;
     }
 
     private void HandleDeflectEnd()
     {
+        lastDeflectTime = Time.time;
         characterStatesData.deflectFlag = false;
         characterStatesData.upperActionFlag = false;
 

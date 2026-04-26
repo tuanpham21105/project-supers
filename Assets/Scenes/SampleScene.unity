@@ -662,7 +662,7 @@ MonoBehaviour:
   impactBuildUpSpeed: 50
   impactDecaySpeed: 2
   fastFlyRotationSpeed: 10
-  normalRotationSpeed: 360
+  normalRotationSpeed: 480
 --- !u!114 &1656352639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,6 +676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1566448591}
+  transitionDuration: 0.15
 --- !u!114 &1656352640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -797,6 +798,7 @@ MonoBehaviour:
   characterObjectsData: {fileID: 0}
   characterStatesData: {fileID: 0}
   animationController: {fileID: 0}
+  deflectComboWindow: 0.5
 --- !u!1 &1764128620
 GameObject:
   m_ObjectHideFlags: 0
@@ -982,7 +984,7 @@ MonoBehaviour:
     mode: 0
     action: 1
   blockKey:
-    key: 324
+    key: 325
     mode: 0
     action: 1
   deflectKey:
@@ -1037,7 +1039,7 @@ MonoBehaviour:
   _backwardInput: 0
   _leftInput: 0
   _rightInput: 0
-  holdThreshold: 0.1
+  holdThreshold: 0.05
   lookSmoothing: 0.05
 --- !u!1 &26438712082966250
 GameObject:

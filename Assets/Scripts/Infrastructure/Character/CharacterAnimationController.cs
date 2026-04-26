@@ -30,12 +30,13 @@ public enum CharacterUpperAnimation
     normal_attack_1,
     normal_attack_2,
     block,
-    deflect
+    deflect_start
 }
 
 public class CharacterAnimationController : MonoBehaviour
 {
     [SerializeField] private Animator animator;
+    [SerializeField] private float transitionDuration;
     private Coroutine upperLayerFadeCoroutine;
     private int normalAttackComboIndex = 0;
     private List<CharacterUpperAnimation> normalAttackCombo = new List<CharacterUpperAnimation>
@@ -56,18 +57,19 @@ public class CharacterAnimationController : MonoBehaviour
         if (animator != null)
         {
             if (normalizedTimeOffset >= 0)
-                animator.CrossFade(animation.ToString(), 0.1f, 0, normalizedTimeOffset);
+                animator.CrossFade(animation.ToString(), transitionDuration, 0, normalizedTimeOffset);
             else
-                animator.CrossFade(animation.ToString(), 0.3f, 0);
+                animator.CrossFade(animation.ToString(), transitionDuration, 0);
         }
     }
 
-    public void PlayUpperAnimation(CharacterUpperAnimation animation)
+    public void PlayUpperAnimation(CharacterUpperAnimation animation, float speed = 1f)
     {
         if (animator != null)
         {
+            animator.SetFloat("DeflectReadySpeed", speed);
             StartFadeUpperLayer(1f, 0.1f);
-            animator.CrossFade(animation.ToString(), 0.1f, 1, 0f);
+            animator.CrossFade(animation.ToString(), transitionDuration, 1, 0f);
         }
     }
 
@@ -121,7 +123,8 @@ public class CharacterAnimationController : MonoBehaviour
     {
         if (animator != null)
         {
-            StartFadeUpperLayer(0f, 0.3f);
+            animator.speed = 1f;
+            StartFadeUpperLayer(0f, transitionDuration);
         }
     }
 
