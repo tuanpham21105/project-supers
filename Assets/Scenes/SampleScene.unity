@@ -936,58 +936,72 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 5
   forwardKey:
+    name: Move Forward
     key: 119
     mode: 0
-    action: 1
+    action: 3
   backwardKey:
+    name: Move Backward
     key: 115
     mode: 0
-    action: 1
+    action: 3
   strafeLeftKey:
+    name: Strafe Left
     key: 97
     mode: 0
-    action: 1
+    action: 3
   strafeRightKey:
+    name: Strafe Right
     key: 100
     mode: 0
-    action: 1
+    action: 3
   jumpKey:
+    name: Jump
     key: 32
     mode: 0
-    action: 1
+    action: 3
   sprintKey:
+    name: Sprint
     key: 304
     mode: 0
     action: 1
   dashKey:
+    name: Dash
     key: 304
     mode: 0
     action: 0
   toggleFlyKey:
+    name: Toggle Fly
     key: 32
-    mode: 1
+    mode: 0
     action: 2
   flyUpKey:
+    name: Fly Up
     key: 32
     mode: 0
     action: 1
   flyDownKey:
+    name: Fly Down
     key: 306
     mode: 0
     action: 1
   normalAttackKey:
+    name: Normal Attack
     key: 323
     mode: 0
-    action: 1
+    action: 3
   strikeAttackKey:
+    name: Strike Attack
     key: 101
     mode: 0
-    action: 1
+    action: 3
   blockKey:
-    key: 325
+    name: Block
+    key: 324
     mode: 0
     action: 1
   deflectKey:
+    name: Deflect
     key: 324
     mode: 0
     action: 0
@@ -1039,7 +1053,8 @@ MonoBehaviour:
   _backwardInput: 0
   _leftInput: 0
   _rightInput: 0
-  holdThreshold: 0.05
+  doubleClickThreshold: 0.3
+  holdThreshold: 0.2
   lookSmoothing: 0.05
 --- !u!1 &26438712082966250
 GameObject:

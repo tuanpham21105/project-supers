@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,12 +30,12 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public bool _leftInput;
     public bool _rightInput;
 
-    private Dictionary<KeyCode, float> lastClickTime = new Dictionary<KeyCode, float>();
-    public const float doubleClickThreshold = 0.3f;
+    private Dictionary<String, float> lastClickTime = new Dictionary<String, float>();
+    [SerializeField] private float doubleClickThreshold = 0.3f;
 
     // Hold: key must be held at least this long before activating
     [SerializeField] private float holdThreshold = 0.2f;
-    private Dictionary<KeyCode, float> holdStartTime = new Dictionary<KeyCode, float>();
+    private Dictionary<String, float> holdStartTime = new Dictionary<String, float>();
 
     private void Awake()
     {
@@ -206,8 +207,8 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         if (currentInput != blockInput)
         {
         }
-            blockInput = currentInput;
-            if (characterDefenseController != null) characterDefenseController.Block(blockInput);
+        blockInput = currentInput;
+        if (characterDefenseController != null) characterDefenseController.Block(blockInput);
         HandleOnceActivation(ref blockInput, keybinds.blockKey);
     }
 
@@ -237,58 +238,62 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     private bool ProcessInput(Keybind keybind, bool currentState)
     {
         KeyCode key = keybind.key;
-
-        // --- Determine raw "just pressed" trigger ---
-        bool triggered = false;
-        if (keybind.mode == KeyMode.Click)           triggered = Input.GetKeyDown(key);
-        else if (keybind.mode == KeyMode.DoubleClick) triggered = CheckDoubleClick(key);
-
-        // -------------------------------------------------------
-        // TOGGLE: flip once per press, ignore key-held repeats
-        // -------------------------------------------------------
-        if (keybind.action == ActivateAction.Toggle)
-        {
-            if (triggered) return !currentState;
-            return currentState;
-        }
-
-        // -------------------------------------------------------
-        // ONCE: true only the single frame the key goes down
-        // -------------------------------------------------------
-        if (keybind.action == ActivateAction.Once)
-        {
-            return triggered;
-        }
-
-        // -------------------------------------------------------
-        // HOLD: key must be continuously held >= holdThreshold
-        //       before the action activates
-        // -------------------------------------------------------
+        String name = keybind.name + "-" + key.ToString();
         bool keyIsDown = Input.GetKey(key);
+        bool keyJustDown = Input.GetKeyDown(key);
+        bool keyJustUp = Input.GetKeyUp(key);
 
-        if (!keyIsDown)
+        // -------------------------------------------------------
+        // ANY: activates immediately on KeyDown and while held
+        // -------------------------------------------------------
+        if (keybind.action == ActivateAction.Any)
         {
-            // Key released — reset timer and deactivate
-            holdStartTime.Remove(key);
-            return false;
+            return keyIsDown;
         }
 
-        // Key is being held — record or keep the start timestamp
-        if (triggered || !holdStartTime.ContainsKey(key))
+        // Determine trigger based on KeyMode
+        bool triggered = false;
+        if (keybind.mode == KeyMode.Click) triggered = keyJustDown;
+        else if (keybind.mode == KeyMode.DoubleClick) triggered = CheckDoubleClick(name, keyJustDown);
+
+        // Record start time on trigger
+        if (triggered)
         {
-            holdStartTime[key] = Time.time;
+            holdStartTime[name] = Time.time;
         }
 
-        // Activate only once the hold duration is met
-        return (Time.time - holdStartTime[key]) >= holdThreshold;
+        // On KeyUp: Handle Once/Toggle if duration was short (tap)
+        if (keyJustUp && holdStartTime.ContainsKey(name))
+        {
+            float duration = Time.time - holdStartTime[name];
+            holdStartTime.Remove(name);
+
+            if (duration < holdThreshold)
+            {
+                if (keybind.action == ActivateAction.Toggle) return !currentState;
+                if (keybind.action == ActivateAction.Once) return true;
+            }
+        }
+
+        // While Holding: Handle Hold if threshold met
+        if (keyIsDown && holdStartTime.ContainsKey(name))
+        {
+            float duration = Time.time - holdStartTime[name];
+            if (duration >= holdThreshold)
+            {
+                if (keybind.action == ActivateAction.Hold) return true;
+            }
+        }
+
+        return (keybind.action == ActivateAction.Toggle) ? currentState : false;
     }
 
-    private bool CheckDoubleClick(KeyCode key)
+    private bool CheckDoubleClick(String name, bool keyJustDown)
     {
-        if (Input.GetKeyDown(key))
+        if (keyJustDown)
         {
-            float timeSinceLastClick = Time.time - lastClickTime.GetValueOrDefault(key, -10f);
-            lastClickTime[key] = Time.time;
+            float timeSinceLastClick = Time.time - lastClickTime.GetValueOrDefault(name, -10f);
+            lastClickTime[name] = Time.time;
             if (timeSinceLastClick <= doubleClickThreshold)
             {
                 return true;
@@ -299,7 +304,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     private void HandleOnceActivation(ref bool inputState, Keybind keybind)
     {
-        if (inputState && keybind.action == ActivateAction.Once)
+        if (inputState && (keybind.action == ActivateAction.Once || keybind.action == ActivateAction.Any))
         {
             inputState = false;
         }
