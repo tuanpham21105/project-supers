@@ -47,7 +47,7 @@ public class CharacterAttackController : MonoBehaviour
 
     public void StartNormalAttack()
     {
-        if (!characterStatesData.normalAttackEndFlag && (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag)) return;
+        if ((characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag)) return;
 
         bool isContinuing = characterStatesData.normalAttackEndFlag;
         
@@ -56,11 +56,27 @@ public class CharacterAttackController : MonoBehaviour
 
     public void StartStrikeAttack()
     {
-        if (!characterStatesData.strikeAttackEndFlag && (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag)) return;
+        if ((characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag)) return;
 
         bool isContinuing = characterStatesData.strikeAttackEndFlag;
 
         PlayStrikeAttack(isContinuing);
+    }
+
+    public void ResetAttackFlags()
+    {
+        characterStatesData.attackFlag = false;
+
+        characterStatesData.normalAttackStartFlag = false;
+        characterStatesData.normalAttackOngoingFlag = false;
+        characterStatesData.normalAttackEndFlag = false;
+
+        characterStatesData.strikeAttackStartFlag = false;
+        characterStatesData.strikeAttackOngoingFlag = false;
+        characterStatesData.strikeAttackEndFlag = false;
+
+        characterStatesData.upperActionFlag = false;
+        characterStatesData.bodyActionFlag = false;
     }
 
     private void PlayNormalAttack(bool isContinuing)
@@ -73,10 +89,9 @@ public class CharacterAttackController : MonoBehaviour
             HandleStrikeAttackEnd();
         }
 
+        ResetAttackFlags();
         characterStatesData.attackFlag = true;
         characterStatesData.normalAttackStartFlag = true;
-        characterStatesData.normalAttackOngoingFlag = false;
-        characterStatesData.normalAttackEndFlag = false;
         characterStatesData.upperActionFlag = true;
 
         if (animationController != null)
@@ -95,12 +110,12 @@ public class CharacterAttackController : MonoBehaviour
             HandleNormalAttackEnd();
         }
 
+        ResetAttackFlags();
         characterStatesData.attackFlag = true;
+        
+        characterStatesData.strikeAttackStartFlag = true;
         characterStatesData.upperActionFlag = true;
         characterStatesData.bodyActionFlag = true;
-        characterStatesData.strikeAttackStartFlag = true;
-        characterStatesData.strikeAttackOngoingFlag = false;
-        characterStatesData.strikeAttackEndFlag = false;
 
         if (animationController != null)
         {
@@ -110,22 +125,32 @@ public class CharacterAttackController : MonoBehaviour
 
     private void HandleNormalAttackOngoing()
     {
+        characterStatesData.attackFlag = true;
+
         characterStatesData.normalAttackStartFlag = false;
         characterStatesData.normalAttackOngoingFlag = true;
+        characterStatesData.normalAttackEndFlag = false;
     }
 
     private void HandleNormalAttackEndOngoing()
     {
         characterStatesData.attackFlag = false;
+
+        characterStatesData.normalAttackStartFlag = false;
+        characterStatesData.normalAttackOngoingFlag = false;
         characterStatesData.normalAttackEndFlag = true;
+
+        characterStatesData.upperActionFlag = false;
     }
 
     private void HandleNormalAttackEnd()
     {
         characterStatesData.attackFlag = false;
+        
         characterStatesData.normalAttackStartFlag = false;
         characterStatesData.normalAttackOngoingFlag = false;
         characterStatesData.normalAttackEndFlag = false;
+        
         characterStatesData.upperActionFlag = false;
 
         if (animationController != null)
@@ -137,22 +162,33 @@ public class CharacterAttackController : MonoBehaviour
 
     private void HandleStrikeAttackOngoing()
     {
+        characterStatesData.attackFlag = true;
+
         characterStatesData.strikeAttackStartFlag = false;
         characterStatesData.strikeAttackOngoingFlag = true;
+        characterStatesData.strikeAttackEndFlag = false;
     }
 
     private void HandleStrikeAttackEndOngoing()
     {
         characterStatesData.attackFlag = false;
+
+        characterStatesData.strikeAttackStartFlag = false;
+        characterStatesData.strikeAttackOngoingFlag = false;
         characterStatesData.strikeAttackEndFlag = true;
+        
+        characterStatesData.upperActionFlag = false;
+        characterStatesData.bodyActionFlag = false;
     }
 
     private void HandleStrikeAttackEnd()
     {
         characterStatesData.attackFlag = false;
+
         characterStatesData.strikeAttackStartFlag = false;
         characterStatesData.strikeAttackOngoingFlag = false;
         characterStatesData.strikeAttackEndFlag = false;
+
         characterStatesData.upperActionFlag = false;
         characterStatesData.bodyActionFlag = false;
 

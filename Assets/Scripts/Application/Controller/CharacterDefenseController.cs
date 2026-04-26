@@ -7,6 +7,7 @@ public class CharacterDefenseController : MonoBehaviour
     [SerializeField] private CharacterObjectsData characterObjectsData;
     [SerializeField] private CharacterStatesData characterStatesData;
     [SerializeField] private CharacterAnimationController animationController;
+    [SerializeField] private CharacterAttackController characterAttackController;
     private CharacterAnimationEvents animationEvents;
 
     private float lastDeflectTime;
@@ -18,6 +19,7 @@ public class CharacterDefenseController : MonoBehaviour
         if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
         if (characterStatesData == null) characterStatesData = GetComponentInParent<CharacterStatesData>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
+        if (characterAttackController == null) characterAttackController = GetComponentInParent<CharacterAttackController>();
 
         if (characterObjectsData != null && characterObjectsData.characterMesh != null)
         {
@@ -41,6 +43,13 @@ public class CharacterDefenseController : MonoBehaviour
         }
     }
 
+    public void ResetDefenseFlags()
+    {
+        characterStatesData.blockFlag = false;
+        characterStatesData.deflectFlag = false;
+        characterStatesData.upperActionFlag = false;
+    }
+
     public void Block(bool active)
     {
         // Only start blocking when not doing other upper actions OR any body actions
@@ -49,18 +58,18 @@ public class CharacterDefenseController : MonoBehaviour
             return;
         }
 
+        ResetDefenseFlags();
         characterStatesData.blockFlag = active;
 
         if (animationController != null)
         {
             if (active)
             {
+                // characterStatesData.upperActionFlag = true;
                 animationController.PlayUpperAnimation(CharacterUpperAnimation.block);
             }
             else
             {
-                // Only end upper animation if we were actually blocking
-                // and not already transitioning to something else like an attack
                 animationController.EndUpperAnimation();
             }
         }
@@ -72,36 +81,42 @@ public class CharacterDefenseController : MonoBehaviour
 
         if (Time.time - lastDeflectTime < deflectComboWindow)
         {
-            currentDeflectSpeed = Mathf.Min(currentDeflectSpeed + 0.75f, 2.5f);
+            currentDeflectSpeed = Mathf.Min(currentDeflectSpeed + 0f, 2.5f);
         }
         else
         {
             currentDeflectSpeed = 1f;
         }
 
-        characterStatesData.deflectFlag = false;
+        ResetDefenseFlags();
         characterStatesData.upperActionFlag = true;
 
         if (animationController != null)
         {
-            animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect_start, currentDeflectSpeed);
+            animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect, currentDeflectSpeed);
         }
     }
 
     private void HandleDeflectOngoing()
     {
         characterStatesData.deflectFlag = true;
+
+        characterStatesData.upperActionFlag = true;
     }
 
     private void HandleDeflectEndOngoing()
     {
         characterStatesData.deflectFlag = false;
+
+        characterStatesData.upperActionFlag = true;
     }
 
-    private void HandleDeflectEnd()
+    public void HandleDeflectEnd()
     {
         lastDeflectTime = Time.time;
+
         characterStatesData.deflectFlag = false;
+
         characterStatesData.upperActionFlag = false;
 
         if (animationController != null)

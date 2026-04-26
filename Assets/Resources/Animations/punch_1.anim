@@ -28526,7 +28526,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.125
+  - time: 1
     functionName: EmitNormalAttackEndOngoing
     data: 
     objectReferenceParameter: {fileID: 0}

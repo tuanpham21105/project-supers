@@ -964,7 +964,7 @@ MonoBehaviour:
     name: Sprint
     key: 304
     mode: 0
-    action: 1
+    action: 3
   dashKey:
     name: Dash
     key: 304
@@ -973,7 +973,7 @@ MonoBehaviour:
   toggleFlyKey:
     name: Toggle Fly
     key: 32
-    mode: 0
+    mode: 1
     action: 2
   flyUpKey:
     name: Fly Up

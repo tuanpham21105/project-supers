@@ -30,7 +30,7 @@ public enum CharacterUpperAnimation
     normal_attack_1,
     normal_attack_2,
     block,
-    deflect_start
+    deflect
 }
 
 public class CharacterAnimationController : MonoBehaviour
@@ -123,7 +123,6 @@ public class CharacterAnimationController : MonoBehaviour
     {
         if (animator != null)
         {
-            animator.speed = 1f;
             StartFadeUpperLayer(0f, transitionDuration);
         }
     }

@@ -112,12 +112,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void SprintInput()
     {
         bool currentSprintInput = ProcessInput(keybinds.sprintKey, sprintInput);
-        if (currentSprintInput != sprintInput)
-        {
-            sprintInput = currentSprintInput;
+        
+        sprintInput = currentSprintInput;
 
-            characterMovementController.Sprint(sprintInput);
-        }
+        characterMovementController.Sprint(sprintInput);
 
         HandleOnceActivation(ref sprintInput, keybinds.sprintKey);
     }
@@ -204,11 +202,11 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void BlockInput()
     {
         bool currentInput = ProcessInput(keybinds.blockKey, blockInput);
-        if (currentInput != blockInput)
-        {
-        }
         blockInput = currentInput;
-        if (characterDefenseController != null) characterDefenseController.Block(blockInput);
+
+        if (characterDefenseController != null)
+            characterDefenseController.Block(blockInput);
+            
         HandleOnceActivation(ref blockInput, keybinds.blockKey);
     }
 
@@ -238,18 +236,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     private bool ProcessInput(Keybind keybind, bool currentState)
     {
         KeyCode key = keybind.key;
-        String name = keybind.name + "-" + key.ToString();
+        String name = keybind.name;
         bool keyIsDown = Input.GetKey(key);
         bool keyJustDown = Input.GetKeyDown(key);
         bool keyJustUp = Input.GetKeyUp(key);
-
-        // -------------------------------------------------------
-        // ANY: activates immediately on KeyDown and while held
-        // -------------------------------------------------------
-        if (keybind.action == ActivateAction.Any)
-        {
-            return keyIsDown;
-        }
 
         // Determine trigger based on KeyMode
         bool triggered = false;
@@ -262,7 +252,12 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
             holdStartTime[name] = Time.time;
         }
 
-        // On KeyUp: Handle Once/Toggle if duration was short (tap)
+        if (keybind.action == ActivateAction.Any)
+        {
+            return keyIsDown;
+        }
+
+        // On KeyUp: Handle Once/Toggle/Any(tap) if duration was short
         if (keyJustUp && holdStartTime.ContainsKey(name))
         {
             float duration = Time.time - holdStartTime[name];
@@ -271,17 +266,19 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
             if (duration < holdThreshold)
             {
                 if (keybind.action == ActivateAction.Toggle) return !currentState;
-                if (keybind.action == ActivateAction.Once) return true;
+                if (keybind.action == ActivateAction.Once)   return true;
+                if (keybind.action == ActivateAction.Any)   return true;
             }
         }
 
-        // While Holding: Handle Hold if threshold met
+        // While Holding: Handle Hold/Any(hold) if threshold met
         if (keyIsDown && holdStartTime.ContainsKey(name))
         {
             float duration = Time.time - holdStartTime[name];
             if (duration >= holdThreshold)
             {
                 if (keybind.action == ActivateAction.Hold) return true;
+                if (keybind.action == ActivateAction.Any)   return true;
             }
         }
 
