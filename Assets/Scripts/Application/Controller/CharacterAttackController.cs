@@ -56,6 +56,7 @@ public class CharacterAttackController : MonoBehaviour
 
     public void StartNormalAttack()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
         if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
 
         // Continuing if we are still within the combo window since the last normal attack ended.
@@ -66,6 +67,7 @@ public class CharacterAttackController : MonoBehaviour
 
     public void StartStrikeAttack()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
         if (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag) return;
 
         // Continuing if we are still within the combo window since the last strike attack ended.
@@ -101,6 +103,7 @@ public class CharacterAttackController : MonoBehaviour
         }
 
         ResetAttackFlags();
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.normal_attack);
         characterStatesData.attackFlag = true;
         characterStatesData.normalAttackStartFlag = true;
         characterStatesData.upperActionFlag = true;
@@ -122,8 +125,9 @@ public class CharacterAttackController : MonoBehaviour
         }
 
         ResetAttackFlags();
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.strike_attack);
         characterStatesData.attackFlag = true;
-
+        
         characterStatesData.strikeAttackStartFlag = true;
         characterStatesData.strikeAttackOngoingFlag = false;
         characterStatesData.strikeAttackEndFlag = false;
@@ -141,6 +145,7 @@ public class CharacterAttackController : MonoBehaviour
 
     private void HandleNormalAttackOngoing()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.normal_attack) return;
         characterStatesData.attackFlag = true;
 
         characterStatesData.normalAttackStartFlag = false;
@@ -152,6 +157,7 @@ public class CharacterAttackController : MonoBehaviour
 
     private void HandleNormalAttackEndOngoing()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.normal_attack) return;
         characterStatesData.attackFlag = false;
 
         characterStatesData.normalAttackStartFlag = false;
@@ -168,6 +174,7 @@ public class CharacterAttackController : MonoBehaviour
 
     private void HandleNormalAttackEnd()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.normal_attack) return;
         if (animationController != null)
         {
             animationController.EndUpperAnimation();
@@ -182,12 +189,14 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.upperActionFlag = false;
 
         lastNormalAttackEndTime = Time.time;
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
 
         //Debug.Log("End Normal attack - " + Time.time);
     }
 
     private void HandleStrikeAttackOngoing()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.strike_attack) return;
         characterStatesData.attackFlag = true;
 
         characterStatesData.strikeAttackStartFlag = false;
@@ -200,6 +209,7 @@ public class CharacterAttackController : MonoBehaviour
 
     private void HandleStrikeAttackEndOngoing()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.strike_attack) return;
         characterStatesData.attackFlag = true;
 
         characterStatesData.strikeAttackStartFlag = false;
@@ -215,6 +225,7 @@ public class CharacterAttackController : MonoBehaviour
 
     private void HandleStrikeAttackEnd()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.strike_attack) return;
         if (animationController != null)
         {
             // Force the movement controller to refresh its animation state
@@ -235,5 +246,6 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.bodyActionFlag = false;
 
         lastStrikeAttackEndTime = Time.time;
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
     }
 }

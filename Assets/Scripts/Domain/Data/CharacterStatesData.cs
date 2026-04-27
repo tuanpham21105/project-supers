@@ -2,8 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CharacterProcessAction
+{
+    none,
+    normal_attack,
+    strike_attack,
+    deflect,
+    deflected
+}
+
 public class CharacterStatesData : MonoBehaviour
 {
+    public CharacterProcessAction currentProcessAction;
+
+    public void ChangeProcessAction(CharacterProcessAction nextAction)
+    {
+        // Turn off all flags of current action
+        switch (currentProcessAction)
+        {
+            case CharacterProcessAction.normal_attack:
+                normalAttackStartFlag = false;
+                normalAttackOngoingFlag = false;
+                normalAttackEndFlag = false;
+                upperActionFlag = false;
+                attackFlag = false;
+                break;
+            case CharacterProcessAction.strike_attack:
+                strikeAttackStartFlag = false;
+                strikeAttackOngoingFlag = false;
+                strikeAttackEndFlag = false;
+                bodyActionFlag = false;
+                upperActionFlag = false;
+                attackFlag = false;
+                break;
+            case CharacterProcessAction.deflect:
+                deflectFlag = false;
+                upperActionFlag = false;
+                break;
+            case CharacterProcessAction.deflected:
+                deflectedFlag = false;
+                upperActionFlag = false;
+                break;
+        }
+
+        currentProcessAction = nextAction;
+    }
+
     public bool moveFlag;
     public bool jumpFlag;
     public bool sprintFlag;
@@ -25,6 +69,8 @@ public class CharacterStatesData : MonoBehaviour
     public bool deflectFlag;
     public bool upperActionFlag;
     public bool bodyActionFlag;
+    public bool hitFlag;
+    public bool deflectedFlag;
 
     public float moveSpeed;
     public Vector2 inputAxes;

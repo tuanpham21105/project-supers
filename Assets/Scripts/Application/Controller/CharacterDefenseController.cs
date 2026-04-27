@@ -16,10 +16,10 @@ public class CharacterDefenseController : MonoBehaviour
 
     void Start()
     {
-        if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
-        if (characterStatesData == null) characterStatesData = GetComponentInParent<CharacterStatesData>();
+        if (characterObjectsData == null) characterObjectsData = GetComponent<CharacterObjectsData>();
+        if (characterStatesData == null) characterStatesData = GetComponent<CharacterStatesData>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
-        if (characterAttackController == null) characterAttackController = GetComponentInParent<CharacterAttackController>();
+        if (characterAttackController == null) characterAttackController = GetComponent<CharacterAttackController>();
 
         if (characterObjectsData != null && characterObjectsData.characterMesh != null)
         {
@@ -55,6 +55,7 @@ public class CharacterDefenseController : MonoBehaviour
         // Only start blocking when not doing other upper actions OR any body actions
         if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag)
         {
+            characterStatesData.blockFlag = false;
             return;
         }
 
@@ -77,6 +78,7 @@ public class CharacterDefenseController : MonoBehaviour
 
     public void Deflect()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
         if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
 
         if (Time.time - lastDeflectTime < deflectComboWindow)
@@ -89,6 +91,7 @@ public class CharacterDefenseController : MonoBehaviour
         }
 
         ResetDefenseFlags();
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.deflect);
         characterStatesData.upperActionFlag = true;
 
         if (animationController != null)
@@ -101,6 +104,7 @@ public class CharacterDefenseController : MonoBehaviour
 
     private void HandleDeflectOngoing()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
         characterStatesData.deflectFlag = true;
 
         characterStatesData.upperActionFlag = true;
@@ -110,6 +114,7 @@ public class CharacterDefenseController : MonoBehaviour
 
     private void HandleDeflectEndOngoing()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
         characterStatesData.deflectFlag = false;
 
         characterStatesData.upperActionFlag = true;
@@ -119,6 +124,7 @@ public class CharacterDefenseController : MonoBehaviour
 
     public void HandleDeflectEnd()
     {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
         if (animationController != null)
         {
             animationController.EndUpperAnimation();
@@ -129,6 +135,7 @@ public class CharacterDefenseController : MonoBehaviour
         characterStatesData.deflectFlag = false;
 
         characterStatesData.upperActionFlag = false;
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
 
         //Debug.Log("End deflect - " + Time.time);
     }

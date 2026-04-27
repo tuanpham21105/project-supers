@@ -27,10 +27,20 @@ public enum CharacterBodyAnimation
 
 public enum CharacterUpperAnimation
 {
+    none,
     normal_attack_1,
     normal_attack_2,
     block,
-    deflect
+    deflect,
+    deflected,
+}
+
+public enum AdditionalAnimation
+{
+    none,
+    hit,
+    hit_1,
+    hit_2
 }
 
 public class CharacterAnimationController : MonoBehaviour
@@ -52,6 +62,14 @@ public class CharacterAnimationController : MonoBehaviour
         CharacterBodyAnimation.strike_attack_2
     };
 
+    private int hitAnimationIndex = 0;
+    private List<AdditionalAnimation> hitAnimations = new List<AdditionalAnimation>
+    {
+        AdditionalAnimation.hit,
+        AdditionalAnimation.hit_1,
+        AdditionalAnimation.hit_2
+    };
+
     public void PlayBodyAnimation(CharacterBodyAnimation animation, float normalizedTimeOffset = -1f)
     {
         if (animator != null)
@@ -68,9 +86,33 @@ public class CharacterAnimationController : MonoBehaviour
         if (animator != null)
         {
             animator.SetFloat("DeflectReadySpeed", speed);
-            StartFadeUpperLayer(1f, 0.1f);
+            StartFadeUpperLayer(1f, transitionDuration);
             animator.CrossFade(animation.ToString(), transitionDuration, 1, 0f);
         }
+    }
+
+    public void PlayAdditionalAnimation(AdditionalAnimation animation)
+    {
+        if (animator != null)
+        {
+            animator.SetLayerWeight(2, 0.5f);
+            animator.CrossFade(animation.ToString(), transitionDuration, 2, 0f);
+        }
+    }
+
+    public void PlayHitAnimation()
+    {
+        PlayAdditionalAnimation(hitAnimations[hitAnimationIndex]);
+        hitAnimationIndex++;
+        if (hitAnimationIndex >= hitAnimations.Count)
+        {
+            hitAnimationIndex = 0;
+        }
+    }
+
+    public void PlayDeflectedAnimation()
+    {
+        PlayUpperAnimation(CharacterUpperAnimation.deflected);
     }
 
     public void PlayNormalAttack(bool isContinuing)

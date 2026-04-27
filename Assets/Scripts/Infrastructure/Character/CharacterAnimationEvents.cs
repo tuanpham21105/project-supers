@@ -13,6 +13,8 @@ public class CharacterAnimationEvents : MonoBehaviour
     public event System.Action OnDeflectOngoing;
     public event System.Action OnDeflectEndOngoing;
     public event System.Action OnDeflectEnd;
+    public event System.Action OnHitEnd;
+    public event System.Action OnDeflectedEnd;
 
     public void EmitNormalAttackOngoing()
     {
@@ -57,5 +59,15 @@ public class CharacterAnimationEvents : MonoBehaviour
     public void EmitDeflectEnd()
     {
         OnDeflectEnd?.Invoke();
+    }
+
+    public void EmitHitEnd()
+    {
+        OnHitEnd?.Invoke();
+    }
+    
+    public void EmitDeflectedEnd()
+    {
+        OnDeflectedEnd?.Invoke();
     }
 }
