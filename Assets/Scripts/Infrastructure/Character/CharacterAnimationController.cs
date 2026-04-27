@@ -45,7 +45,7 @@ public class CharacterAnimationController : MonoBehaviour
         CharacterUpperAnimation.normal_attack_2
     };
 
-    private int strikeAttackComboIndex = 0;
+    [SerializeField] private int strikeAttackComboIndex = 0;
     private List<CharacterBodyAnimation> strikeAttackCombo = new List<CharacterBodyAnimation>
     {
         CharacterBodyAnimation.strike_attack_1,

@@ -10,6 +10,15 @@ public class CharacterAttackController : MonoBehaviour
     [SerializeField] private CharacterDefenseController defenseController;
     private CharacterAnimationEvents animationEvents;
 
+    // Timestamps recording when each attack last entered its end-ongoing (follow-through) phase.
+    // Used to determine whether the next attack of the same type is a continuing combo.
+    private float lastNormalAttackEndTime = -Mathf.Infinity;
+    private float lastStrikeAttackEndTime = -Mathf.Infinity;
+
+    // Maximum seconds after an attack's follow-through ends during which the next
+    // attack of the same kind is treated as a continuing combo.
+    [SerializeField] private float continueAttackWindow = 1f;
+
     void Start()
     {
         if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
@@ -47,18 +56,20 @@ public class CharacterAttackController : MonoBehaviour
 
     public void StartNormalAttack()
     {
-        if ((characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag)) return;
+        if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
 
-        bool isContinuing = characterStatesData.normalAttackEndFlag;
-        
+        // Continuing if we are still within the combo window since the last normal attack ended.
+        bool isContinuing = (Time.time - lastNormalAttackEndTime) <= continueAttackWindow;
+
         PlayNormalAttack(isContinuing);
     }
 
     public void StartStrikeAttack()
     {
-        if ((characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag)) return;
+        if (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag) return;
 
-        bool isContinuing = characterStatesData.strikeAttackEndFlag;
+        // Continuing if we are still within the combo window since the last strike attack ended.
+        bool isContinuing = (Time.time - lastStrikeAttackEndTime) <= continueAttackWindow;
 
         PlayStrikeAttack(isContinuing);
     }
@@ -112,8 +123,11 @@ public class CharacterAttackController : MonoBehaviour
 
         ResetAttackFlags();
         characterStatesData.attackFlag = true;
-        
+
         characterStatesData.strikeAttackStartFlag = true;
+        characterStatesData.strikeAttackOngoingFlag = false;
+        characterStatesData.strikeAttackEndFlag = false;
+
         characterStatesData.upperActionFlag = true;
         characterStatesData.bodyActionFlag = true;
 
@@ -121,6 +135,8 @@ public class CharacterAttackController : MonoBehaviour
         {
             animationController.PlayStrikeAttack(isContinuing);
         }
+
+        //Debug.Log("Start normal attack - " + Time.time);
     }
 
     private void HandleNormalAttackOngoing()
@@ -130,6 +146,8 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.normalAttackStartFlag = false;
         characterStatesData.normalAttackOngoingFlag = true;
         characterStatesData.normalAttackEndFlag = false;
+
+        //Debug.Log("Start ongoing normal attack - " + Time.time);
     }
 
     private void HandleNormalAttackEndOngoing()
@@ -140,24 +158,32 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.normalAttackOngoingFlag = false;
         characterStatesData.normalAttackEndFlag = true;
 
-        characterStatesData.upperActionFlag = false;
+        characterStatesData.upperActionFlag = true;
+
+        // Record the time this attack entered its follow-through so the next input
+        // can decide whether it qualifies as a continuing combo.
+
+        //Debug.Log("End Ongoing Normal attack - " + Time.time);
     }
 
     private void HandleNormalAttackEnd()
     {
+        if (animationController != null)
+        {
+            animationController.EndUpperAnimation();
+        }
+
         characterStatesData.attackFlag = false;
-        
+
         characterStatesData.normalAttackStartFlag = false;
         characterStatesData.normalAttackOngoingFlag = false;
         characterStatesData.normalAttackEndFlag = false;
-        
+
         characterStatesData.upperActionFlag = false;
 
-        if (animationController != null)
-        {
-            animationController.ResetNormalAttackCombo();
-            animationController.EndUpperAnimation();
-        }
+        lastNormalAttackEndTime = Time.time;
+
+        //Debug.Log("End Normal attack - " + Time.time);
     }
 
     private void HandleStrikeAttackOngoing()
@@ -167,22 +193,38 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.strikeAttackStartFlag = false;
         characterStatesData.strikeAttackOngoingFlag = true;
         characterStatesData.strikeAttackEndFlag = false;
+
+        characterStatesData.upperActionFlag = true;
+        characterStatesData.bodyActionFlag = true;
     }
 
     private void HandleStrikeAttackEndOngoing()
     {
-        characterStatesData.attackFlag = false;
+        characterStatesData.attackFlag = true;
 
         characterStatesData.strikeAttackStartFlag = false;
         characterStatesData.strikeAttackOngoingFlag = false;
         characterStatesData.strikeAttackEndFlag = true;
-        
-        characterStatesData.upperActionFlag = false;
-        characterStatesData.bodyActionFlag = false;
+
+        characterStatesData.upperActionFlag = true;
+        characterStatesData.bodyActionFlag = true;
+
+        // Record the time this attack entered its follow-through so the next input
+        // can decide whether it qualifies as a continuing combo.
     }
 
     private void HandleStrikeAttackEnd()
     {
+        if (animationController != null)
+        {
+            // Force the movement controller to refresh its animation state
+            CharacterMovementController movementController = GetComponent<CharacterMovementController>();
+            if (movementController != null)
+            {
+                movementController.ForceRefreshBodyAnimation();
+            }
+        }
+
         characterStatesData.attackFlag = false;
 
         characterStatesData.strikeAttackStartFlag = false;
@@ -192,15 +234,6 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.upperActionFlag = false;
         characterStatesData.bodyActionFlag = false;
 
-        if (animationController != null)
-        {
-            animationController.ResetStrikeAttackCombo();
-            // Force the movement controller to refresh its animation state
-            CharacterMovementController movementController = GetComponent<CharacterMovementController>();
-            if (movementController != null)
-            {
-                movementController.ForceRefreshBodyAnimation();
-            }
-        }
+        lastStrikeAttackEndTime = Time.time;
     }
 }

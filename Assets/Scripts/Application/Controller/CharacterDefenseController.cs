@@ -95,6 +95,8 @@ public class CharacterDefenseController : MonoBehaviour
         {
             animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect, currentDeflectSpeed);
         }
+
+        //Debug.Log("Start deflect - " + Time.time);
     }
 
     private void HandleDeflectOngoing()
@@ -102,6 +104,8 @@ public class CharacterDefenseController : MonoBehaviour
         characterStatesData.deflectFlag = true;
 
         characterStatesData.upperActionFlag = true;
+
+        //Debug.Log("Start Ongoing deflect - " + Time.time);
     }
 
     private void HandleDeflectEndOngoing()
@@ -109,19 +113,23 @@ public class CharacterDefenseController : MonoBehaviour
         characterStatesData.deflectFlag = false;
 
         characterStatesData.upperActionFlag = true;
+
+        //Debug.Log("End Ongoing deflect - " + Time.time);
     }
 
     public void HandleDeflectEnd()
     {
+        if (animationController != null)
+        {
+            animationController.EndUpperAnimation();
+        }
+
         lastDeflectTime = Time.time;
 
         characterStatesData.deflectFlag = false;
 
         characterStatesData.upperActionFlag = false;
 
-        if (animationController != null)
-        {
-            animationController.EndUpperAnimation();
-        }
+        //Debug.Log("End deflect - " + Time.time);
     }
 }
