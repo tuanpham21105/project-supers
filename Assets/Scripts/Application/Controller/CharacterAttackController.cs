@@ -96,12 +96,6 @@ public class CharacterAttackController : MonoBehaviour
     {
         if (defenseController != null) defenseController.Block(false);
 
-        // If a strike attack was in its follow-through, clean it up before starting a new attack kind
-        if (characterStatesData.strikeAttackEndFlag)
-        {
-            HandleStrikeAttackEnd();
-        }
-
         ResetAttackFlags();
         characterStatesData.ChangeProcessAction(CharacterProcessAction.normal_attack);
         characterStatesData.attackFlag = true;
@@ -117,12 +111,6 @@ public class CharacterAttackController : MonoBehaviour
     private void PlayStrikeAttack(bool isContinuing)
     {
         if (defenseController != null) defenseController.Block(false);
-
-        // If a normal attack was in its follow-through, clean it up before starting a new attack kind
-        if (characterStatesData.normalAttackEndFlag)
-        {
-            HandleNormalAttackEnd();
-        }
 
         ResetAttackFlags();
         characterStatesData.ChangeProcessAction(CharacterProcessAction.strike_attack);

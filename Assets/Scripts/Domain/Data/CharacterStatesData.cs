@@ -8,7 +8,8 @@ public enum CharacterProcessAction
     normal_attack,
     strike_attack,
     deflect,
-    deflected
+    deflected,
+    knock_out
 }
 
 public class CharacterStatesData : MonoBehaviour
@@ -43,6 +44,20 @@ public class CharacterStatesData : MonoBehaviour
                 deflectedFlag = false;
                 upperActionFlag = false;
                 break;
+            case CharacterProcessAction.knock_out:
+                knockAwayFlag = false;
+                bodyActionFlag = false;
+                upperActionFlag = false;
+                break;
+        }
+
+        if (nextAction == CharacterProcessAction.knock_out)
+        {
+            attackFlag = false;
+            strikeAttackStartFlag = false;
+            strikeAttackOngoingFlag = false;
+            strikeAttackEndFlag = false;
+            knockAwayFlag = false;
         }
 
         currentProcessAction = nextAction;
@@ -78,4 +93,6 @@ public class CharacterStatesData : MonoBehaviour
     public float horizontalRotation;
     public float verticalRotation;
     public Vector3 direction;
+
+    public int currentEndurance;
 }

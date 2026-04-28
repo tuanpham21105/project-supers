@@ -44,8 +44,18 @@ public class PlayerTestInputController : MonoBehaviour
             debuffController.Deflected();
         }
     }
-    private void HandleF3() { Debug.Log("F3 Placeholder"); }
-    private void HandleF4() { Debug.Log("F4 Placeholder"); }
+    private void HandleF3()
+    {
+        if (debuffController != null)
+        {
+            Debug.Log("F3: Triggering KnockBack");
+            // Mock knockback: backwards and slightly upwards
+            Vector3 knockback = -transform.forward * 100f + Vector3.up * 5f;
+            debuffController.KnockOut(knockback);
+        }
+    }
+    private void HandleF4() { Debug.Log("F4 Placeholder"); 
+    }
     private void HandleF5() { Debug.Log("F5 Placeholder"); }
     private void HandleF6() { Debug.Log("F6 Placeholder"); }
     private void HandleF7() { Debug.Log("F7 Placeholder"); }

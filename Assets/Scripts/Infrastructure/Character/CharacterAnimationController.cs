@@ -22,7 +22,9 @@ public enum CharacterBodyAnimation
     jump,
     fall,
     strike_attack_1,
-    strike_attack_2
+    strike_attack_2,
+    knock_out_1,
+    knock_out_2
 }
 
 public enum CharacterUpperAnimation
@@ -159,6 +161,12 @@ public class CharacterAnimationController : MonoBehaviour
     public void ResetStrikeAttackCombo()
     {
         strikeAttackComboIndex = 0;
+    }
+
+    public void PlayKnockOutAnimation(bool front)
+    {
+        CharacterBodyAnimation animation = front ? CharacterBodyAnimation.knock_out_1 : CharacterBodyAnimation.knock_out_2;
+        PlayBodyAnimation(animation);
     }
 
     public void EndUpperAnimation()

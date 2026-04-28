@@ -15,12 +15,16 @@ public class CharacterObjectService : MonoBehaviour
     public bool IsGrounded => characterController.isGrounded;
     public Transform CharacterTransform => transform;
     public Vector3 Velocity => characterController.velocity;
+    public Vector3 ImpactForceDirection => _impactForce.normalized;
+
+    public event Action OnImpactForceDecayed;
 
     private float _verticalVelocity;
     private Vector3 _impactForce;
     private Vector3 _dashForce;
     private float _dashTimer;
     private Vector3 _horizontalMove;
+    private bool _isImpactActive;
 
     void Start()
     {
@@ -50,9 +54,16 @@ public class CharacterObjectService : MonoBehaviour
         // Decay the impact force over time
         _impactForce = Vector3.Lerp(_impactForce, Vector3.zero, impactDecaySpeed * Time.fixedDeltaTime);
 
-        if (_impactForce.magnitude > 0.1f)
+        if (_impactForce.magnitude > 6f)
         {
             combinedMove += _impactForce;
+            _isImpactActive = true;
+        }
+        else if (_isImpactActive)
+        {
+            _isImpactActive = false;
+            _impactForce = Vector3.zero;
+            OnImpactForceDecayed?.Invoke();
         }
 
         // 4. Handle Dash
@@ -86,6 +97,13 @@ public class CharacterObjectService : MonoBehaviour
     public void ApplyForce(Vector3 force)
     {
         _impactForce += force;
+    }
+
+    public void SetDirection(Vector3 direction)
+    {
+        if (direction == Vector3.zero) return;
+
+        transform.forward = direction;
     }
 
     public void RotateToDirection(Vector3 direction)

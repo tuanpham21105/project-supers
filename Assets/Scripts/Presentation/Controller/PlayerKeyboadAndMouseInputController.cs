@@ -112,10 +112,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void SprintInput()
     {
         bool currentSprintInput = ProcessInput(keybinds.sprintKey, sprintInput);
-        
+
         sprintInput = currentSprintInput;
 
-        characterMovementController.Sprint(sprintInput);
+        characterMovementController.SetSprint(sprintInput);
 
         HandleOnceActivation(ref sprintInput, keybinds.sprintKey);
     }
@@ -133,12 +133,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void ToggleFlyInput()
     {
         bool currentFlyInput = ProcessInput(keybinds.toggleFlyKey, toggleFlyInput);
-        if (currentFlyInput != toggleFlyInput)
-        {
-            toggleFlyInput = currentFlyInput;
 
-            characterMovementController.ToggleFly(toggleFlyInput);
-        }
+        toggleFlyInput = currentFlyInput;
+
+        characterMovementController.SetFly(toggleFlyInput);
 
         HandleOnceActivation(ref toggleFlyInput, keybinds.toggleFlyKey);
     }
@@ -156,12 +154,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void FlyUpInput()
     {
         bool currentInput = ProcessInput(keybinds.flyUpKey, flyUpInput);
-        if (currentInput != flyUpInput)
-        {
-            flyUpInput = currentInput;
+        
+        flyUpInput = currentInput;
 
-            characterMovementController.FlyUp(flyUpInput);
-        }
+        characterMovementController.SetFlyUp(flyUpInput);
 
         HandleOnceActivation(ref flyUpInput, keybinds.flyUpKey);
     }
@@ -169,12 +165,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void FlyDownInput()
     {
         bool currentInput = ProcessInput(keybinds.flyDownKey, flyDownInput);
-        if (currentInput != flyDownInput)
-        {
-            flyDownInput = currentInput;
+        
+        flyDownInput = currentInput;
 
-            characterMovementController.FlyDown(flyDownInput);
-        }
+        characterMovementController.SetFlyDown(flyDownInput);
 
         HandleOnceActivation(ref flyDownInput, keybinds.flyDownKey);
     }

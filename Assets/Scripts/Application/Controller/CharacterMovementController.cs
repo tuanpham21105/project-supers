@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,13 +21,13 @@ public class CharacterMovementController : MonoBehaviour
 
     private void Update()
     {
-        ApplyRotation();
-        UpdateAnimations();
     }
 
     private void FixedUpdate()
     {
         HandleMovement();
+        ApplyRotation();
+        UpdateAnimations();
     }
 
     private void ApplyRotation()
@@ -96,8 +97,10 @@ public class CharacterMovementController : MonoBehaviour
         // Auto-landing: if we touch the ground while in fly mode, turn it off.
         if (characterStatesData.flyFlag && characterObjectService.IsGrounded)
         {
-            ToggleFly(false);
+            SetFly(false);
         }
+
+        characterObjectService.ToggleGravity(!characterStatesData.flyFlag);
     }
 
     private Vector3 GetCurrentMoveDirection()
@@ -128,30 +131,39 @@ public class CharacterMovementController : MonoBehaviour
         return moveDirection.normalized;
     }
 
-    public void Move(Vector2 direction)
+    public bool Move(Vector2 direction)
     {
+        if (characterStatesData.bodyActionFlag) return false;
         characterStatesData.inputAxes = direction;
         characterStatesData.moveFlag = direction.sqrMagnitude > 0;
+        return true;
     }
 
-    public void Jump()
+    public bool Jump()
     {
+        if (characterStatesData.bodyActionFlag) return false;
         // Jump only work when on ground, not flying and no body actions ongoing
-        if (!characterStatesData.flyFlag && characterObjectService.IsGrounded && !characterStatesData.bodyActionFlag)
+        if (!characterStatesData.flyFlag && characterObjectService.IsGrounded)
         {
             characterObjectService.SetVerticalVelocity(characterStatsData.jumpForce);
         }
+        return true;
     }
 
-    public void Sprint(bool status)
+    public bool SetSprint(bool status)
     {
+        if (characterStatesData.bodyActionFlag) return false;
+        if (status == characterStatesData.sprintFlag) return true;
+
         characterStatesData.sprintFlag = status;
+        return true;
     }
 
-    public void Dash()
+    public bool Dash()
     {
-        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) return;
+        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) return false;
         StartCoroutine(DashCoroutine());
+        return true;
     }
 
     private IEnumerator DashCoroutine()
@@ -195,25 +207,38 @@ public class CharacterMovementController : MonoBehaviour
         characterStatesData.dashCooldownFlag = false;
     }
 
-    public void ToggleFly(bool status)
+    public bool SetFly(bool status)
     {
+        if (characterStatesData.bodyActionFlag) return false;
+        if (status == characterStatesData.flyFlag) return true;
+
         characterStatesData.flyFlag = status;
-        characterObjectService.ToggleGravity(!status);
+        return true;
     }
 
-    public void FlyUp(bool status)
+    public bool SetFlyUp(bool status)
     {
+        if (characterStatesData.bodyActionFlag) return false;
+        if (status == characterStatesData.flyUpFlag) return true;
+
         characterStatesData.flyUpFlag = status;
+        return true;
     }
 
-    public void FlyDown(bool status)
+    public bool SetFlyDown(bool status)
     {
+        if (characterStatesData.bodyActionFlag) return false;
+        if (status == characterStatesData.flyDownFlag) return true;
+
         characterStatesData.flyDownFlag = status;
+        return true;
     }
 
-    public void Rotate(Vector3 lookInput)
+    public bool Rotate(Vector3 lookInput)
     {
+        if (characterStatesData.bodyActionFlag) return false;
         characterStatesData.lookInput = lookInput;
+        return true;
     }
 
     private void UpdateAnimations()

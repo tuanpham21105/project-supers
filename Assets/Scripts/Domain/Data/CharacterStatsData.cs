@@ -12,4 +12,5 @@ public class CharacterStatsData : MonoBehaviour
     public float dashForce;
     public float dashDuration;
     public float dashCooldown;
+    public int endurance;
 }
