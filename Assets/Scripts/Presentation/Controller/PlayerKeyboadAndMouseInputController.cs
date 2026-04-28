@@ -47,12 +47,20 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         keybinds = PlayerKeyboardAndMouseKeybindsData.playerKeyboardAndMouseKeybindsData;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        characterMovementController.onLanding += HandleLanding;
     }
 
     private void OnDisable()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    private void Oestroy()
+    {
+
+        characterMovementController.onLanding -= HandleLanding;  
     }
 
     private Vector2 smoothLookInput;
@@ -79,6 +87,11 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     //     // Physics-related logic remains here if needed, 
     //     // but current implementation handles movement via Move calls triggered by inputs.
     // }
+
+    public void HandleLanding()
+    {
+        toggleFlyInput = false;
+    }
 
     public override void MoveDirectionInput()
     {

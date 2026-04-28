@@ -13,6 +13,8 @@ public class CharacterMovementController : MonoBehaviour
 
     private CharacterBodyAnimation _currentBodyAnimation;
 
+    public event Action onLanding;
+
     private void Start()
     {
         // Initialize rotation states from current transform orientations to prevent jumping at start
@@ -36,7 +38,7 @@ public class CharacterMovementController : MonoBehaviour
 
         Vector3 lookDir = characterStatesData.lookInput;
 
-        if (characterStatesData.fastFlyFlag && !characterStatesData.upperActionFlag)
+        if (characterStatesData.fastFlyFlag && !characterStatesData.upperActionFlag && !characterObjectService.IsGrounded)
         {
             characterObjectService.FastFlyingRotate(lookDir);
         }
@@ -98,6 +100,7 @@ public class CharacterMovementController : MonoBehaviour
         if (characterStatesData.flyFlag && characterObjectService.IsGrounded)
         {
             SetFly(false);
+            onLanding?.Invoke();
         }
 
         characterObjectService.ToggleGravity(!characterStatesData.flyFlag);
@@ -207,38 +210,30 @@ public class CharacterMovementController : MonoBehaviour
         characterStatesData.dashCooldownFlag = false;
     }
 
-    public bool SetFly(bool status)
+    public void SetFly(bool status)
     {
-        if (characterStatesData.bodyActionFlag) return false;
-        if (status == characterStatesData.flyFlag) return true;
+        if (status == characterStatesData.flyFlag) return;
 
         characterStatesData.flyFlag = status;
-        return true;
     }
 
-    public bool SetFlyUp(bool status)
+    public void SetFlyUp(bool status)
     {
-        if (characterStatesData.bodyActionFlag) return false;
-        if (status == characterStatesData.flyUpFlag) return true;
+        if (status == characterStatesData.flyUpFlag) return;
 
         characterStatesData.flyUpFlag = status;
-        return true;
     }
 
-    public bool SetFlyDown(bool status)
+    public void SetFlyDown(bool status)
     {
-        if (characterStatesData.bodyActionFlag) return false;
-        if (status == characterStatesData.flyDownFlag) return true;
+        if (status == characterStatesData.flyDownFlag) return;
 
         characterStatesData.flyDownFlag = status;
-        return true;
     }
 
-    public bool Rotate(Vector3 lookInput)
+    public void Rotate(Vector3 lookInput)
     {
-        if (characterStatesData.bodyActionFlag) return false;
         characterStatesData.lookInput = lookInput;
-        return true;
     }
 
     private void UpdateAnimations()
