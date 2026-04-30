@@ -1507,6 +1507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterObjectsData: {fileID: 0}
   characterStatesData: {fileID: 0}
+  characterStatsData: {fileID: 0}
   characterMovementController: {fileID: 0}
   animationController: {fileID: 0}
 --- !u!114 &821827463
@@ -1566,10 +1567,12 @@ MonoBehaviour:
   dashDuration: 0.1
   dashCooldown: 1
   endurance: 5000
-  knockOutThreshold: 0.01
+  knockOutThreshold: 0.5
   blockThreshold: 0.7
   normalAttackDamage: 200
   strikeAttackDamage: 250
+  hitKnockAwayForce: 14
+  damageKnockAwayRatio: 0.3
 --- !u!114 &821827466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3114,6 +3117,8 @@ MonoBehaviour:
   blockThreshold: 0.7
   normalAttackDamage: 200
   strikeAttackDamage: 50
+  hitKnockAwayForce: 0
+  damageKnockAwayRatio: 0
 --- !u!114 &1656352643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3207,6 +3212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterObjectsData: {fileID: 0}
   characterStatesData: {fileID: 0}
+  characterStatsData: {fileID: 0}
   characterMovementController: {fileID: 0}
   animationController: {fileID: 0}
 --- !u!114 &1656352647

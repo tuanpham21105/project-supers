@@ -57,7 +57,7 @@ public class CharacterObjectService : MonoBehaviour
         _impactForce = Vector3.Lerp(_impactForce, Vector3.zero, impactDecaySpeed * Time.fixedDeltaTime);
 
         bool impactAppliedThisFrame = false;
-        if (_impactForce.magnitude > 6f)
+        if (_impactForce.magnitude > 10f)
         {
             combinedMove += _impactForce;
             _isImpactActive = true;

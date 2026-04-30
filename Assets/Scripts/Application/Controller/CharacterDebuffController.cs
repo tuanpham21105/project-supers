@@ -5,6 +5,7 @@ public class CharacterDebuffController : MonoBehaviour
 {
     [SerializeField] private CharacterObjectsData characterObjectsData;
     [SerializeField] private CharacterStatesData characterStatesData;
+    [SerializeField] private CharacterStatsData characterStatsData;
     [SerializeField] private CharacterMovementController characterMovementController;
     [SerializeField] private CharacterAnimationController animationController;
     private CharacterObjectService characterObjectService;
@@ -14,6 +15,7 @@ public class CharacterDebuffController : MonoBehaviour
     {
         if (characterObjectsData == null) characterObjectsData = GetComponent<CharacterObjectsData>();
         if (characterStatesData == null) characterStatesData = GetComponent<CharacterStatesData>();
+        if (characterStatsData == null) characterStatsData = GetComponent<CharacterStatsData>();
         if (characterMovementController == null) characterMovementController = GetComponent<CharacterMovementController>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
         if (characterObjectService == null) characterObjectService = GetComponent<CharacterObjectService>();
@@ -59,6 +61,8 @@ public class CharacterDebuffController : MonoBehaviour
         {
             animationController.PlayHitAnimation();
         }
+
+        KnockBack(direction * characterStatsData.hitKnockAwayForce);
     }
 
     private void HandleHitEnd()
@@ -104,7 +108,7 @@ public class CharacterDebuffController : MonoBehaviour
         }
     }
 
-    public void KnockOut(Vector3 direction, bool isFront)
+    public void KnockOut(Vector3 direction, bool isFront, int damage)
     {
         if (characterStatesData != null && characterStatesData.knockAwayFlag) return;
 
@@ -125,7 +129,8 @@ public class CharacterDebuffController : MonoBehaviour
         if (characterObjectService != null)
         {
             characterObjectService.SetDirection(direction * (isFront ? -1 : 1));
-            characterObjectService.ApplyForce(direction);
+            Vector3 force = direction * damage * characterStatsData.damageKnockAwayRatio;
+            KnockBack(force);
         }
     }
 
@@ -144,6 +149,8 @@ public class CharacterDebuffController : MonoBehaviour
         {
             animationController.PlayDeflectedAnimation();
         }
+
+        KnockBack(direction * characterStatsData.hitKnockAwayForce);
     }
 
     private void HandleDeflectedEnd()

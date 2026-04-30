@@ -69,7 +69,7 @@ public class CharacterTakeDamageController : MonoBehaviour
 
         if (damage >= (int)(characterStatsData.knockOutThreshold * (float)characterStatesData.currentEndurance))
         {
-            characterDebuffController.KnockOut(direction, isFront);
+            characterDebuffController.KnockOut(direction, isFront, damage);
         }
         else
         {
