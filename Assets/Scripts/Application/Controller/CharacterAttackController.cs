@@ -6,8 +6,10 @@ public class CharacterAttackController : MonoBehaviour
 {
     [SerializeField] private CharacterObjectsData characterObjectsData;
     [SerializeField] private CharacterStatesData characterStatesData;
+    [SerializeField] private CharacterStatsData characterStatsData;
     [SerializeField] private CharacterAnimationController animationController;
     [SerializeField] private CharacterDefenseController defenseController;
+    [SerializeField] private CharacterHitBoxesEvents characterHitBoxesEvents;
     private CharacterAnimationEvents animationEvents;
 
     // Timestamps recording when each attack last entered its end-ongoing (follow-through) phase.
@@ -23,8 +25,16 @@ public class CharacterAttackController : MonoBehaviour
     {
         if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
         if (characterStatesData == null) characterStatesData = GetComponentInParent<CharacterStatesData>();
+        if (characterStatsData == null) characterStatsData = GetComponentInParent<CharacterStatsData>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
         if (defenseController == null) defenseController = GetComponent<CharacterDefenseController>();
+        if (characterHitBoxesEvents == null) characterHitBoxesEvents = characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>();
+        
+        if (characterHitBoxesEvents != null)
+        {
+            characterHitBoxesEvents.OnNormalAttack += HandleNormalAttackHit;
+            characterHitBoxesEvents.OnStrikeAttack += HandleStrikeAttackHit;
+        }
 
         if (characterObjectsData != null && characterObjectsData.characterMesh != null)
         {
@@ -52,6 +62,14 @@ public class CharacterAttackController : MonoBehaviour
             animationEvents.OnStrikeAttackEndOngoing -= HandleStrikeAttackEndOngoing;
             animationEvents.OnStrikeAttackEnd -= HandleStrikeAttackEnd;
         }
+    }
+
+    public void HandleNormalAttackHit(GameObject target) {
+        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, characterStatsData.normalAttackDamage, (target.transform.position - gameObject.transform.position).normalized, AttackTypes.light_attack);
+    }
+
+    public void HandleStrikeAttackHit(GameObject target) {
+        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, characterStatsData.strikeAttackDamage, (target.transform.position - gameObject.transform.position).normalized, AttackTypes.heavy_attack);
     }
 
     public void StartNormalAttack()

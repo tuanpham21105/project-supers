@@ -48,10 +48,10 @@ public class PlayerTestInputController : MonoBehaviour
     {
         if (debuffController != null)
         {
-            Debug.Log("F3: Triggering KnockBack");
+            // Debug.Log("F3: Triggering KnockBack");
             // Mock knockback: backwards and slightly upwards
-            Vector3 knockback = -transform.forward * 100f + Vector3.up * 5f;
-            debuffController.KnockOut(knockback);
+            Vector3 knockback = -Vector3.forward * 100f + Vector3.down * 200f;
+            debuffController.KnockOut(knockback, true);
         }
     }
     private void HandleF4() { Debug.Log("F4 Placeholder"); 

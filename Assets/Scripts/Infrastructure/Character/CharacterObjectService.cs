@@ -18,6 +18,7 @@ public class CharacterObjectService : MonoBehaviour
     public Vector3 ImpactForceDirection => _impactForce.normalized;
 
     public event Action OnImpactForceDecayed;
+    public event Action OnImpactCollision;
 
     private float _verticalVelocity;
     private Vector3 _impactForce;
@@ -33,6 +34,7 @@ public class CharacterObjectService : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector3 startPosition = transform.position;
         Vector3 combinedMove = Vector3.zero;
 
         // 1. Handle Horizontal Movement
@@ -54,10 +56,12 @@ public class CharacterObjectService : MonoBehaviour
         // Decay the impact force over time
         _impactForce = Vector3.Lerp(_impactForce, Vector3.zero, impactDecaySpeed * Time.fixedDeltaTime);
 
+        bool impactAppliedThisFrame = false;
         if (_impactForce.magnitude > 6f)
         {
             combinedMove += _impactForce;
             _isImpactActive = true;
+            impactAppliedThisFrame = true;
         }
         else if (_isImpactActive)
         {
@@ -76,6 +80,19 @@ public class CharacterObjectService : MonoBehaviour
 
         // Apply everything in one call per tick
         characterController.Move(combinedMove * Time.fixedDeltaTime);
+
+        if (impactAppliedThisFrame)
+        {
+            float distanceMoved = Vector3.Distance(transform.position, startPosition);
+            float expectedDistance = combinedMove.magnitude * Time.fixedDeltaTime;
+
+            if (expectedDistance > 0.01f && distanceMoved < 0.001f)
+            {
+                _impactForce = Vector3.zero;
+                _isImpactActive = false;
+                OnImpactCollision?.Invoke();
+            }
+        }
     }
 
     public void ToggleGravity(bool status)
@@ -136,5 +153,9 @@ public class CharacterObjectService : MonoBehaviour
     {
         _dashForce = direction.normalized * force;
         _dashTimer = duration;
+    }
+
+    public bool IsPointFront(Vector3 point) {
+        return Vector3.Dot(point, transform.forward) <= 0;
     }
 }

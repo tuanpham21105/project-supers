@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterDebuffController : MonoBehaviour
@@ -31,7 +30,8 @@ public class CharacterDebuffController : MonoBehaviour
 
         if (characterObjectService != null)
         {
-            characterObjectService.OnImpactForceDecayed += HandleImpactForceDecayed;
+            characterObjectService.OnImpactForceDecayed += EndKnockOut;
+            characterObjectService.OnImpactCollision += HandleImpactCollision;
         }
     }
 
@@ -45,11 +45,12 @@ public class CharacterDebuffController : MonoBehaviour
 
         if (characterObjectService != null)
         {
-            characterObjectService.OnImpactForceDecayed -= HandleImpactForceDecayed;
+            characterObjectService.OnImpactForceDecayed -= EndKnockOut;
+            characterObjectService.OnImpactCollision -= HandleImpactCollision;
         }
     }
     
-    public void Hit()
+    public void Hit(Vector3 direction)
     {
         if (characterStatesData != null && characterStatesData.hitFlag) return;
 
@@ -69,7 +70,18 @@ public class CharacterDebuffController : MonoBehaviour
         }
     }
 
-    private void HandleImpactForceDecayed()
+    private void HandleImpactCollision()
+    {
+        StartCoroutine(ImpactCollisionRoutine());
+    }
+
+    private IEnumerator ImpactCollisionRoutine()
+    {
+        yield return new WaitForSeconds(1f);
+        EndKnockOut();
+    }
+
+    private void EndKnockOut()
     {
         if (characterStatesData != null)
         {
@@ -92,7 +104,7 @@ public class CharacterDebuffController : MonoBehaviour
         }
     }
 
-    public void KnockOut(Vector3 knockoutForce)
+    public void KnockOut(Vector3 direction, bool isFront)
     {
         if (characterStatesData != null && characterStatesData.knockAwayFlag) return;
 
@@ -104,23 +116,20 @@ public class CharacterDebuffController : MonoBehaviour
             characterStatesData.upperActionFlag = true;
         }
 
-        // Determine if knockoutForce is in front or back of character
-        bool isFront = Vector3.Dot(knockoutForce, transform.forward) < 0;
-
         if (animationController != null)
         {
-            animationController.PlayKnockOutAnimation(isFront);
             animationController.EndUpperAnimation();
+            animationController.PlayKnockOutAnimation(isFront);
         }
 
         if (characterObjectService != null)
         {
-            characterObjectService.SetDirection(knockoutForce * (isFront ? -1 : 1));
-            characterObjectService.ApplyForce(knockoutForce);
+            characterObjectService.SetDirection(direction * (isFront ? -1 : 1));
+            characterObjectService.ApplyForce(direction);
         }
     }
 
-    public void Deflected()
+    public void Deflected(Vector3 direction)
     {
         if (characterStatesData != null && characterStatesData.deflectedFlag) return;
 

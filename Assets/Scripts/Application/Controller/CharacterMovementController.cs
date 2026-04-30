@@ -96,6 +96,8 @@ public class CharacterMovementController : MonoBehaviour
             characterObjectService.Move(moveDirection, currentSpeed);
         }
 
+        characterStatesData.moveSpeed = currentSpeed;
+
         // Auto-landing: if we touch the ground while in fly mode, turn it off.
         if (characterStatesData.flyFlag && characterObjectService.IsGrounded)
         {
@@ -134,39 +136,31 @@ public class CharacterMovementController : MonoBehaviour
         return moveDirection.normalized;
     }
 
-    public bool Move(Vector2 direction)
+    public void Move(Vector2 direction)
     {
-        if (characterStatesData.bodyActionFlag) return false;
         characterStatesData.inputAxes = direction;
         characterStatesData.moveFlag = direction.sqrMagnitude > 0;
-        return true;
     }
 
-    public bool Jump()
+    public void Jump()
     {
-        if (characterStatesData.bodyActionFlag) return false;
-        // Jump only work when on ground, not flying and no body actions ongoing
         if (!characterStatesData.flyFlag && characterObjectService.IsGrounded)
         {
             characterObjectService.SetVerticalVelocity(characterStatsData.jumpForce);
         }
-        return true;
     }
 
-    public bool SetSprint(bool status)
+    public void SetSprint(bool status)
     {
-        if (characterStatesData.bodyActionFlag) return false;
-        if (status == characterStatesData.sprintFlag) return true;
+        if (status == characterStatesData.sprintFlag) return;
 
         characterStatesData.sprintFlag = status;
-        return true;
     }
 
-    public bool Dash()
+    public void Dash()
     {
-        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) return false;
+        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) return;
         StartCoroutine(DashCoroutine());
-        return true;
     }
 
     private IEnumerator DashCoroutine()

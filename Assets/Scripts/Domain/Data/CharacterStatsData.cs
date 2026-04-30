@@ -13,4 +13,10 @@ public class CharacterStatsData : MonoBehaviour
     public float dashDuration;
     public float dashCooldown;
     public int endurance;
+    public float knockOutThreshold;
+    public float blockThreshold;
+    public int normalAttackDamage;
+    public int strikeAttackDamage;
+    public float hitKnockAwayForce;
+    public float damageKnockAwayRatio;
 }
