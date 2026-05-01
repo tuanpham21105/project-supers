@@ -8,6 +8,21 @@ public class CharacterHitBoxService : MonoBehaviour
 
     [SerializeField] private AttackTypes attackType;
 
+    void Start()
+    {
+        characterHitBoxesEvents.OnAttackInterrupt += HandleAttackInterrupt;
+    }
+
+    void OnDestroy()
+    {
+        characterHitBoxesEvents.OnAttackInterrupt -= HandleAttackInterrupt;
+    }
+
+    private void HandleAttackInterrupt()
+    {
+        GetComponent<Collider>().enabled = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (characterHitBoxesEvents == null) return;
@@ -15,10 +30,10 @@ public class CharacterHitBoxService : MonoBehaviour
         switch (attackType)
         {
             case AttackTypes.light_attack:
-                characterHitBoxesEvents.EmitNormalAttack(other.gameObject);
+                characterHitBoxesEvents.EmitNormalAttack(other.GetComponent<CharacterHurtBoxService>().GetCharacter());
                 break;
             case AttackTypes.heavy_attack:
-                characterHitBoxesEvents.EmitStrikeAttack(other.gameObject);
+                characterHitBoxesEvents.EmitStrikeAttack(other.GetComponent<CharacterHurtBoxService>().GetCharacter());
                 break;
         }
     }

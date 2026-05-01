@@ -26,7 +26,10 @@ public class CharacterAttackController : MonoBehaviour
     {
         if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
         if (characterObjectService == null) characterObjectService = GetComponentInParent<CharacterObjectService>();
-        if (characterStatesData == null) characterStatesData = GetComponentInParent<CharacterStatesData>();
+        if (characterStatesData == null) {
+            characterStatesData = GetComponentInParent<CharacterStatesData>();
+            characterStatesData.OnAttackInterrupt += HandleAttackInterrup;
+        }
         if (characterStatsData == null) characterStatsData = GetComponentInParent<CharacterStatsData>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
         if (defenseController == null) defenseController = GetComponent<CharacterDefenseController>();
@@ -64,6 +67,19 @@ public class CharacterAttackController : MonoBehaviour
             animationEvents.OnStrikeAttackEndOngoing -= HandleStrikeAttackEndOngoing;
             animationEvents.OnStrikeAttackEnd -= HandleStrikeAttackEnd;
         }
+
+        characterStatesData.OnAttackInterrupt -= HandleAttackInterrup;
+                
+        if (characterHitBoxesEvents != null)
+        {
+            characterHitBoxesEvents.OnNormalAttack -= HandleNormalAttackHit;
+            characterHitBoxesEvents.OnStrikeAttack -= HandleStrikeAttackHit;
+        }
+    }
+
+    public void HandleAttackInterrup()
+    {
+        characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>().EmitAttackInterrupt();
     }
 
     public void HandleNormalAttackHit(GameObject target) {
@@ -270,8 +286,6 @@ public class CharacterAttackController : MonoBehaviour
         float scale =  1 - (Vector3.Angle(moveDirection, attackDirection) / characterStatsData.maxCombineAttackAngleSize);
 
         combineDamage += (int)((scale > 0 ? scale : 0) * sqrMoveSpeed * characterStatsData.sqrMoveSpeedDamageThreshold);
-
-        Debug.Log(combineDamage);
 
         return combineDamage;
     }

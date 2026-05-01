@@ -5,6 +5,7 @@ public class CharacterHitBoxesEvents : MonoBehaviour
 {
     public event Action<GameObject> OnNormalAttack;
     public event Action<GameObject> OnStrikeAttack;
+    public event Action OnAttackInterrupt;
 
     public void EmitNormalAttack(GameObject target)
     {
@@ -14,5 +15,10 @@ public class CharacterHitBoxesEvents : MonoBehaviour
     public void EmitStrikeAttack(GameObject target)
     {
         OnStrikeAttack?.Invoke(target);
+    }
+
+    public void EmitAttackInterrupt()
+    {
+        OnAttackInterrupt?.Invoke();
     }
 }

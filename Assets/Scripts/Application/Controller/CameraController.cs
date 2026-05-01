@@ -10,8 +10,13 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Transform character;
     private float yaw;
     private float pitch;
+    [Header("Collision Settings")]
     [SerializeField] private float cameraRadius = 0.2f;
     [SerializeField] private Vector3 offset = new Vector3(0, 1.5f, -5f);
+    [Tooltip("Layers the camera should hit.")]
+    [SerializeField] private LayerMask includeLayers = ~0;
+    [Tooltip("Layers the camera should ignore.")]
+    [SerializeField] private LayerMask excludeLayers;
 
     // Start is called before the first frame update
     void Start()
@@ -43,8 +48,7 @@ public class CameraController : MonoBehaviour
         Vector3 desiredWorldPos = verticalRotator.TransformPoint(desiredLocalPos);
         Vector3 dir = (desiredWorldPos - verticalRotator.position).normalized;
         float maxDistance = offset.magnitude;
-
-        int layerMask = ~LayerMask.GetMask("Character");
+        int layerMask = includeLayers.value & ~excludeLayers.value;
         RaycastHit hit;
 
         if (Physics.SphereCast(verticalRotator.position, cameraRadius, dir, out hit, maxDistance, layerMask))

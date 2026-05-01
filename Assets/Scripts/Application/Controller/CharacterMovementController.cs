@@ -10,6 +10,7 @@ public class CharacterMovementController : MonoBehaviour
     [SerializeField] private CharacterObjectService characterObjectService;
     [SerializeField] private CharacterObjectsData characterObjectsData;
     [SerializeField] private CharacterAnimationController characterAnimationController;
+    [SerializeField] private CharacterHurtBoxService characterHurtBoxService;
 
     private CharacterBodyAnimation _currentBodyAnimation;
 
@@ -17,6 +18,13 @@ public class CharacterMovementController : MonoBehaviour
 
     private void Start()
     {
+        if (characterStatsData == null) characterStatsData = GetComponent<CharacterStatsData>();
+        if (characterStatesData == null) characterStatesData = GetComponent<CharacterStatesData>();
+        if (characterObjectService == null) characterObjectService = GetComponent<CharacterObjectService>();
+        if (characterObjectsData == null) characterObjectsData = GetComponent<CharacterObjectsData>();
+        if (characterAnimationController == null) characterAnimationController = characterObjectsData.characterMesh.GetComponent<CharacterAnimationController>();
+        if (characterHurtBoxService == null) characterHurtBoxService = characterObjectsData.characterHurtBox.GetComponent<CharacterHurtBoxService>();
+
         // Initialize rotation states from current transform orientations to prevent jumping at start
         characterStatesData.horizontalRotation = characterObjectService.CharacterTransform.eulerAngles.y;
     }
@@ -41,11 +49,15 @@ public class CharacterMovementController : MonoBehaviour
         if (characterStatesData.fastFlyFlag && !characterStatesData.upperActionFlag && !characterObjectService.IsGrounded)
         {
             characterObjectService.FastFlyingRotate(lookDir);
+            characterObjectService.ResizeCollider(true);
+            characterHurtBoxService.RotateLocal(new Vector3(90, 0, 0));
         }
         else
         {
             lookDir.y = 0;
             characterObjectService.RotateToDirection(lookDir);
+            characterObjectService.ResizeCollider(false);
+            characterHurtBoxService.RotateLocal(new Vector3(0, 0, 0));
         }
     }
 

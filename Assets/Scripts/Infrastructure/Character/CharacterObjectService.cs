@@ -167,4 +167,16 @@ public class CharacterObjectService : MonoBehaviour
     public bool IsPointFront(Vector3 point) {
         return Vector3.Dot(point, transform.forward) <= 0;
     }
+
+    public void ResizeCollider(bool isFastFly)
+    {
+        if (isFastFly)
+        {
+            GetComponent<CharacterController>().height = GetComponent<CharacterController>().radius;
+        }
+        else
+        {
+            GetComponent<CharacterController>().height = 2f;
+        }
+    }
 }

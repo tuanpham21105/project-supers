@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,7 @@ public class CharacterStatesData : MonoBehaviour
                 normalAttackEndFlag = false;
                 upperActionFlag = false;
                 attackFlag = false;
+                OnAttackInterrupt?.Invoke();
                 break;
             case CharacterProcessAction.strike_attack:
                 strikeAttackStartFlag = false;
@@ -35,6 +37,7 @@ public class CharacterStatesData : MonoBehaviour
                 bodyActionFlag = false;
                 upperActionFlag = false;
                 attackFlag = false;
+                OnAttackInterrupt?.Invoke();
                 break;
             case CharacterProcessAction.deflect:
                 deflectFlag = false;
@@ -62,6 +65,8 @@ public class CharacterStatesData : MonoBehaviour
 
         currentProcessAction = nextAction;
     }
+
+    public event Action OnAttackInterrupt;
 
     public bool moveFlag;
     public bool jumpFlag;
