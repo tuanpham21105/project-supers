@@ -26,6 +26,11 @@ public class CharacterObjectService : MonoBehaviour
     private float _dashTimer;
     private Vector3 _horizontalMove;
     private bool _isImpactActive;
+    [SerializeField] private Vector3 currentMoveDirection;
+    [SerializeField] private float currentSqrMoveSpeed;
+
+    public Vector3 GetMoveDirection() => currentMoveDirection;
+    public float GetSqrMoveSpeed() => currentSqrMoveSpeed;
 
     void Start()
     {
@@ -46,7 +51,8 @@ public class CharacterObjectService : MonoBehaviour
         {
             if (characterController.isGrounded && _verticalVelocity < 0)
             {
-                _verticalVelocity = -2f;
+                // _verticalVelocity = -2f;
+                _verticalVelocity = 0f;
             }
             _verticalVelocity += Physics.gravity.y * Time.fixedDeltaTime;
         }
@@ -80,6 +86,9 @@ public class CharacterObjectService : MonoBehaviour
 
         // Apply everything in one call per tick
         characterController.Move(combinedMove * Time.fixedDeltaTime);
+
+        currentMoveDirection = combinedMove.normalized;
+        currentSqrMoveSpeed = combinedMove.sqrMagnitude;
 
         if (impactAppliedThisFrame)
         {

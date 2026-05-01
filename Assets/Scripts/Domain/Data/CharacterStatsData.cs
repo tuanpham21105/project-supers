@@ -19,4 +19,6 @@ public class CharacterStatsData : MonoBehaviour
     public int strikeAttackDamage;
     public float hitKnockAwayForce;
     public float damageKnockAwayRatio;
+    public float maxCombineAttackAngleSize;
+    public float sqrMoveSpeedDamageThreshold;
 }

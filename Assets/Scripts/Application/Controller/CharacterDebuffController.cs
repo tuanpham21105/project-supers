@@ -54,13 +54,12 @@ public class CharacterDebuffController : MonoBehaviour
     
     public void Hit(Vector3 direction)
     {
-        if (characterStatesData != null && characterStatesData.hitFlag) return;
-
-        if (characterStatesData != null) characterStatesData.hitFlag = true;
-        if (animationController != null)
+        if (animationController != null && !characterStatesData.hitFlag)
         {
             animationController.PlayHitAnimation();
         }
+        
+        if (characterStatesData != null) characterStatesData.hitFlag = true;
 
         KnockBack(direction * characterStatsData.hitKnockAwayForce);
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterAttackController : MonoBehaviour
 {
     [SerializeField] private CharacterObjectsData characterObjectsData;
+    [SerializeField] private CharacterObjectService characterObjectService;
     [SerializeField] private CharacterStatesData characterStatesData;
     [SerializeField] private CharacterStatsData characterStatsData;
     [SerializeField] private CharacterAnimationController animationController;
@@ -24,6 +25,7 @@ public class CharacterAttackController : MonoBehaviour
     void Start()
     {
         if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
+        if (characterObjectService == null) characterObjectService = GetComponentInParent<CharacterObjectService>();
         if (characterStatesData == null) characterStatesData = GetComponentInParent<CharacterStatesData>();
         if (characterStatsData == null) characterStatsData = GetComponentInParent<CharacterStatsData>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
@@ -65,11 +67,15 @@ public class CharacterAttackController : MonoBehaviour
     }
 
     public void HandleNormalAttackHit(GameObject target) {
-        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, characterStatsData.normalAttackDamage, (target.transform.position - gameObject.transform.position).normalized, AttackTypes.light_attack);
+        Vector3 attackDirection = (target.transform.position - gameObject.transform.position).normalized;
+        int damage = CalculateAttackDamage(characterStatsData.normalAttackDamage, attackDirection);
+        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, AttackTypes.light_attack);
     }
 
     public void HandleStrikeAttackHit(GameObject target) {
-        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, characterStatsData.strikeAttackDamage, (target.transform.position - gameObject.transform.position).normalized, AttackTypes.heavy_attack);
+        Vector3 attackDirection = (target.transform.position - gameObject.transform.position).normalized;
+        int damage = CalculateAttackDamage(characterStatsData.strikeAttackDamage, attackDirection);
+        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, AttackTypes.heavy_attack);
     }
 
     public void StartNormalAttack()
@@ -253,5 +259,20 @@ public class CharacterAttackController : MonoBehaviour
 
         lastStrikeAttackEndTime = Time.time;
         characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
+    }
+
+    private int CalculateAttackDamage(int baseDamage, Vector3 attackDirection)
+    {
+        Vector3 moveDirection = characterObjectService.GetMoveDirection();
+        float sqrMoveSpeed = characterObjectService.GetSqrMoveSpeed();
+        int combineDamage = baseDamage;
+        
+        float scale =  1 - (Vector3.Angle(moveDirection, attackDirection) / characterStatsData.maxCombineAttackAngleSize);
+
+        combineDamage += (int)((scale > 0 ? scale : 0) * sqrMoveSpeed * characterStatsData.sqrMoveSpeedDamageThreshold);
+
+        Debug.Log(combineDamage);
+
+        return combineDamage;
     }
 }
