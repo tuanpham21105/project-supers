@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterStatsData : MonoBehaviour
 {
+    // [Constant]
+    [Header("Constant")]
     public float moveSpeed;
     public float sprintAdditionalSpeed;
     public float flySpeed;

@@ -48,30 +48,44 @@ public enum AdditionalAnimation
 
 public class CharacterAnimationController : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
+    // [Dependencies]
+    [Header("Dependencies")]
+    private CharacterObjectsData characterObjectsData;
+    private Animator animator;
+
+    // [Constant]
+    [Header("Constant")]
     [SerializeField] private float transitionDuration;
-    private Coroutine upperLayerFadeCoroutine;
-    private int normalAttackComboIndex = 0;
-    private List<CharacterUpperAnimation> normalAttackCombo = new List<CharacterUpperAnimation>
+    [SerializeField] private List<CharacterUpperAnimation> normalAttackCombo = new List<CharacterUpperAnimation>
     {
         CharacterUpperAnimation.normal_attack_1,
         CharacterUpperAnimation.normal_attack_2
     };
-
-    [SerializeField] private int strikeAttackComboIndex = 0;
-    private List<CharacterBodyAnimation> strikeAttackCombo = new List<CharacterBodyAnimation>
+    [SerializeField] private List<CharacterBodyAnimation> strikeAttackCombo = new List<CharacterBodyAnimation>
     {
         CharacterBodyAnimation.strike_attack_1,
         CharacterBodyAnimation.strike_attack_2
     };
-
-    private int hitAnimationIndex = 0;
-    private List<AdditionalAnimation> hitAnimations = new List<AdditionalAnimation>
+    [SerializeField] private List<AdditionalAnimation> hitAnimations = new List<AdditionalAnimation>
     {
         AdditionalAnimation.hit,
         AdditionalAnimation.hit_1,
         AdditionalAnimation.hit_2
     };
+
+    // [Runtime]
+    [Header("Runtime")]
+    private Coroutine upperLayerFadeCoroutine;
+    private int normalAttackComboIndex = 0;
+    private int strikeAttackComboIndex = 0;
+    private int hitAnimationIndex = 0;
+
+    void Start()
+    {
+        characterObjectsData = GetComponent<CharacterObjectsData>();
+
+        animator = characterObjectsData.characterMesh.GetComponent<Animator>();
+    }
 
     public void PlayBodyAnimation(CharacterBodyAnimation animation, float normalizedTimeOffset = -1f)
     {

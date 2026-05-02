@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterObjectsData : MonoBehaviour
 {
+    // [Constant]
+    [Header("Constant")]
     public GameObject characterObject;
     public Transform characterMesh;
     public GameObject characterHurtBox;

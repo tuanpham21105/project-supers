@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class CharacterDefenseController : MonoBehaviour
 {
-    [SerializeField] private CharacterObjectsData characterObjectsData;
-    [SerializeField] private CharacterStatesData characterStatesData;
-    [SerializeField] private CharacterAnimationController animationController;
-    [SerializeField] private CharacterAttackController characterAttackController;
+    // [Dependencies]
+    [Header("Dependencies")]
+    private CharacterObjectsData characterObjectsData;
+    private CharacterStatesData characterStatesData;
+    private CharacterAnimationController animationController;
+    private CharacterAttackController characterAttackController;
     private CharacterAnimationEvents animationEvents;
 
+    // [Runtime]
+    [Header("Runtime")]
     private float lastDeflectTime;
     private float currentDeflectSpeed = 1f;
+
+    // [Constant]
+    [Header("Constant")]
     [SerializeField] private float deflectComboWindow = 0.5f;
 
     void Start()
@@ -50,6 +57,45 @@ public class CharacterDefenseController : MonoBehaviour
         characterStatesData.upperActionFlag = false;
     }
 
+    private void HandleDeflectOngoing()
+    {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
+        characterStatesData.deflectFlag = true;
+
+        characterStatesData.upperActionFlag = true;
+
+        //Debug.Log("Start Ongoing deflect - " + Time.time);
+    }
+
+    private void HandleDeflectEndOngoing()
+    {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
+        characterStatesData.deflectFlag = false;
+
+        characterStatesData.upperActionFlag = true;
+
+        //Debug.Log("End Ongoing deflect - " + Time.time);
+    }
+
+    public void HandleDeflectEnd()
+    {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
+        if (animationController != null)
+        {
+            animationController.EndUpperAnimation();
+        }
+
+        lastDeflectTime = Time.time;
+
+        characterStatesData.deflectFlag = false;
+
+        characterStatesData.upperActionFlag = false;
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
+
+        //Debug.Log("End deflect - " + Time.time);
+    }
+
+    // [Control methods]
     public void Block(bool active)
     {
         // Only start blocking when not doing other upper actions OR any body actions
@@ -102,41 +148,4 @@ public class CharacterDefenseController : MonoBehaviour
         //Debug.Log("Start deflect - " + Time.time);
     }
 
-    private void HandleDeflectOngoing()
-    {
-        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
-        characterStatesData.deflectFlag = true;
-
-        characterStatesData.upperActionFlag = true;
-
-        //Debug.Log("Start Ongoing deflect - " + Time.time);
-    }
-
-    private void HandleDeflectEndOngoing()
-    {
-        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
-        characterStatesData.deflectFlag = false;
-
-        characterStatesData.upperActionFlag = true;
-
-        //Debug.Log("End Ongoing deflect - " + Time.time);
-    }
-
-    public void HandleDeflectEnd()
-    {
-        if (characterStatesData.currentProcessAction != CharacterProcessAction.deflect) return;
-        if (animationController != null)
-        {
-            animationController.EndUpperAnimation();
-        }
-
-        lastDeflectTime = Time.time;
-
-        characterStatesData.deflectFlag = false;
-
-        characterStatesData.upperActionFlag = false;
-        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
-
-        //Debug.Log("End deflect - " + Time.time);
-    }
 }

@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class CharacterDebuffController : MonoBehaviour
 {
-    [SerializeField] private CharacterObjectsData characterObjectsData;
-    [SerializeField] private CharacterStatesData characterStatesData;
-    [SerializeField] private CharacterStatsData characterStatsData;
-    [SerializeField] private CharacterMovementController characterMovementController;
-    [SerializeField] private CharacterAnimationController animationController;
+    // [Dependencies]
+    [Header("Dependencies")]
+    private CharacterObjectsData characterObjectsData;
+    private CharacterStatesData characterStatesData;
+    private CharacterStatsData characterStatsData;
+    private CharacterMovementController characterMovementController;
+    private CharacterAnimationController animationController;
     private CharacterObjectService characterObjectService;
     private CharacterAnimationEvents animationEvents;
 
@@ -52,18 +54,6 @@ public class CharacterDebuffController : MonoBehaviour
         }
     }
     
-    public void Hit(Vector3 direction, int damage)
-    {
-        if (animationController != null && !characterStatesData.hitFlag)
-        {
-            animationController.PlayHitAnimation();
-        }
-        
-        if (characterStatesData != null) characterStatesData.hitFlag = true;
-
-        KnockBack(direction, damage);
-    }
-
     private void HandleHitEnd()
     {
         if (characterStatesData != null) characterStatesData.hitFlag = false;
@@ -108,6 +98,33 @@ public class CharacterDebuffController : MonoBehaviour
         }
     }
 
+    private void HandleDeflectedEnd()
+    {
+        if (characterStatesData != null)
+        {
+            if (characterStatesData.currentProcessAction != CharacterProcessAction.deflected) return;
+            characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
+        }
+        
+        if (animationController != null)
+        {
+            animationController.EndUpperAnimation();
+        }
+    }
+
+    // [Control methods]
+    public void Hit(Vector3 direction, int damage)
+    {
+        if (animationController != null && !characterStatesData.hitFlag)
+        {
+            animationController.PlayHitAnimation();
+        }
+        
+        if (characterStatesData != null) characterStatesData.hitFlag = true;
+
+        KnockBack(direction, damage);
+    }
+
     public void KnockOut(Vector3 direction, bool isFront, int damage)
     {
         if (characterStatesData != null && characterStatesData.knockAwayFlag) return;
@@ -147,20 +164,6 @@ public class CharacterDebuffController : MonoBehaviour
         if (animationController != null)
         {
             animationController.PlayDeflectedAnimation();
-        }
-    }
-
-    private void HandleDeflectedEnd()
-    {
-        if (characterStatesData != null)
-        {
-            if (characterStatesData.currentProcessAction != CharacterProcessAction.deflected) return;
-            characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
-        }
-        
-        if (animationController != null)
-        {
-            animationController.EndUpperAnimation();
         }
     }
 

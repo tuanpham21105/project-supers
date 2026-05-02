@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class CharacterAttackController : MonoBehaviour
 {
-    [SerializeField] private CharacterObjectsData characterObjectsData;
-    [SerializeField] private CharacterObjectService characterObjectService;
-    [SerializeField] private CharacterStatesData characterStatesData;
-    [SerializeField] private CharacterStatsData characterStatsData;
-    [SerializeField] private CharacterAnimationController animationController;
-    [SerializeField] private CharacterDefenseController defenseController;
-    [SerializeField] private CharacterHitBoxesEvents characterHitBoxesEvents;
+    // [Dependencies]
+    [Header("Dependencies")]
+    private CharacterObjectsData characterObjectsData;
+    private CharacterObjectService characterObjectService;
+    private CharacterStatesData characterStatesData;
+    private CharacterStatsData characterStatsData;
+    private CharacterAnimationController animationController;
+    private CharacterDefenseController defenseController;
+    private CharacterHitBoxesEvents characterHitBoxesEvents;
     private CharacterAnimationEvents animationEvents;
 
     // Timestamps recording when each attack last entered its end-ongoing (follow-through) phase.
     // Used to determine whether the next attack of the same type is a continuing combo.
+
+    // [Runtime]
+    [Header("Runtime")]
     private float lastNormalAttackEndTime = -Mathf.Infinity;
     private float lastStrikeAttackEndTime = -Mathf.Infinity;
 
     // Maximum seconds after an attack's follow-through ends during which the next
     // attack of the same kind is treated as a continuing combo.
+    
+    // [Constant]
+    [Header("Constant")]
     [SerializeField] private float continueAttackWindow = 1f;
 
     void Start()
@@ -28,7 +36,7 @@ public class CharacterAttackController : MonoBehaviour
         if (characterObjectService == null) characterObjectService = GetComponentInParent<CharacterObjectService>();
         if (characterStatesData == null) {
             characterStatesData = GetComponentInParent<CharacterStatesData>();
-            characterStatesData.OnAttackInterrupt += HandleAttackInterrup;
+            characterStatesData.OnAttackInterrupt += HandleAttackInterrupt;
         }
         if (characterStatsData == null) characterStatsData = GetComponentInParent<CharacterStatsData>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
@@ -67,7 +75,7 @@ public class CharacterAttackController : MonoBehaviour
             animationEvents.OnStrikeAttackEnd -= HandleStrikeAttackEnd;
         }
 
-        characterStatesData.OnAttackInterrupt -= HandleAttackInterrup;
+        characterStatesData.OnAttackInterrupt -= HandleAttackInterrupt;
                 
         if (characterHitBoxesEvents != null)
         {
@@ -75,7 +83,7 @@ public class CharacterAttackController : MonoBehaviour
         }
     }
 
-    public void HandleAttackInterrup()
+    public void HandleAttackInterrupt()
     {
         characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>().EmitAttackInterrupt();
     }
@@ -97,28 +105,6 @@ public class CharacterAttackController : MonoBehaviour
 
         int damage = CalculateAttackDamage(baseDamage, attackDirection);
         target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, type);
-    }
-
-    public void StartNormalAttack()
-    {
-        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
-        if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
-
-        // Continuing if we are still within the combo window since the last normal attack ended.
-        bool isContinuing = (Time.time - lastNormalAttackEndTime) <= continueAttackWindow;
-
-        PlayNormalAttack(isContinuing);
-    }
-
-    public void StartStrikeAttack()
-    {
-        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
-        if (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag) return;
-
-        // Continuing if we are still within the combo window since the last strike attack ended.
-        bool isContinuing = (Time.time - lastStrikeAttackEndTime) <= continueAttackWindow;
-
-        PlayStrikeAttack(isContinuing);
     }
 
     public void ResetAttackFlags()
@@ -294,4 +280,28 @@ public class CharacterAttackController : MonoBehaviour
 
         return combineDamage;
     }
+
+    // [Control methods]
+    public void StartNormalAttack()
+    {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
+        if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
+
+        // Continuing if we are still within the combo window since the last normal attack ended.
+        bool isContinuing = (Time.time - lastNormalAttackEndTime) <= continueAttackWindow;
+
+        PlayNormalAttack(isContinuing);
+    }
+
+    public void StartStrikeAttack()
+    {
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
+        if (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag) return;
+
+        // Continuing if we are still within the combo window since the last strike attack ended.
+        bool isContinuing = (Time.time - lastStrikeAttackEndTime) <= continueAttackWindow;
+
+        PlayStrikeAttack(isContinuing);
+    }
+
 }

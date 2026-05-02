@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class CharacterHitBoxService : MonoBehaviour
 {
+    // [Dependencies]
+    [Header("Dependencies")]
     [SerializeField] private CharacterHitBoxesEvents characterHitBoxesEvents;
 
+    // [Constant]
+    [Header("Constant")]
     [SerializeField] private AttackTypes attackType;
 
     void Start()

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CharacterHurtBoxService : MonoBehaviour
 {
-    [SerializeField] private GameObject character;
+    // [Dependencies]
+    [Header("Dependencies")]
+    private GameObject character;
 
     public GameObject GetCharacter() => character;
 

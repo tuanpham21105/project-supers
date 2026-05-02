@@ -5,16 +5,21 @@ using UnityEngine;
 
 public class CharacterMovementController : MonoBehaviour
 {
-    [SerializeField] private CharacterStatsData characterStatsData;
-    [SerializeField] private CharacterStatesData characterStatesData;
-    [SerializeField] private CharacterObjectService characterObjectService;
-    [SerializeField] private CharacterObjectsData characterObjectsData;
-    [SerializeField] private CharacterAnimationController characterAnimationController;
-    [SerializeField] private CharacterHurtBoxService characterHurtBoxService;
-    [SerializeField] private CharacterHitBoxesEvents characterHitBoxesEvents;
+    // [Dependencies]
+    [Header("Dependencies")]
+    private CharacterStatsData characterStatsData;
+    private CharacterStatesData characterStatesData;
+    private CharacterObjectService characterObjectService;
+    private CharacterObjectsData characterObjectsData;
+    private CharacterAnimationController characterAnimationController;
+    private CharacterHurtBoxService characterHurtBoxService;
+    private CharacterHitBoxesEvents characterHitBoxesEvents;
 
+    // [Runtime]
+    [Header("Runtime")]
     private CharacterBodyAnimation _currentBodyAnimation;
 
+    // [Event]
     public event Action onLanding;
 
     private void Start()
@@ -29,10 +34,6 @@ public class CharacterMovementController : MonoBehaviour
 
         // Initialize rotation states from current transform orientations to prevent jumping at start
         characterStatesData.horizontalRotation = characterObjectService.CharacterTransform.eulerAngles.y;
-    }
-
-    private void Update()
-    {
     }
 
     private void FixedUpdate()
@@ -152,100 +153,6 @@ public class CharacterMovementController : MonoBehaviour
         return moveDirection.normalized;
     }
 
-    public void Move(Vector2 direction)
-    {
-        characterStatesData.inputAxes = direction;
-        characterStatesData.moveFlag = direction.sqrMagnitude > 0;
-    }
-
-    public void Jump()
-    {
-        if (!characterStatesData.flyFlag && characterObjectService.IsGrounded)
-        {
-            characterObjectService.SetVerticalVelocity(characterStatsData.jumpForce);
-        }
-    }
-
-    public void SetSprint(bool status)
-    {
-        if (status == characterStatesData.sprintFlag) return;
-
-        characterStatesData.sprintFlag = status;
-    }
-
-    public void Dash()
-    {
-        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) return;
-        StartCoroutine(DashCoroutine());
-    }
-
-    private IEnumerator DashCoroutine()
-    {
-        characterStatesData.dashFlag = true;
-        characterStatesData.bodyActionFlag = true; // Dash is a body action
-
-        // Calculate dash direction: prioritizing actual movement direction (velocity)
-        Vector3 currentVelocity = characterObjectService.Velocity;
-        Vector3 dashDirection = currentVelocity;
-
-        // If not moving significantly, fall back to the input-based direction
-        if (dashDirection.magnitude < 0.1f)
-        {
-            dashDirection = characterStatesData.direction;
-        }
-
-        // If still no direction (no movement and no input), default to character's forward
-        if (dashDirection.sqrMagnitude < 0.001f)
-        {
-            dashDirection = characterObjectService.CharacterTransform.forward;
-        }
-
-        // If grounded, clear any downward vertical velocity (like the gravity stabilizer) 
-        // to ensure the dash stays horizontal unless there's an intentional upward jump/fly movement.
-        if (characterObjectService.IsGrounded && dashDirection.y < 0)
-        {
-            dashDirection.y = 0;
-        }
-
-        characterObjectService.Dash(dashDirection.normalized, characterStatsData.dashForce, characterStatsData.dashDuration);
-
-        yield return new WaitForSeconds(characterStatsData.dashDuration);
-
-        characterStatesData.dashFlag = false;
-        characterStatesData.bodyActionFlag = false;
-        characterStatesData.dashCooldownFlag = true;
-
-        yield return new WaitForSeconds(characterStatsData.dashCooldown);
-
-        characterStatesData.dashCooldownFlag = false;
-    }
-
-    public void SetFly(bool status)
-    {
-        if (status == characterStatesData.flyFlag) return;
-
-        characterStatesData.flyFlag = status;
-    }
-
-    public void SetFlyUp(bool status)
-    {
-        if (status == characterStatesData.flyUpFlag) return;
-
-        characterStatesData.flyUpFlag = status;
-    }
-
-    public void SetFlyDown(bool status)
-    {
-        if (status == characterStatesData.flyDownFlag) return;
-
-        characterStatesData.flyDownFlag = status;
-    }
-
-    public void Rotate(Vector3 lookInput)
-    {
-        characterStatesData.lookInput = lookInput;
-    }
-
     private void UpdateAnimations()
     {
         if (characterAnimationController == null) return;
@@ -315,4 +222,100 @@ public class CharacterMovementController : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator DashCoroutine()
+    {
+        characterStatesData.dashFlag = true;
+        characterStatesData.bodyActionFlag = true; // Dash is a body action
+
+        // Calculate dash direction: prioritizing actual movement direction (velocity)
+        Vector3 currentVelocity = characterObjectService.Velocity;
+        Vector3 dashDirection = currentVelocity;
+
+        // If not moving significantly, fall back to the input-based direction
+        if (dashDirection.magnitude < 0.1f)
+        {
+            dashDirection = characterStatesData.direction;
+        }
+
+        // If still no direction (no movement and no input), default to character's forward
+        if (dashDirection.sqrMagnitude < 0.001f)
+        {
+            dashDirection = characterObjectService.CharacterTransform.forward;
+        }
+
+        // If grounded, clear any downward vertical velocity (like the gravity stabilizer) 
+        // to ensure the dash stays horizontal unless there's an intentional upward jump/fly movement.
+        if (characterObjectService.IsGrounded && dashDirection.y < 0)
+        {
+            dashDirection.y = 0;
+        }
+
+        characterObjectService.Dash(dashDirection.normalized, characterStatsData.dashForce, characterStatsData.dashDuration);
+
+        yield return new WaitForSeconds(characterStatsData.dashDuration);
+
+        characterStatesData.dashFlag = false;
+        characterStatesData.bodyActionFlag = false;
+        characterStatesData.dashCooldownFlag = true;
+
+        yield return new WaitForSeconds(characterStatsData.dashCooldown);
+
+        characterStatesData.dashCooldownFlag = false;
+    }
+
+    // [Control methods]
+    public void Move(Vector2 direction)
+    {
+        characterStatesData.inputAxes = direction;
+        characterStatesData.moveFlag = direction.sqrMagnitude > 0;
+    }
+
+    public void Jump()
+    {
+        if (!characterStatesData.flyFlag && characterObjectService.IsGrounded)
+        {
+            characterObjectService.SetVerticalVelocity(characterStatsData.jumpForce);
+        }
+    }
+
+    public void SetSprint(bool status)
+    {
+        if (status == characterStatesData.sprintFlag) return;
+
+        characterStatesData.sprintFlag = status;
+    }
+
+    public void Dash()
+    {
+        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) return;
+        StartCoroutine(DashCoroutine());
+    }
+
+    public void SetFly(bool status)
+    {
+        if (status == characterStatesData.flyFlag) return;
+
+        characterStatesData.flyFlag = status;
+    }
+
+    public void SetFlyUp(bool status)
+    {
+        if (status == characterStatesData.flyUpFlag) return;
+
+        characterStatesData.flyUpFlag = status;
+    }
+
+    public void SetFlyDown(bool status)
+    {
+        if (status == characterStatesData.flyDownFlag) return;
+
+        characterStatesData.flyDownFlag = status;
+    }
+
+    public void Rotate(Vector3 lookInput)
+    {
+        characterStatesData.lookInput = lookInput;
+    }
+
 }

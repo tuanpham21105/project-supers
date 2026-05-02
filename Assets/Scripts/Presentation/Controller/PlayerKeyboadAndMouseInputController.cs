@@ -6,9 +6,10 @@ using UnityEngine;
 public class PlayerKeyboadAndMouseInputController : PlayerInputController
 {
     private PlayerKeyboardAndMouseKeybindsData keybinds;
-    [SerializeField] private CharacterMovementController characterMovementController;
-    [SerializeField] private CharacterAttackController characterAttackController;
-    [SerializeField] private CharacterDefenseController characterDefenseController;
+    [SerializeField] private GameObject character;
+    private CharacterMovementController characterMovementController;
+    private CharacterAttackController characterAttackController;
+    private CharacterDefenseController characterDefenseController;
     [SerializeField] private CameraController cameraController;
 
     public Vector2 moveDirectionInput;
@@ -44,6 +45,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     private void Start()
     {
+        characterMovementController = character.GetComponent<CharacterMovementController>();
+        characterAttackController = character.GetComponent<CharacterAttackController>();
+        characterDefenseController = character.GetComponent<CharacterDefenseController>();
+
         keybinds = PlayerKeyboardAndMouseKeybindsData.playerKeyboardAndMouseKeybindsData;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

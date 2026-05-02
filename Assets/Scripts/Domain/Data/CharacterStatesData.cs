@@ -16,8 +16,6 @@ public enum CharacterProcessAction
 
 public class CharacterStatesData : MonoBehaviour
 {
-    public CharacterProcessAction currentProcessAction;
-
     public void ChangeProcessAction(CharacterProcessAction nextAction)
     {
         // Turn off all flags of current action
@@ -89,8 +87,13 @@ public class CharacterStatesData : MonoBehaviour
 
         currentProcessAction = nextAction;
     }
-
+    
+    // [Event]
     public event Action OnAttackInterrupt;
+
+    // [Runtime]
+    [Header("Runtime")]
+    public CharacterProcessAction currentProcessAction;
 
     public bool moveFlag;
     public bool jumpFlag;

@@ -5,32 +5,38 @@ using UnityEngine;
 
 public class CharacterObjectService : MonoBehaviour
 {
-    [SerializeField] private CharacterController characterController;
+    // [Dependencies]
+    [Header("Dependencies")]
+    private CharacterController characterController;
 
+    // [Constant]
+    [Header("Constant")]
     [SerializeField] private bool gravity;
     [SerializeField] private float impactDecaySpeed = 1f;
     [SerializeField] private float fastFlyRotationSpeed = 10f;
     [SerializeField] private float normalRotationSpeed = 360f;
 
-    public bool IsGrounded => characterController.isGrounded;
-    public Transform CharacterTransform => transform;
-    public Vector3 Velocity => characterController.velocity;
-    public Vector3 ImpactForceDirection => _impactForce.normalized;
-
+    // [Event]
     public event Action OnImpactForceDecayed;
     public event Action OnImpactCollision;
 
+    // [Runtime]
+    [Header("Runtime")]
     private float _verticalVelocity;
     private Vector3 _impactForce;
     private Vector3 _dashForce;
     private float _dashTimer;
     private Vector3 _horizontalMove;
     private bool _isImpactActive;
-    [SerializeField] private Vector3 currentMoveDirection;
-    [SerializeField] private float currentSqrMoveSpeed;
+    private Vector3 currentMoveDirection;
+    private float currentSqrMoveSpeed;
 
     public Vector3 GetMoveDirection() => currentMoveDirection;
     public float GetSqrMoveSpeed() => currentSqrMoveSpeed;
+    public bool IsGrounded => characterController.isGrounded;
+    public Transform CharacterTransform => transform;
+    public Vector3 Velocity => characterController.velocity;
+    public Vector3 ImpactForceDirection => _impactForce.normalized;
 
     void Start()
     {

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CharacterHitBoxesEvents : MonoBehaviour
 {
+    // [Event]
     public event Action<GameObject, AttackTypes> OnAttackHit;
     public event Action OnAttackInterrupt;
     public event Action OnStartFlyAttack;

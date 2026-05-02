@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterAnimationEvents : MonoBehaviour
 {
+    // [Event]
     public event System.Action OnNormalAttackOngoing;
     public event System.Action OnNormalAttackEndOngoing;
     public event System.Action OnNormalAttackEnd;

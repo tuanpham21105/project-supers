@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class CharacterTakeDamageController : MonoBehaviour
 {
-    [SerializeField] private CharacterStatsData characterStatsData;
-    [SerializeField] private CharacterStatesData characterStatesData;
-    [SerializeField] private CharacterObjectService characterObjectService;
-    [SerializeField] private CharacterDebuffController characterDebuffController;
+    // [Dependencies]
+    [Header("Dependencies")]
+    private CharacterStatsData characterStatsData;
+    private CharacterStatesData characterStatesData;
+    private CharacterObjectService characterObjectService;
+    private CharacterDebuffController characterDebuffController;
 
     void Start()
     {
@@ -18,7 +20,32 @@ public class CharacterTakeDamageController : MonoBehaviour
 
         characterStatesData.currentEndurance = characterStatsData.endurance;
     }
+    
+    private void ApplyDamage(int damage, bool isFront, Vector3 direction)
+    {
+        if (damage <= 0) return;
 
+        if (damage >= (int)(characterStatsData.knockOutThreshold * (float)characterStatesData.currentEndurance))
+        {
+            characterDebuffController.KnockOut(direction, isFront, damage);
+        }
+        else
+        {
+            characterDebuffController.Hit(direction, damage);
+        }
+
+        characterStatesData.currentEndurance -= damage;
+
+        Debug.Log(damage);
+
+        if (characterStatesData.currentEndurance < 0)
+        {
+            characterStatesData.currentEndurance = 0;
+            characterDebuffController.Dead();
+        }
+    }
+
+    // [Control method]
     public void GetHit(GameObject attacker, int damage, Vector3 direction, AttackTypes attackType)
     {
         if (attacker == gameObject) return;
@@ -57,27 +84,4 @@ public class CharacterTakeDamageController : MonoBehaviour
         }
     }
 
-    private void ApplyDamage(int damage, bool isFront, Vector3 direction)
-    {
-        if (damage <= 0) return;
-
-        if (damage >= (int)(characterStatsData.knockOutThreshold * (float)characterStatesData.currentEndurance))
-        {
-            characterDebuffController.KnockOut(direction, isFront, damage);
-        }
-        else
-        {
-            characterDebuffController.Hit(direction, damage);
-        }
-
-        characterStatesData.currentEndurance -= damage;
-
-        Debug.Log(damage);
-
-        if (characterStatesData.currentEndurance < 0)
-        {
-            characterStatesData.currentEndurance = 0;
-            characterDebuffController.Dead();
-        }
-    }
 }
