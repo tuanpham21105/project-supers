@@ -11,8 +11,11 @@ public class CharacterHitBoxService : MonoBehaviour
     void Start()
     {
         characterHitBoxesEvents.OnAttackInterrupt += HandleAttackInterrupt;
-        characterHitBoxesEvents.OnStartFlyAttack += HandleStartFlyAttack;
-        characterHitBoxesEvents.OnEndFlyAttack += HandleEndFlyAttack;
+        if (attackType == AttackTypes.fly_attack)
+        {
+            characterHitBoxesEvents.OnStartFlyAttack += HandleStartFlyAttack;
+            characterHitBoxesEvents.OnEndFlyAttack += HandleEndFlyAttack;
+        }
     }
 
     void OnDestroy()
