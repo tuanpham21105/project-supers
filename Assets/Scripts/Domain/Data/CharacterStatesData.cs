@@ -10,7 +10,8 @@ public enum CharacterProcessAction
     strike_attack,
     deflect,
     deflected,
-    knock_out
+    knock_out,
+    dead
 }
 
 public class CharacterStatesData : MonoBehaviour
@@ -52,6 +53,29 @@ public class CharacterStatesData : MonoBehaviour
                 bodyActionFlag = false;
                 upperActionFlag = false;
                 break;
+            case CharacterProcessAction.dead:
+                deadFlag = false;
+                bodyActionFlag = false;
+                break;
+        }
+
+        if (nextAction == CharacterProcessAction.dead)
+        {
+            moveFlag = false;
+            jumpFlag = false;
+            sprintFlag = false;
+            dashFlag = false;
+            flyFlag = false;
+            flyUpFlag = false;
+            flyDownFlag = false;
+            fastFlyFlag = false;
+            attackFlag = false;
+            blockFlag = false;
+            deflectFlag = false;
+            upperActionFlag = false;
+            hitFlag = false;
+            deflectedFlag = false;
+            knockAwayFlag = false;
         }
 
         if (nextAction == CharacterProcessAction.knock_out)
@@ -91,6 +115,7 @@ public class CharacterStatesData : MonoBehaviour
     public bool bodyActionFlag;
     public bool hitFlag;
     public bool deflectedFlag;
+    public bool deadFlag;
 
     public float moveSpeed;
     public Vector2 inputAxes;

@@ -96,7 +96,6 @@ public class CharacterAttackController : MonoBehaviour
         }
 
         int damage = CalculateAttackDamage(baseDamage, attackDirection);
-        Debug.Log(damage);
         target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, type);
     }
 

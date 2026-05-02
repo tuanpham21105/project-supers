@@ -19,19 +19,15 @@ public class CharacterTakeDamageController : MonoBehaviour
         characterStatesData.currentEndurance = characterStatsData.endurance;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void GetHit(GameObject attacker, int damage, Vector3 direction, AttackTypes attackType)
     {
         if (attacker == gameObject) return;
 
+        if (characterStatesData.deadFlag) return;
+
         if (characterStatesData.knockAwayFlag)
         {
-            
+            characterDebuffController.Dead();
         }
         else
         {
@@ -41,7 +37,7 @@ public class CharacterTakeDamageController : MonoBehaviour
             {
                 if (characterStatesData.blockFlag)
                 {
-                    damage = (int)((float)damage * characterStatsData.blockThreshold);
+                    damage = (int)((float)damage * (1f - characterStatsData.blockThreshold));
                     ApplyDamage(damage, isFront, direction);
                     return;
                 }
@@ -51,7 +47,7 @@ public class CharacterTakeDamageController : MonoBehaviour
                     switch (attackType)
                     {
                         case AttackTypes.normal_attack:
-                            attacker.GetComponent<CharacterDebuffController>().Deflected(direction);
+                            attacker.GetComponent<CharacterDebuffController>().Deflected();
                             return;
                     }
                 }
@@ -71,12 +67,17 @@ public class CharacterTakeDamageController : MonoBehaviour
         }
         else
         {
-            characterDebuffController.Hit(direction);
+            characterDebuffController.Hit(direction, damage);
         }
 
         characterStatesData.currentEndurance -= damage;
 
+        Debug.Log(damage);
+
         if (characterStatesData.currentEndurance < 0)
+        {
             characterStatesData.currentEndurance = 0;
+            characterDebuffController.Dead();
+        }
     }
 }

@@ -157,7 +157,6 @@ public class CharacterObjectService : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, fastFlyRotationSpeed * Time.fixedDeltaTime);
     }
 
-
     public void Dash(Vector3 direction, float force, float duration)
     {
         _dashForce = direction.normalized * force;

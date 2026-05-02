@@ -52,7 +52,7 @@ public class CharacterDebuffController : MonoBehaviour
         }
     }
     
-    public void Hit(Vector3 direction)
+    public void Hit(Vector3 direction, int damage)
     {
         if (animationController != null && !characterStatesData.hitFlag)
         {
@@ -61,7 +61,7 @@ public class CharacterDebuffController : MonoBehaviour
         
         if (characterStatesData != null) characterStatesData.hitFlag = true;
 
-        KnockBack(direction * characterStatsData.hitKnockAwayForce);
+        KnockBack(direction, damage);
     }
 
     private void HandleHitEnd()
@@ -99,11 +99,12 @@ public class CharacterDebuffController : MonoBehaviour
         characterMovementController.ForceRefreshBodyAnimation();
     }
 
-    public void KnockBack(Vector3 knockbackForce)
+    public void KnockBack(Vector3 direction, int damage)
     {
         if (characterObjectService != null)
         {
-            characterObjectService.ApplyForce(knockbackForce);
+            Vector3 force = direction * damage * characterStatsData.damageKnockAwayRatio;
+            characterObjectService.ApplyForce(force);
         }
     }
 
@@ -128,12 +129,11 @@ public class CharacterDebuffController : MonoBehaviour
         if (characterObjectService != null)
         {
             characterObjectService.SetDirection(direction * (isFront ? -1 : 1));
-            Vector3 force = direction * damage * characterStatsData.damageKnockAwayRatio;
-            KnockBack(force);
+            KnockBack(direction, damage);
         }
     }
 
-    public void Deflected(Vector3 direction)
+    public void Deflected()
     {
         if (characterStatesData != null && characterStatesData.deflectedFlag) return;
 
@@ -148,8 +148,6 @@ public class CharacterDebuffController : MonoBehaviour
         {
             animationController.PlayDeflectedAnimation();
         }
-
-        KnockBack(direction * characterStatsData.hitKnockAwayForce);
     }
 
     private void HandleDeflectedEnd()
@@ -163,6 +161,21 @@ public class CharacterDebuffController : MonoBehaviour
         if (animationController != null)
         {
             animationController.EndUpperAnimation();
+        }
+    }
+
+    public void Dead()
+    {
+        if (characterStatesData != null)
+        {
+            characterStatesData.ChangeProcessAction(CharacterProcessAction.dead);
+            characterStatesData.deadFlag = true;
+            characterStatesData.bodyActionFlag = true;
+        }
+
+        if (animationController != null)
+        {
+            animationController.PlayBodyAnimation(CharacterBodyAnimation.dead);
         }
     }
 }

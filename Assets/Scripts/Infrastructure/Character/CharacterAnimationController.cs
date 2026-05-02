@@ -24,7 +24,8 @@ public enum CharacterBodyAnimation
     strike_attack_1,
     strike_attack_2,
     knock_out_1,
-    knock_out_2
+    knock_out_2,
+    dead
 }
 
 public enum CharacterUpperAnimation
