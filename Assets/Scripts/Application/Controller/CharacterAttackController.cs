@@ -37,8 +37,7 @@ public class CharacterAttackController : MonoBehaviour
         
         if (characterHitBoxesEvents != null)
         {
-            characterHitBoxesEvents.OnNormalAttack += HandleNormalAttackHit;
-            characterHitBoxesEvents.OnStrikeAttack += HandleStrikeAttackHit;
+            characterHitBoxesEvents.OnAttackHit += HandleAttackHit;
         }
 
         if (characterObjectsData != null && characterObjectsData.characterMesh != null)
@@ -72,8 +71,7 @@ public class CharacterAttackController : MonoBehaviour
                 
         if (characterHitBoxesEvents != null)
         {
-            characterHitBoxesEvents.OnNormalAttack -= HandleNormalAttackHit;
-            characterHitBoxesEvents.OnStrikeAttack -= HandleStrikeAttackHit;
+            characterHitBoxesEvents.OnAttackHit -= HandleAttackHit;
         }
     }
 
@@ -82,16 +80,24 @@ public class CharacterAttackController : MonoBehaviour
         characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>().EmitAttackInterrupt();
     }
 
-    public void HandleNormalAttackHit(GameObject target) {
+    private void HandleAttackHit(GameObject target, AttackTypes type)
+    {
         Vector3 attackDirection = (target.transform.position - gameObject.transform.position).normalized;
-        int damage = CalculateAttackDamage(characterStatsData.normalAttackDamage, attackDirection);
-        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, AttackTypes.light_attack);
-    }
+        int baseDamage = 0;
 
-    public void HandleStrikeAttackHit(GameObject target) {
-        Vector3 attackDirection = (target.transform.position - gameObject.transform.position).normalized;
-        int damage = CalculateAttackDamage(characterStatsData.strikeAttackDamage, attackDirection);
-        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, AttackTypes.heavy_attack);
+        switch (type)
+        {
+            case AttackTypes.normal_attack:
+                baseDamage = characterStatsData.normalAttackDamage;
+                break;
+            case AttackTypes.strike_attack:
+                baseDamage = characterStatsData.strikeAttackDamage;
+                break;
+        }
+
+        int damage = CalculateAttackDamage(baseDamage, attackDirection);
+        Debug.Log(damage);
+        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, type);
     }
 
     public void StartNormalAttack()

@@ -3,22 +3,28 @@ using UnityEngine;
 
 public class CharacterHitBoxesEvents : MonoBehaviour
 {
-    public event Action<GameObject> OnNormalAttack;
-    public event Action<GameObject> OnStrikeAttack;
+    public event Action<GameObject, AttackTypes> OnAttackHit;
     public event Action OnAttackInterrupt;
+    public event Action OnStartFlyAttack;
+    public event Action OnEndFlyAttack;
 
-    public void EmitNormalAttack(GameObject target)
+    public void EmitAttackHit(GameObject target, AttackTypes type)
     {
-        OnNormalAttack?.Invoke(target);
-    }
-
-    public void EmitStrikeAttack(GameObject target)
-    {
-        OnStrikeAttack?.Invoke(target);
+        OnAttackHit?.Invoke(target, type);
     }
 
     public void EmitAttackInterrupt()
     {
         OnAttackInterrupt?.Invoke();
+    }
+
+    public void EmitStartFlyAttack()
+    {
+        OnStartFlyAttack?.Invoke();
+    }
+
+    public void EmitEndFlyAttack()
+    {
+        OnEndFlyAttack?.Invoke();
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum AttackTypes
 {
-    light_attack,
-    heavy_attack,
+    normal_attack,
+    strike_attack,
+    fly_attack,
 }

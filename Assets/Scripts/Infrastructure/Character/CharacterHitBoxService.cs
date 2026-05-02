@@ -11,6 +11,8 @@ public class CharacterHitBoxService : MonoBehaviour
     void Start()
     {
         characterHitBoxesEvents.OnAttackInterrupt += HandleAttackInterrupt;
+        characterHitBoxesEvents.OnStartFlyAttack += HandleStartFlyAttack;
+        characterHitBoxesEvents.OnEndFlyAttack += HandleEndFlyAttack;
     }
 
     void OnDestroy()
@@ -23,18 +25,20 @@ public class CharacterHitBoxService : MonoBehaviour
         GetComponent<Collider>().enabled = false;
     }
 
+    private void HandleStartFlyAttack()
+    {
+        GetComponent<Collider>().enabled = true;
+    }
+
+    private void HandleEndFlyAttack()
+    {
+        GetComponent<Collider>().enabled = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (characterHitBoxesEvents == null) return;
 
-        switch (attackType)
-        {
-            case AttackTypes.light_attack:
-                characterHitBoxesEvents.EmitNormalAttack(other.GetComponent<CharacterHurtBoxService>().GetCharacter());
-                break;
-            case AttackTypes.heavy_attack:
-                characterHitBoxesEvents.EmitStrikeAttack(other.GetComponent<CharacterHurtBoxService>().GetCharacter());
-                break;
-        }
+        characterHitBoxesEvents.EmitAttackHit(other.GetComponent<CharacterHurtBoxService>().GetCharacter(), attackType);
     }
 }

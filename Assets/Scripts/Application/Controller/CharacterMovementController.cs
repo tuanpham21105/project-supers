@@ -11,6 +11,7 @@ public class CharacterMovementController : MonoBehaviour
     [SerializeField] private CharacterObjectsData characterObjectsData;
     [SerializeField] private CharacterAnimationController characterAnimationController;
     [SerializeField] private CharacterHurtBoxService characterHurtBoxService;
+    [SerializeField] private CharacterHitBoxesEvents characterHitBoxesEvents;
 
     private CharacterBodyAnimation _currentBodyAnimation;
 
@@ -24,6 +25,7 @@ public class CharacterMovementController : MonoBehaviour
         if (characterObjectsData == null) characterObjectsData = GetComponent<CharacterObjectsData>();
         if (characterAnimationController == null) characterAnimationController = characterObjectsData.characterMesh.GetComponent<CharacterAnimationController>();
         if (characterHurtBoxService == null) characterHurtBoxService = characterObjectsData.characterHurtBox.GetComponent<CharacterHurtBoxService>();
+        characterHitBoxesEvents = characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>();
 
         // Initialize rotation states from current transform orientations to prevent jumping at start
         characterStatesData.horizontalRotation = characterObjectService.CharacterTransform.eulerAngles.y;
@@ -51,6 +53,7 @@ public class CharacterMovementController : MonoBehaviour
             characterObjectService.FastFlyingRotate(lookDir);
             characterObjectService.ResizeCollider(true);
             characterHurtBoxService.RotateLocal(new Vector3(90, 0, 0));
+            characterHitBoxesEvents.EmitStartFlyAttack();
         }
         else
         {
@@ -58,6 +61,7 @@ public class CharacterMovementController : MonoBehaviour
             characterObjectService.RotateToDirection(lookDir);
             characterObjectService.ResizeCollider(false);
             characterHurtBoxService.RotateLocal(new Vector3(0, 0, 0));
+            characterHitBoxesEvents.EmitEndFlyAttack();
         }
     }
 

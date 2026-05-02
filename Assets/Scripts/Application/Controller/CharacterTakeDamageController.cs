@@ -50,11 +50,9 @@ public class CharacterTakeDamageController : MonoBehaviour
                 {
                     switch (attackType)
                     {
-                        case AttackTypes.light_attack:
+                        case AttackTypes.normal_attack:
                             attacker.GetComponent<CharacterDebuffController>().Deflected(direction);
                             return;
-                        case AttackTypes.heavy_attack:
-                            break;
                     }
                 }
             }
