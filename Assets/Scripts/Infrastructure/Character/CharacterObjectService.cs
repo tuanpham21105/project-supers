@@ -8,6 +8,7 @@ public class CharacterObjectService : MonoBehaviour
     // [Dependencies]
     [Header("Dependencies")]
     private CharacterController characterController;
+    private CharacterStatesData characterStatesData;
 
     // [Constant]
     [Header("Constant")]
@@ -20,27 +21,15 @@ public class CharacterObjectService : MonoBehaviour
     public event Action OnImpactForceDecayed;
     public event Action OnImpactCollision;
 
-    // [Runtime]
-    [Header("Runtime")]
-    private float _verticalVelocity;
-    private Vector3 _impactForce;
-    private Vector3 _dashForce;
-    private float _dashTimer;
-    private Vector3 _horizontalMove;
-    private bool _isImpactActive;
-    private Vector3 currentMoveDirection;
-    private float currentSqrMoveSpeed;
-
-    public Vector3 GetMoveDirection() => currentMoveDirection;
-    public float GetSqrMoveSpeed() => currentSqrMoveSpeed;
     public bool IsGrounded => characterController.isGrounded;
     public Transform CharacterTransform => transform;
     public Vector3 Velocity => characterController.velocity;
-    public Vector3 ImpactForceDirection => _impactForce.normalized;
+    public Vector3 ImpactForceDirection => characterStatesData.impactForce.normalized;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        characterStatesData = GetComponent<CharacterStatesData>();
     }
 
     void FixedUpdate()
@@ -49,52 +38,52 @@ public class CharacterObjectService : MonoBehaviour
         Vector3 combinedMove = Vector3.zero;
 
         // 1. Handle Horizontal Movement
-        combinedMove += _horizontalMove;
-        _horizontalMove = Vector3.zero; // Reset after consuming
+        combinedMove += characterStatesData.horizontalMove;
+        characterStatesData.horizontalMove = Vector3.zero; // Reset after consuming
 
         // 2. Handle Gravity & Vertical Velocity
         if (gravity)
         {
-            if (characterController.isGrounded && _verticalVelocity < 0)
+            if (characterController.isGrounded && characterStatesData.verticalVelocity < 0)
             {
-                // _verticalVelocity = -2f;
-                _verticalVelocity = 0f;
+                // characterStatesData.verticalVelocity = -2f;
+                characterStatesData.verticalVelocity = 0f;
             }
-            _verticalVelocity += Physics.gravity.y * Time.fixedDeltaTime;
+            characterStatesData.verticalVelocity += Physics.gravity.y * Time.fixedDeltaTime;
         }
-        combinedMove.y += _verticalVelocity;
+        combinedMove.y += characterStatesData.verticalVelocity;
 
         // 3. Handle Impact Forces
         // Decay the impact force over time
-        _impactForce = Vector3.Lerp(_impactForce, Vector3.zero, impactDecaySpeed * Time.fixedDeltaTime);
+        characterStatesData.impactForce = Vector3.Lerp(characterStatesData.impactForce, Vector3.zero, impactDecaySpeed * Time.fixedDeltaTime);
 
         bool impactAppliedThisFrame = false;
-        if (_impactForce.magnitude > 10f)
+        if (characterStatesData.impactForce.magnitude > 10f)
         {
-            combinedMove += _impactForce;
-            _isImpactActive = true;
+            combinedMove += characterStatesData.impactForce;
+            characterStatesData.isImpactActive = true;
             impactAppliedThisFrame = true;
         }
-        else if (_isImpactActive)
+        else if (characterStatesData.isImpactActive)
         {
-            _isImpactActive = false;
-            _impactForce = Vector3.zero;
+            characterStatesData.isImpactActive = false;
+            characterStatesData.impactForce = Vector3.zero;
             OnImpactForceDecayed?.Invoke();
         }
 
         // 4. Handle Dash
-        if (_dashTimer > 0)
+        if (characterStatesData.dashTimer > 0)
         {
-            combinedMove += _dashForce;
-            _dashTimer -= Time.fixedDeltaTime;
-            if (_dashTimer <= 0) _dashForce = Vector3.zero;
+            combinedMove += characterStatesData.dashForce;
+            characterStatesData.dashTimer -= Time.fixedDeltaTime;
+            if (characterStatesData.dashTimer <= 0) characterStatesData.dashForce = Vector3.zero;
         }
 
         // Apply everything in one call per tick
         characterController.Move(combinedMove * Time.fixedDeltaTime);
 
-        currentMoveDirection = combinedMove.normalized;
-        currentSqrMoveSpeed = combinedMove.sqrMagnitude;
+        characterStatesData.currentMoveDirection = combinedMove.normalized;
+        characterStatesData.currentSqrMoveSpeed = combinedMove.sqrMagnitude;
 
         if (impactAppliedThisFrame)
         {
@@ -103,8 +92,8 @@ public class CharacterObjectService : MonoBehaviour
 
             if (expectedDistance > 0.01f && distanceMoved < 0.001f)
             {
-                _impactForce = Vector3.zero;
-                _isImpactActive = false;
+                characterStatesData.impactForce = Vector3.zero;
+                characterStatesData.isImpactActive = false;
                 OnImpactCollision?.Invoke();
             }
         }
@@ -113,22 +102,22 @@ public class CharacterObjectService : MonoBehaviour
     public void ToggleGravity(bool status)
     {
         gravity = status;
-        if (!status) _verticalVelocity = 0;
+        if (!status) characterStatesData.verticalVelocity = 0;
     }
 
     public void Move(Vector3 direction, float moveSpeed)
     {
-        _horizontalMove = direction * moveSpeed;
+        characterStatesData.horizontalMove = direction * moveSpeed;
     }
 
     public void SetVerticalVelocity(float velocity)
     {
-        _verticalVelocity = velocity;
+        characterStatesData.verticalVelocity = velocity;
     }
 
     public void ApplyForce(Vector3 force)
     {
-        _impactForce += force;
+        characterStatesData.impactForce += force;
     }
 
     public void SetDirection(Vector3 direction)
@@ -165,8 +154,8 @@ public class CharacterObjectService : MonoBehaviour
 
     public void Dash(Vector3 direction, float force, float duration)
     {
-        _dashForce = direction.normalized * force;
-        _dashTimer = duration;
+        characterStatesData.dashForce = direction.normalized * force;
+        characterStatesData.dashTimer = duration;
     }
 
     public bool IsPointFront(Vector3 point) {

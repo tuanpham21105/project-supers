@@ -15,21 +15,6 @@ public class CharacterAttackController : MonoBehaviour
     private CharacterHitBoxesEvents characterHitBoxesEvents;
     private CharacterAnimationEvents animationEvents;
 
-    // Timestamps recording when each attack last entered its end-ongoing (follow-through) phase.
-    // Used to determine whether the next attack of the same type is a continuing combo.
-
-    // [Runtime]
-    [Header("Runtime")]
-    private float lastNormalAttackEndTime = -Mathf.Infinity;
-    private float lastStrikeAttackEndTime = -Mathf.Infinity;
-
-    // Maximum seconds after an attack's follow-through ends during which the next
-    // attack of the same kind is treated as a continuing combo.
-    
-    // [Constant]
-    [Header("Constant")]
-    [SerializeField] private float continueAttackWindow = 1f;
-
     void Start()
     {
         if (characterObjectsData == null) characterObjectsData = GetComponentInParent<CharacterObjectsData>();
@@ -207,7 +192,7 @@ public class CharacterAttackController : MonoBehaviour
 
         characterStatesData.upperActionFlag = false;
 
-        lastNormalAttackEndTime = Time.time;
+        characterStatesData.lastNormalAttackEndTime = Time.time;
         characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
 
         //Debug.Log("End Normal attack - " + Time.time);
@@ -264,14 +249,14 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.upperActionFlag = false;
         characterStatesData.bodyActionFlag = false;
 
-        lastStrikeAttackEndTime = Time.time;
+        characterStatesData.lastStrikeAttackEndTime = Time.time;
         characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
     }
 
     private int CalculateAttackDamage(int baseDamage, Vector3 attackDirection)
     {
-        Vector3 moveDirection = characterObjectService.GetMoveDirection();
-        float sqrMoveSpeed = characterObjectService.GetSqrMoveSpeed();
+        Vector3 moveDirection = characterStatesData.currentMoveDirection;
+        float sqrMoveSpeed = characterStatesData.currentSqrMoveSpeed;
         int combineDamage = baseDamage;
         
         float scale =  1 - (Vector3.Angle(moveDirection, attackDirection) / characterStatsData.maxCombineAttackAngleSize);
@@ -288,7 +273,7 @@ public class CharacterAttackController : MonoBehaviour
         if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
 
         // Continuing if we are still within the combo window since the last normal attack ended.
-        bool isContinuing = (Time.time - lastNormalAttackEndTime) <= continueAttackWindow;
+        bool isContinuing = (Time.time - characterStatesData.lastNormalAttackEndTime) <= characterStatsData.continueAttackWindow;
 
         PlayNormalAttack(isContinuing);
     }
@@ -299,7 +284,7 @@ public class CharacterAttackController : MonoBehaviour
         if (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag) return;
 
         // Continuing if we are still within the combo window since the last strike attack ended.
-        bool isContinuing = (Time.time - lastStrikeAttackEndTime) <= continueAttackWindow;
+        bool isContinuing = (Time.time - characterStatesData.lastStrikeAttackEndTime) <= characterStatsData.continueAttackWindow;
 
         PlayStrikeAttack(isContinuing);
     }

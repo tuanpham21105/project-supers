@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public enum CharacterBodyAnimation
 {
@@ -51,6 +52,7 @@ public class CharacterAnimationController : MonoBehaviour
     // [Dependencies]
     [Header("Dependencies")]
     private CharacterObjectsData characterObjectsData;
+    private CharacterStatesData characterStatesData;
     private Animator animator;
 
     // [Constant]
@@ -76,13 +78,11 @@ public class CharacterAnimationController : MonoBehaviour
     // [Runtime]
     [Header("Runtime")]
     private Coroutine upperLayerFadeCoroutine;
-    private int normalAttackComboIndex = 0;
-    private int strikeAttackComboIndex = 0;
-    private int hitAnimationIndex = 0;
 
     void Start()
     {
         characterObjectsData = GetComponent<CharacterObjectsData>();
+        characterStatesData = GetComponent<CharacterStatesData>();
 
         animator = characterObjectsData.characterMesh.GetComponent<Animator>();
     }
@@ -119,11 +119,11 @@ public class CharacterAnimationController : MonoBehaviour
 
     public void PlayHitAnimation()
     {
-        PlayAdditionalAnimation(hitAnimations[hitAnimationIndex]);
-        hitAnimationIndex++;
-        if (hitAnimationIndex >= hitAnimations.Count)
+        PlayAdditionalAnimation(hitAnimations[characterStatesData.hitAnimationIndex]);
+        characterStatesData.hitAnimationIndex++;
+        if (characterStatesData.hitAnimationIndex >= hitAnimations.Count)
         {
-            hitAnimationIndex = 0;
+            characterStatesData.hitAnimationIndex = 0;
         }
     }
 
@@ -136,46 +136,46 @@ public class CharacterAnimationController : MonoBehaviour
     {
         if (isContinuing)
         {
-            normalAttackComboIndex++;
-            if (normalAttackComboIndex >= normalAttackCombo.Count)
+            characterStatesData.normalAttackComboIndex++;
+            if (characterStatesData.normalAttackComboIndex >= normalAttackCombo.Count)
             {
-                normalAttackComboIndex = 0;
+                characterStatesData.normalAttackComboIndex = 0;
             }
         }
         else
         {
-            normalAttackComboIndex = 0;
+            characterStatesData.normalAttackComboIndex = 0;
         }
 
-        PlayUpperAnimation(normalAttackCombo[normalAttackComboIndex]);
+        PlayUpperAnimation(normalAttackCombo[characterStatesData.normalAttackComboIndex]);
     }
 
     public void ResetNormalAttackCombo()
     {
-        normalAttackComboIndex = 0;
+        characterStatesData.normalAttackComboIndex = 0;
     }
 
     public void PlayStrikeAttack(bool isContinuing)
     {
         if (isContinuing)
         {
-            strikeAttackComboIndex++;
-            if (strikeAttackComboIndex >= strikeAttackCombo.Count)
+            characterStatesData.strikeAttackComboIndex++;
+            if (characterStatesData.strikeAttackComboIndex >= strikeAttackCombo.Count)
             {
-                strikeAttackComboIndex = 0;
+                characterStatesData.strikeAttackComboIndex = 0;
             }
         }
         else
         {
-            strikeAttackComboIndex = 0;
+            characterStatesData.strikeAttackComboIndex = 0;
         }
 
-        PlayBodyAnimation(strikeAttackCombo[strikeAttackComboIndex], 0f);
+        PlayBodyAnimation(strikeAttackCombo[characterStatesData.strikeAttackComboIndex], 0f);
     }
 
     public void ResetStrikeAttackCombo()
     {
-        strikeAttackComboIndex = 0;
+        characterStatesData.strikeAttackComboIndex = 0;
     }
 
     public void PlayKnockOutAnimation(bool front)

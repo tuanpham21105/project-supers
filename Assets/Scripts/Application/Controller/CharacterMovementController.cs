@@ -15,10 +15,6 @@ public class CharacterMovementController : MonoBehaviour
     private CharacterHurtBoxService characterHurtBoxService;
     private CharacterHitBoxesEvents characterHitBoxesEvents;
 
-    // [Runtime]
-    [Header("Runtime")]
-    private CharacterBodyAnimation _currentBodyAnimation;
-
     // [Event]
     public event Action onLanding;
 
@@ -28,12 +24,9 @@ public class CharacterMovementController : MonoBehaviour
         if (characterStatesData == null) characterStatesData = GetComponent<CharacterStatesData>();
         if (characterObjectService == null) characterObjectService = GetComponent<CharacterObjectService>();
         if (characterObjectsData == null) characterObjectsData = GetComponent<CharacterObjectsData>();
-        if (characterAnimationController == null) characterAnimationController = characterObjectsData.characterMesh.GetComponent<CharacterAnimationController>();
+        if (characterAnimationController == null) characterAnimationController = GetComponent<CharacterAnimationController>();
         if (characterHurtBoxService == null) characterHurtBoxService = characterObjectsData.characterHurtBox.GetComponent<CharacterHurtBoxService>();
         characterHitBoxesEvents = characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>();
-
-        // Initialize rotation states from current transform orientations to prevent jumping at start
-        characterStatesData.horizontalRotation = characterObjectService.CharacterTransform.eulerAngles.y;
     }
 
     private void FixedUpdate()
@@ -158,23 +151,23 @@ public class CharacterMovementController : MonoBehaviour
         if (characterAnimationController == null) return;
 
         CharacterBodyAnimation nextAnim = DetermineBodyAnimation();
-        if (nextAnim != _currentBodyAnimation)
+        if (nextAnim != characterStatesData.currentBodyAnimation)
         {
-            _currentBodyAnimation = nextAnim;
-            characterAnimationController.PlayBodyAnimation(_currentBodyAnimation);
+            characterStatesData.currentBodyAnimation = nextAnim;
+            characterAnimationController.PlayBodyAnimation(characterStatesData.currentBodyAnimation);
         }
     }
 
     public void ForceRefreshBodyAnimation()
     {
-        _currentBodyAnimation = (CharacterBodyAnimation)(-1); // Use an invalid value to force update
+        characterStatesData.currentBodyAnimation = (CharacterBodyAnimation)(-1); // Use an invalid value to force update
         UpdateAnimations();
     }
 
     private CharacterBodyAnimation DetermineBodyAnimation()
     {
         if (characterStatesData.bodyActionFlag)
-            return _currentBodyAnimation;
+            return characterStatesData.currentBodyAnimation;
 
         if (characterStatesData.flyFlag)
         {

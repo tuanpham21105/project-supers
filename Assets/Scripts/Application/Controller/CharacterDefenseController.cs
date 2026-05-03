@@ -11,15 +11,7 @@ public class CharacterDefenseController : MonoBehaviour
     private CharacterAnimationController animationController;
     private CharacterAttackController characterAttackController;
     private CharacterAnimationEvents animationEvents;
-
-    // [Runtime]
-    [Header("Runtime")]
-    private float lastDeflectTime;
-    private float currentDeflectSpeed = 1f;
-
-    // [Constant]
-    [Header("Constant")]
-    [SerializeField] private float deflectComboWindow = 0.5f;
+    private CharacterStatsData characterStatsData;
 
     void Start()
     {
@@ -27,6 +19,7 @@ public class CharacterDefenseController : MonoBehaviour
         if (characterStatesData == null) characterStatesData = GetComponent<CharacterStatesData>();
         if (animationController == null) animationController = GetComponent<CharacterAnimationController>();
         if (characterAttackController == null) characterAttackController = GetComponent<CharacterAttackController>();
+        if (characterStatsData == null) characterStatsData = GetComponent<CharacterStatsData>();
 
         if (characterObjectsData != null && characterObjectsData.characterMesh != null)
         {
@@ -85,7 +78,7 @@ public class CharacterDefenseController : MonoBehaviour
             animationController.EndUpperAnimation();
         }
 
-        lastDeflectTime = Time.time;
+        characterStatesData.lastDeflectTime = Time.time;
 
         characterStatesData.deflectFlag = false;
 
@@ -127,13 +120,13 @@ public class CharacterDefenseController : MonoBehaviour
         if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
         if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
 
-        if (Time.time - lastDeflectTime < deflectComboWindow)
+        if (Time.time - characterStatesData.lastDeflectTime < characterStatsData.deflectComboWindow)
         {
-            currentDeflectSpeed = Mathf.Min(currentDeflectSpeed + 0f, 2.5f);
+            characterStatesData.currentDeflectSpeed = Mathf.Min(characterStatesData.currentDeflectSpeed + 0f, 2.5f);
         }
         else
         {
-            currentDeflectSpeed = 1f;
+            characterStatesData.currentDeflectSpeed = 1f;
         }
 
         ResetDefenseFlags();
@@ -142,7 +135,7 @@ public class CharacterDefenseController : MonoBehaviour
 
         if (animationController != null)
         {
-            animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect, currentDeflectSpeed);
+            animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect, characterStatesData.currentDeflectSpeed);
         }
 
         //Debug.Log("Start deflect - " + Time.time);

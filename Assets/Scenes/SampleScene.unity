@@ -944,7 +944,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d5cfc2b6fb634f87890bcd779986dfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
 --- !u!65 &459061919
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3152,13 +3151,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3314ac9f85beccc9ab3f25761a281b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 1656352637}
   gravity: 1
   impactDecaySpeed: 2
   fastFlyRotationSpeed: 5
   normalRotationSpeed: 540
-  currentMoveDirection: {x: 0, y: 0, z: 0}
-  currentSqrMoveSpeed: 0
 --- !u!114 &1656352639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3171,9 +3167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61a1b09f275c38709bde986ae1f05ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1566448591}
   transitionDuration: 0.1
-  strikeAttackComboIndex: 0
+  normalAttackCombo: 0100000002000000
+  strikeAttackCombo: 1100000012000000
+  hitAnimations: 010000000200000003000000
 --- !u!114 &1656352640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3201,13 +3198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0453086608c8bb95e81c616d87a2ec30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStatsData: {fileID: 1656352642}
-  characterStatesData: {fileID: 1656352643}
-  characterObjectService: {fileID: 1656352638}
-  characterObjectsData: {fileID: 1656352640}
-  characterAnimationController: {fileID: 1656352639}
-  characterHurtBoxService: {fileID: 0}
-  characterHitBoxesEvents: {fileID: 0}
 --- !u!114 &1656352642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3220,23 +3210,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ae4aacbe84c97d1293dac86f7d60f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  sprintAdditionalSpeed: 15
-  flySpeed: 15
-  flySprintAdditionalSpeed: 25
-  jumpForce: 10
-  dashForce: 50
-  dashDuration: 0.2
-  dashCooldown: 1
-  endurance: 5000
-  knockOutThreshold: 0.1
-  blockThreshold: 0.7
-  normalAttackDamage: 200
-  strikeAttackDamage: 50
-  hitKnockAwayForce: 15
-  damageKnockAwayRatio: 0.4
-  maxCombineAttackAngleSize: 60
-  sqrMoveSpeedDamageThreshold: 0.5
+  characterStatsSO: {fileID: 11400000, guid: f868aeb34a10ec80ba21dd111b4e7ea3, type: 2}
+  moveSpeed: 0
+  sprintAdditionalSpeed: 0
+  flySpeed: 0
+  flySprintAdditionalSpeed: 0
+  jumpForce: 0
+  dashForce: 0
+  dashDuration: 0
+  dashCooldown: 0
+  endurance: 0
+  knockOutThreshold: 0
+  blockThreshold: 0
+  normalAttackDamage: 0
+  strikeAttackDamage: 0
+  damageKnockAwayRatio: 0
+  maxCombineAttackAngleSize: 0
+  sqrMoveSpeedDamageThreshold: 0
+  continueAttackWindow: 0
+  deflectComboWindow: 0
 --- !u!114 &1656352643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3273,13 +3265,28 @@ MonoBehaviour:
   bodyActionFlag: 0
   hitFlag: 0
   deflectedFlag: 0
+  deadFlag: 0
+  currentEndurance: 0
   moveSpeed: 0
   inputAxes: {x: 0, y: 0}
   lookInput: {x: 0, y: 0, z: 0}
-  horizontalRotation: 0
-  verticalRotation: 0
   direction: {x: 0, y: 0, z: 0}
-  currentEndurance: 0
+  currentBodyAnimation: 0
+  lastNormalAttackEndTime: -Infinity
+  lastStrikeAttackEndTime: -Infinity
+  lastDeflectTime: 0
+  currentDeflectSpeed: 1
+  normalAttackComboIndex: 0
+  strikeAttackComboIndex: 0
+  hitAnimationIndex: 0
+  verticalVelocity: 0
+  impactForce: {x: 0, y: 0, z: 0}
+  dashForce: {x: 0, y: 0, z: 0}
+  dashTimer: 0
+  horizontalMove: {x: 0, y: 0, z: 0}
+  isImpactActive: 0
+  currentMoveDirection: {x: 0, y: 0, z: 0}
+  currentSqrMoveSpeed: 0
 --- !u!114 &1656352644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3292,14 +3299,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda3de5131d8f4f1d8bea5eaab8a00b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterObjectsData: {fileID: 0}
-  characterObjectService: {fileID: 0}
-  characterStatesData: {fileID: 0}
-  characterStatsData: {fileID: 0}
-  animationController: {fileID: 0}
-  defenseController: {fileID: 0}
-  characterHitBoxesEvents: {fileID: 0}
-  continueAttackWindow: 0.6
 --- !u!114 &1656352645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3312,11 +3311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bfd518688bfd42a3b13324bd774c265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterObjectsData: {fileID: 0}
-  characterStatesData: {fileID: 0}
-  animationController: {fileID: 0}
-  characterAttackController: {fileID: 0}
-  deflectComboWindow: 0.5
 --- !u!114 &1656352646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3329,11 +3323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e77be2946204ad2ebba5f6d0ac9fdfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterObjectsData: {fileID: 0}
-  characterStatesData: {fileID: 0}
-  characterStatsData: {fileID: 0}
-  characterMovementController: {fileID: 0}
-  animationController: {fileID: 0}
 --- !u!114 &1656352647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3346,10 +3335,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75eea77264776c99ba0c66d6968d1537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStatsData: {fileID: 0}
-  characterStatesData: {fileID: 0}
-  characterObjectService: {fileID: 0}
-  characterDebuffController: {fileID: 0}
 --- !u!1 &1686600008
 GameObject:
   m_ObjectHideFlags: 0
@@ -3654,9 +3639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe35abd0cc1286f469b1820fbfb90320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterMovementController: {fileID: 1656352641}
-  characterAttackController: {fileID: 1656352644}
-  characterDefenseController: {fileID: 1656352645}
+  character: {fileID: 1656352632}
   cameraController: {fileID: 371461814}
   moveDirectionInput: {x: 0, y: 0}
   sprintInput: 0
@@ -3789,10 +3772,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75eea77264776c99ba0c66d6968d1537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStatsData: {fileID: 0}
-  characterStatesData: {fileID: 0}
-  characterObjectService: {fileID: 0}
-  characterDebuffController: {fileID: 0}
 --- !u!114 &1914549266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3805,11 +3784,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e77be2946204ad2ebba5f6d0ac9fdfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterObjectsData: {fileID: 0}
-  characterStatesData: {fileID: 0}
-  characterStatsData: {fileID: 0}
-  characterMovementController: {fileID: 0}
-  animationController: {fileID: 0}
 --- !u!114 &1914549267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3822,11 +3796,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bfd518688bfd42a3b13324bd774c265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterObjectsData: {fileID: 0}
-  characterStatesData: {fileID: 0}
-  animationController: {fileID: 0}
-  characterAttackController: {fileID: 0}
-  deflectComboWindow: 0.5
 --- !u!114 &1914549268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3839,14 +3808,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda3de5131d8f4f1d8bea5eaab8a00b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterObjectsData: {fileID: 0}
-  characterObjectService: {fileID: 0}
-  characterStatesData: {fileID: 0}
-  characterStatsData: {fileID: 0}
-  animationController: {fileID: 0}
-  defenseController: {fileID: 0}
-  characterHitBoxesEvents: {fileID: 0}
-  continueAttackWindow: 0.6
 --- !u!114 &1914549269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3859,23 +3820,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ae4aacbe84c97d1293dac86f7d60f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  sprintAdditionalSpeed: 15
-  flySpeed: 15
-  flySprintAdditionalSpeed: 25
-  jumpForce: 10
-  dashForce: 50
-  dashDuration: 0.2
-  dashCooldown: 1
-  endurance: 5000
-  knockOutThreshold: 0.1
-  blockThreshold: 0.7
-  normalAttackDamage: 200
-  strikeAttackDamage: 50
-  hitKnockAwayForce: 15
-  damageKnockAwayRatio: 0.4
-  maxCombineAttackAngleSize: 60
-  sqrMoveSpeedDamageThreshold: 0.5
+  characterStatsSO: {fileID: 11400000, guid: f868aeb34a10ec80ba21dd111b4e7ea3, type: 2}
+  moveSpeed: 0
+  sprintAdditionalSpeed: 0
+  flySpeed: 0
+  flySprintAdditionalSpeed: 0
+  jumpForce: 0
+  dashForce: 0
+  dashDuration: 0
+  dashCooldown: 0
+  endurance: 0
+  knockOutThreshold: 0
+  blockThreshold: 0
+  normalAttackDamage: 0
+  strikeAttackDamage: 0
+  damageKnockAwayRatio: 0
+  maxCombineAttackAngleSize: 0
+  sqrMoveSpeedDamageThreshold: 0
+  continueAttackWindow: 0
+  deflectComboWindow: 0
 --- !u!114 &1914549270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3912,13 +3875,28 @@ MonoBehaviour:
   bodyActionFlag: 0
   hitFlag: 0
   deflectedFlag: 0
+  deadFlag: 0
+  currentEndurance: 0
   moveSpeed: 0
   inputAxes: {x: 0, y: 0}
   lookInput: {x: 0, y: 0, z: 0}
-  horizontalRotation: 0
-  verticalRotation: 0
   direction: {x: 0, y: 0, z: 0}
-  currentEndurance: 0
+  currentBodyAnimation: 0
+  lastNormalAttackEndTime: -Infinity
+  lastStrikeAttackEndTime: -Infinity
+  lastDeflectTime: 0
+  currentDeflectSpeed: 1
+  normalAttackComboIndex: 0
+  strikeAttackComboIndex: 0
+  hitAnimationIndex: 0
+  verticalVelocity: 0
+  impactForce: {x: 0, y: 0, z: 0}
+  dashForce: {x: 0, y: 0, z: 0}
+  dashTimer: 0
+  horizontalMove: {x: 0, y: 0, z: 0}
+  isImpactActive: 0
+  currentMoveDirection: {x: 0, y: 0, z: 0}
+  currentSqrMoveSpeed: 0
 --- !u!114 &1914549271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3946,13 +3924,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0453086608c8bb95e81c616d87a2ec30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStatsData: {fileID: 1914549269}
-  characterStatesData: {fileID: 1914549270}
-  characterObjectService: {fileID: 1914549274}
-  characterObjectsData: {fileID: 1914549271}
-  characterAnimationController: {fileID: 1914549273}
-  characterHurtBoxService: {fileID: 0}
-  characterHitBoxesEvents: {fileID: 0}
 --- !u!114 &1914549273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3965,9 +3936,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61a1b09f275c38709bde986ae1f05ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 567559488}
   transitionDuration: 0.1
-  strikeAttackComboIndex: 0
+  normalAttackCombo: 0100000002000000
+  strikeAttackCombo: 1100000012000000
+  hitAnimations: 010000000200000003000000
 --- !u!114 &1914549274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3980,13 +3952,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3314ac9f85beccc9ab3f25761a281b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 1914549275}
   gravity: 1
   impactDecaySpeed: 2
   fastFlyRotationSpeed: 5
   normalRotationSpeed: 540
-  currentMoveDirection: {x: 0, y: 0, z: 0}
-  currentSqrMoveSpeed: 0
 --- !u!143 &1914549275
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4180,7 +4149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d5cfc2b6fb634f87890bcd779986dfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
 --- !u!54 &1928477382
 Rigidbody:
   m_ObjectHideFlags: 0
