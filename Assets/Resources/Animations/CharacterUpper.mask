@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CharacterUpper
+  m_Mask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Character
+    m_Weight: 0
+  - m_Path: Character/HipBone
+    m_Weight: 0
+  - m_Path: Character/HipBone/ChestBone
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/BackAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/ChestMesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/ChestMesh/chest_mesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/EarsBone
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/EarsBone/EarsAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/EarsBone/EarsMesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/EarsBone/EarsMesh/ears_mesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/FaceAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/Hair
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/Hair/Back
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/Hair/Side
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/Hair/Top
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/HeadAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/HeadMesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/HeadBone/HeadMesh/head_mesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone/LeftArmMesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone/LeftArmMesh/left_arm_mesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone/LeftForearmBone
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone/LeftForearmBone/LeftForearmAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone/LeftForearmBone/LeftForearmMesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone/LeftForearmBone/LeftForearmMesh/left_forearm_mesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone/LeftForearmBone/LeftHandAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/LeftArmBone/LeftShoulderAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/NeckAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone/RightArmMesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone/RightArmMesh/right_arm_mesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone/RightForearmBone
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone/RightForearmBone/RightForearmAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone/RightForearmBone/RightForearmMesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone/RightForearmBone/RightForearmMesh/right_forearm_mesh
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone/RightForearmBone/RightHandAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/ChestBone/RightArmBone/RightShoulderAccessories
+    m_Weight: 1
+  - m_Path: Character/HipBone/HipMesh
+    m_Weight: 0
+  - m_Path: Character/HipBone/HipMesh/hip_mesh
+    m_Weight: 0
+  - m_Path: Character/LeftThighBone
+    m_Weight: 0
+  - m_Path: Character/LeftThighBone/LeftShinBone
+    m_Weight: 0
+  - m_Path: Character/LeftThighBone/LeftShinBone/LeftShinMesh
+    m_Weight: 0
+  - m_Path: Character/LeftThighBone/LeftShinBone/LeftShinMesh/left_shin_mesh
+    m_Weight: 0
+  - m_Path: Character/LeftThighBone/LeftThighMesh
+    m_Weight: 0
+  - m_Path: Character/LeftThighBone/LeftThighMesh/left_thigh_mesh
+    m_Weight: 0
+  - m_Path: Character/RightThighBone
+    m_Weight: 0
+  - m_Path: Character/RightThighBone/RightShinBone
+    m_Weight: 0
+  - m_Path: Character/RightThighBone/RightShinBone/RightShinMesh
+    m_Weight: 0
+  - m_Path: Character/RightThighBone/RightShinBone/RightShinMesh/right_shin_mesh
+    m_Weight: 0
+  - m_Path: Character/RightThighBone/RightThighMesh
+    m_Weight: 0
+  - m_Path: Character/RightThighBone/RightThighMesh/right_thigh_mesh
+    m_Weight: 0

@@ -17,8 +17,8 @@ MonoBehaviour:
   flySpeed: 15
   flySprintAdditionalSpeed: 25
   jumpForce: 10
-  dashForce: 50
-  dashDuration: 0.2
+  dashForce: 80
+  dashDuration: 0.125
   dashCooldown: 1
   endurance: 5000
   knockOutThreshold: 0.5

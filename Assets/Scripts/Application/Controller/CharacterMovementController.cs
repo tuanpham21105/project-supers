@@ -175,8 +175,15 @@ public class CharacterMovementController : MonoBehaviour
 
             if (characterStatesData.fastFlyFlag) return CharacterBodyAnimation.fast_fly;
 
-            if (characterStatesData.inputAxes.sqrMagnitude < 0.01f) return CharacterBodyAnimation.fly_idle;
+            // New logic: Check for vertical movement animations if no significant horizontal input
+            if (characterStatesData.inputAxes.sqrMagnitude < 0.01f)
+            {
+                if (characterStatesData.flyUpFlag) return CharacterBodyAnimation.jump;
+                if (characterStatesData.flyDownFlag) return CharacterBodyAnimation.fall;
+                return CharacterBodyAnimation.fly_idle;
+            }
 
+            // Existing logic for horizontal movement
             // Prioritize vertical axis for forward/backward, horizontal for strafing
             if (Mathf.Abs(characterStatesData.inputAxes.y) >= Mathf.Abs(characterStatesData.inputAxes.x))
             {

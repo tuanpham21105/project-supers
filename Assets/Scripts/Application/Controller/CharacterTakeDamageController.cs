@@ -36,9 +36,7 @@ public class CharacterTakeDamageController : MonoBehaviour
 
         characterStatesData.currentEndurance -= damage;
 
-        Debug.Log(damage);
-
-        if (characterStatesData.currentEndurance < 0)
+        if (characterStatesData.currentEndurance <= 0)
         {
             characterStatesData.currentEndurance = 0;
             characterDebuffController.Dead();
