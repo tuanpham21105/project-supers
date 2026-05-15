@@ -25,21 +25,22 @@ public class CharacterTakeDamageController : MonoBehaviour
     {
         if (damage <= 0) return;
 
-        if (damage >= (int)(characterStatsData.knockOutThreshold * (float)characterStatesData.currentEndurance))
+        characterStatesData.currentEndurance -= damage;
+
+        int oldCurrentEndurance = characterStatesData.currentEndurance;
+
+        if (characterStatesData.currentEndurance <= 0)
+        {
+            characterStatesData.currentEndurance = 0;
+        }
+
+        if (damage >= (int)(characterStatsData.knockOutThreshold * (float)oldCurrentEndurance))
         {
             characterDebuffController.KnockOut(direction, isFront, damage);
         }
         else
         {
             characterDebuffController.Hit(direction, damage);
-        }
-
-        characterStatesData.currentEndurance -= damage;
-
-        if (characterStatesData.currentEndurance <= 0)
-        {
-            characterStatesData.currentEndurance = 0;
-            characterDebuffController.Dead();
         }
     }
 
@@ -52,10 +53,11 @@ public class CharacterTakeDamageController : MonoBehaviour
 
         if (characterStatesData.knockAwayFlag)
         {
-            characterDebuffController.Dead();
+            // characterDebuffController.Dead();
         }
         else
         {
+        }
             bool isFront = characterObjectService.IsPointFront(direction);
 
             if (isFront)
@@ -79,7 +81,6 @@ public class CharacterTakeDamageController : MonoBehaviour
             }
 
             ApplyDamage(damage, isFront, direction);
-        }
     }
 
 }

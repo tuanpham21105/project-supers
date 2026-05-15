@@ -53,7 +53,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        characterMovementController.onLanding += HandleLanding;
+        characterMovementController.endFlying += HandleLanding;
     }
 
     private void OnDisable()
@@ -65,7 +65,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     private void Oestroy()
     {
 
-        characterMovementController.onLanding -= HandleLanding;  
+        characterMovementController.endFlying -= HandleLanding;  
     }
 
     private Vector2 smoothLookInput;

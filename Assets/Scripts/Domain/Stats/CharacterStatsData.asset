@@ -20,11 +20,11 @@ MonoBehaviour:
   dashForce: 80
   dashDuration: 0.125
   dashCooldown: 1
-  endurance: 5000
-  knockOutThreshold: 0.5
+  endurance: 50
+  knockOutThreshold: 0.01
   blockThreshold: 0.7
-  normalAttackDamage: 200
-  strikeAttackDamage: 400
+  normalAttackDamage: 100
+  strikeAttackDamage: 100
   damageKnockAwayRatio: 0.4
   maxCombineAttackAngleSize: 60
   sqrMoveSpeedDamageThreshold: 0.5

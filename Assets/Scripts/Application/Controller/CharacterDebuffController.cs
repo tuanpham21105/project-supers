@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class CharacterDebuffController : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class CharacterDebuffController : MonoBehaviour
             characterObjectService.OnImpactForceDecayed += EndKnockOut;
             characterObjectService.OnImpactCollision += HandleImpactCollision;
         }
+
+        characterMovementController.endFlying += HandleEndFallKnockOut;
     }
 
     private void OnDestroy()
@@ -52,6 +55,8 @@ public class CharacterDebuffController : MonoBehaviour
             characterObjectService.OnImpactForceDecayed -= EndKnockOut;
             characterObjectService.OnImpactCollision -= HandleImpactCollision;
         }
+
+        characterMovementController.endFlying -= HandleEndFallKnockOut;
     }
     
     private void HandleHitEnd()
@@ -80,10 +85,15 @@ public class CharacterDebuffController : MonoBehaviour
         {
             characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
 
-            // if (animationController != null)
-            // {
-            //     animationController.PlayBodyAnimation(characterStatesData.flyFlag ? CharacterBodyAnimation.fly_idle : CharacterBodyAnimation.ground_idle);
-            // }
+            if (characterStatesData.currentEndurance <= 0)
+            {
+                if (characterStatesData.fallFlag)
+                {
+                    FallKnockOut();
+                }
+                else 
+                    Dead();
+            }
         }
 
         characterMovementController.ForceRefreshBodyAnimation();
@@ -112,6 +122,13 @@ public class CharacterDebuffController : MonoBehaviour
         }
     }
 
+    private void HandleEndFallKnockOut()
+    {
+        if (characterStatesData.knockAwayFlag && characterStatesData.currentEndurance <= 0)
+        {
+            Dead();
+        } 
+    }
     // [Control methods]
     public void Hit(Vector3 direction, int damage)
     {
@@ -127,7 +144,7 @@ public class CharacterDebuffController : MonoBehaviour
 
     public void KnockOut(Vector3 direction, bool isFront, int damage)
     {
-        if (characterStatesData != null && characterStatesData.knockAwayFlag) return;
+        // if (characterStatesData != null && characterStatesData.knockAwayFlag) return;
 
         if (characterStatesData != null)
         {
@@ -135,6 +152,13 @@ public class CharacterDebuffController : MonoBehaviour
             characterStatesData.knockAwayFlag = true;
             characterStatesData.bodyActionFlag = true;
             characterStatesData.upperActionFlag = true;
+
+            if (characterStatesData.currentEndurance <= 0)
+            {
+                characterMovementController.SetFlyEnd();
+            }
+
+            characterStatesData.isFront = isFront;
         }
 
         if (animationController != null)
@@ -147,6 +171,48 @@ public class CharacterDebuffController : MonoBehaviour
         {
             characterObjectService.SetDirection(direction * (isFront ? -1 : 1));
             KnockBack(direction, damage);
+        }
+    }
+
+    public void FallKnockOut()
+    {
+        Vector3 direction = Vector3.down;
+        bool isFront = characterObjectService.IsFaceUp();
+
+        // if (characterStatesData != null && characterStatesData.knockAwayFlag) return;
+
+        if (characterStatesData != null)
+        {
+            characterStatesData.ChangeProcessAction(CharacterProcessAction.knock_out);
+            characterStatesData.knockAwayFlag = true;
+            characterStatesData.bodyActionFlag = true;
+            characterStatesData.upperActionFlag = true;
+
+            characterStatesData.isFront = isFront;
+        }
+
+        if (animationController != null)
+        {
+            animationController.EndUpperAnimation();
+            animationController.PlayKnockOutAnimation(isFront);
+        }
+
+        if (characterObjectService != null)
+        {
+            // Last horizontal facing direction
+            Vector3 horizontal = characterObjectsData.characterObject.transform.forward;
+            horizontal.y = 0f;
+            horizontal.Normalize();
+
+            // Body forward when lying down
+            Vector3 forward = (isFront ? Vector3.up : Vector3.down);
+
+            // Build rotation:
+            // forward = up/down
+            // up = previous horizontal direction
+            Quaternion rot = Quaternion.LookRotation(forward, horizontal);
+
+            characterObjectsData.characterObject.transform.rotation = rot;
         }
     }
 
@@ -176,9 +242,19 @@ public class CharacterDebuffController : MonoBehaviour
             characterStatesData.bodyActionFlag = true;
         }
 
+        if (characterObjectService != null)
+        {
+            // Last horizontal facing direction
+            Vector3 horizontal = characterObjectsData.characterObject.transform.up;
+            horizontal.y = 0f;
+            horizontal.Normalize();
+
+            characterObjectService.SetDirection(horizontal);
+        }
+
         if (animationController != null)
         {
-            animationController.PlayBodyAnimation(CharacterBodyAnimation.dead);
+            animationController.PlayBodyAnimation(characterStatesData.isFront ? CharacterBodyAnimation.dead_1 : CharacterBodyAnimation.dead_2);
         }
     }
 }

@@ -127,6 +127,13 @@ public class CharacterObjectService : MonoBehaviour
         transform.forward = direction;
     }
 
+    public void SetUpDirection(Vector3 direction)
+    {
+        if (direction == Vector3.zero) return;
+
+        transform.up = direction;
+    }
+
     public void RotateToDirection(Vector3 direction)
     {
         if (direction == Vector3.zero) return;
@@ -160,6 +167,11 @@ public class CharacterObjectService : MonoBehaviour
 
     public bool IsPointFront(Vector3 point) {
         return Vector3.Dot(point, transform.forward) <= 0;
+    }
+
+    public bool IsFaceUp()
+    {
+        return !IsPointFront(Vector3.up);
     }
 
     public void ResizeCollider(bool isFastFly)

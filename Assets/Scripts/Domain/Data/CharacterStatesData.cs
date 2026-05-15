@@ -119,6 +119,7 @@ public class CharacterStatesData : MonoBehaviour
     public bool hitFlag;
     public bool deflectedFlag;
     public bool deadFlag;
+    public bool fallFlag;
 
     public int currentEndurance;
     public float moveSpeed;
@@ -147,4 +148,6 @@ public class CharacterStatesData : MonoBehaviour
     public bool isImpactActive;
     public Vector3 currentMoveDirection;
     public float currentSqrMoveSpeed;
+
+    public bool isFront;
 }

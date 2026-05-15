@@ -16,7 +16,7 @@ public class CharacterMovementController : MonoBehaviour
     private CharacterHitBoxesEvents characterHitBoxesEvents;
 
     // [Event]
-    public event Action onLanding;
+    public event Action endFlying;
 
     private void Start()
     {
@@ -38,7 +38,7 @@ public class CharacterMovementController : MonoBehaviour
 
     private void ApplyRotation()
     {
-        if (characterStatesData.knockAwayFlag) return;
+        if (characterStatesData.knockAwayFlag || characterStatesData.deadFlag) return;
 
         Vector3 lookDir = characterStatesData.lookInput;
 
@@ -61,6 +61,18 @@ public class CharacterMovementController : MonoBehaviour
 
     private void HandleMovement()
     {
+
+        // Auto-landing: if we touch the ground while in fly mode, turn it off.
+        if (characterStatesData.flyFlag && characterObjectService.IsGrounded)
+        {
+            SetFlyEnd();
+        }
+
+        if (characterStatesData.knockAwayFlag && characterStatesData.fallFlag && characterObjectService.IsGrounded && characterStatesData.currentEndurance <= 0)
+        {
+            SetFlyEnd();
+        }
+
         if (characterStatesData.knockAwayFlag) return;
 
         Vector3 moveDirection = GetCurrentMoveDirection();
@@ -99,6 +111,15 @@ public class CharacterMovementController : MonoBehaviour
         else
         {
             currentSpeed = characterStatsData.moveSpeed + (characterStatesData.sprintFlag ? characterStatsData.sprintAdditionalSpeed : 0);
+
+            if (!characterObjectService.IsGrounded)
+            {
+                characterStatesData.fallFlag = characterObjectService.Velocity.y < 0;
+            }
+            else
+            {
+                characterStatesData.fallFlag = false;
+            }
         }
 
         if (moveDirection.sqrMagnitude > 0)
@@ -107,13 +128,6 @@ public class CharacterMovementController : MonoBehaviour
         }
 
         characterStatesData.moveSpeed = currentSpeed;
-
-        // Auto-landing: if we touch the ground while in fly mode, turn it off.
-        if (characterStatesData.flyFlag && characterObjectService.IsGrounded)
-        {
-            SetFly(false);
-            onLanding?.Invoke();
-        }
 
         characterObjectService.ToggleGravity(!characterStatesData.flyFlag);
     }
@@ -273,7 +287,7 @@ public class CharacterMovementController : MonoBehaviour
 
     public void Jump()
     {
-        if (!characterStatesData.flyFlag && characterObjectService.IsGrounded)
+        if (!characterStatesData.flyFlag && characterObjectService.IsGrounded && !characterStatesData.bodyActionFlag && characterStatesData.currentProcessAction == CharacterProcessAction.none)
         {
             characterObjectService.SetVerticalVelocity(characterStatsData.jumpForce);
         }
@@ -297,6 +311,23 @@ public class CharacterMovementController : MonoBehaviour
         if (status == characterStatesData.flyFlag) return;
 
         characterStatesData.flyFlag = status;
+    }
+
+    public void SetFlyEnd()
+    {
+        characterStatesData.flyFlag = false;
+        characterObjectService.ToggleGravity(true);
+
+        endFlying?.Invoke();
+
+        if (!characterObjectService.IsGrounded)
+        {
+            characterStatesData.fallFlag = true;
+        }
+        else
+        {
+            characterStatesData.fallFlag = false;
+        }
     }
 
     public void SetFlyUp(bool status)
