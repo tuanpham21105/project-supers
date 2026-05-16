@@ -200,7 +200,7 @@ public class CharacterDebuffController : MonoBehaviour
         if (characterObjectService != null)
         {
             // Last horizontal facing direction
-            Vector3 horizontal = characterObjectsData.characterObject.transform.forward;
+            Vector3 horizontal = characterObjectsData.characterObject.transform.forward * (isFront ? -1 : 1);
             horizontal.y = 0f;
             horizontal.Normalize();
 
@@ -245,7 +245,7 @@ public class CharacterDebuffController : MonoBehaviour
         if (characterObjectService != null)
         {
             // Last horizontal facing direction
-            Vector3 horizontal = characterObjectsData.characterObject.transform.up;
+            Vector3 horizontal = characterObjectsData.characterObject.transform.up * (characterStatesData.isFront ? -1 : 1);
             horizontal.y = 0f;
             horizontal.Normalize();
 
