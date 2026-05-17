@@ -56,9 +56,9 @@ public class PlayerTestInputController : MonoBehaviour
             movementController = character.GetComponent<CharacterMovementController>();
             characterStatesData = character.GetComponent<CharacterStatesData>();
             takeDamageController = character.GetComponent<CharacterTakeDamageController>();
-        }
 
-        movementController.endFlying += InputToggleFly;
+            movementController.endFlying += InputToggleFly;
+        }
 
 
     }

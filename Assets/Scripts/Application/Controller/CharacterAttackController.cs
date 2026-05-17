@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CharacterAttackController : MonoBehaviour
 {
-    // [Dependencies]
+    // ─────────────────────────────────────────────
+    // DEPENDENCIES
+    // ─────────────────────────────────────────────
     [Header("Dependencies")]
     private CharacterObjectsData characterObjectsData;
     private CharacterObjectService characterObjectService;
@@ -29,9 +31,7 @@ public class CharacterAttackController : MonoBehaviour
         if (characterHitBoxesEvents == null) characterHitBoxesEvents = characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>();
         
         if (characterHitBoxesEvents != null)
-        {
             characterHitBoxesEvents.OnAttackHit += HandleAttackHit;
-        }
 
         if (characterObjectsData != null && characterObjectsData.characterMesh != null)
         {
@@ -61,36 +61,59 @@ public class CharacterAttackController : MonoBehaviour
         }
 
         characterStatesData.OnAttackInterrupt -= HandleAttackInterrupt;
-                
+
         if (characterHitBoxesEvents != null)
-        {
             characterHitBoxesEvents.OnAttackHit -= HandleAttackHit;
-        }
     }
 
-    public void HandleAttackInterrupt()
+    // ─────────────────────────────────────────────
+    // LOGIC — pure logic, no state, no presentation
+    // safe to run on server
+    // ─────────────────────────────────────────────
+
+    // Checks if attack input is valid
+    public bool CanStartNormalAttack()
     {
-        characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>().EmitAttackInterrupt();
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return false;
+        if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return false;
+        return true;
     }
 
-    private void HandleAttackHit(GameObject target, AttackTypes type)
+    public bool CanStartStrikeAttack()
     {
-        Vector3 attackDirection = (target.transform.position - gameObject.transform.position).normalized;
-        int baseDamage = 0;
-
-        switch (type)
-        {
-            case AttackTypes.normal_attack:
-                baseDamage = characterStatsData.normalAttackDamage;
-                break;
-            case AttackTypes.strike_attack:
-                baseDamage = characterStatsData.strikeAttackDamage;
-                break;
-        }
-
-        int damage = CalculateAttackDamage(baseDamage, attackDirection);
-        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, type);
+        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return false;
+        if (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag) return false;
+        return true;
     }
+
+    // Checks combo window
+    public bool IsNormalAttackContinuing()
+    {
+        return (Time.time - characterStatesData.lastNormalAttackEndTime) <= characterStatsData.continueAttackWindow;
+    }
+
+    public bool IsStrikeAttackContinuing()
+    {
+        return (Time.time - characterStatesData.lastStrikeAttackEndTime) <= characterStatsData.continueAttackWindow;
+    }
+
+    // Pure damage calculation — no state, no presentation
+    public int CalculateAttackDamage(int baseDamage, Vector3 attackDirection)
+    {
+        Vector3 moveDirection = characterStatesData.currentMoveDirection;
+        float sqrMoveSpeed = characterStatesData.currentSqrMoveSpeed;
+        int combineDamage = baseDamage;
+
+        float scale = 1 - (Vector3.Angle(moveDirection, attackDirection) / characterStatsData.maxCombineAttackAngleSize);
+        combineDamage += (int)((scale > 0 ? scale : 0) * sqrMoveSpeed * characterStatsData.sqrMoveSpeedDamageThreshold);
+
+        return combineDamage;
+    }
+
+    // ─────────────────────────────────────────────
+    // STATE — only modify state data
+    // safe to run on server and sync to clients
+    // ─────────────────────────────────────────────
 
     public void ResetAttackFlags()
     {
@@ -108,185 +131,200 @@ public class CharacterAttackController : MonoBehaviour
         characterStatesData.bodyActionFlag = false;
     }
 
-    private void PlayNormalAttack(bool isContinuing)
+    public void SetStateNormalAttackStart()
     {
-        if (defenseController != null) defenseController.Block(false);
-
         ResetAttackFlags();
         characterStatesData.ChangeProcessAction(CharacterProcessAction.normal_attack);
         characterStatesData.attackFlag = true;
         characterStatesData.normalAttackStartFlag = true;
         characterStatesData.upperActionFlag = true;
-
-        if (animationController != null)
-        {
-            animationController.PlayNormalAttack(isContinuing);
-        }
     }
 
-    private void PlayStrikeAttack(bool isContinuing)
+    public void SetStateNormalAttackOngoing()
     {
-        if (defenseController != null) defenseController.Block(false);
+        characterStatesData.attackFlag = true;
+        characterStatesData.normalAttackStartFlag = false;
+        characterStatesData.normalAttackOngoingFlag = true;
+        characterStatesData.normalAttackEndFlag = false;
+    }
 
+    public void SetStateNormalAttackEndOngoing()
+    {
+        characterStatesData.attackFlag = false;
+        characterStatesData.normalAttackStartFlag = false;
+        characterStatesData.normalAttackOngoingFlag = false;
+        characterStatesData.normalAttackEndFlag = true;
+        characterStatesData.upperActionFlag = true;
+    }
+
+    public void SetStateNormalAttackEnd()
+    {
+        characterStatesData.attackFlag = false;
+        characterStatesData.normalAttackStartFlag = false;
+        characterStatesData.normalAttackOngoingFlag = false;
+        characterStatesData.normalAttackEndFlag = false;
+        characterStatesData.upperActionFlag = false;
+        characterStatesData.lastNormalAttackEndTime = Time.time;
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
+    }
+
+    public void SetStateStrikeAttackStart()
+    {
         ResetAttackFlags();
         characterStatesData.ChangeProcessAction(CharacterProcessAction.strike_attack);
         characterStatesData.attackFlag = true;
-        
         characterStatesData.strikeAttackStartFlag = true;
         characterStatesData.strikeAttackOngoingFlag = false;
         characterStatesData.strikeAttackEndFlag = false;
-
         characterStatesData.upperActionFlag = true;
         characterStatesData.bodyActionFlag = true;
-
-        if (animationController != null)
-        {
-            animationController.PlayStrikeAttack(isContinuing);
-        }
-
-        //Debug.Log("Start normal attack - " + Time.time);
     }
+
+    public void SetStateStrikeAttackOngoing()
+    {
+        characterStatesData.attackFlag = true;
+        characterStatesData.strikeAttackStartFlag = false;
+        characterStatesData.strikeAttackOngoingFlag = true;
+        characterStatesData.strikeAttackEndFlag = false;
+        characterStatesData.upperActionFlag = true;
+        characterStatesData.bodyActionFlag = true;
+    }
+
+    public void SetStateStrikeAttackEndOngoing()
+    {
+        characterStatesData.attackFlag = true;
+        characterStatesData.strikeAttackStartFlag = false;
+        characterStatesData.strikeAttackOngoingFlag = false;
+        characterStatesData.strikeAttackEndFlag = true;
+        characterStatesData.upperActionFlag = true;
+        characterStatesData.bodyActionFlag = true;
+    }
+
+    public void SetStateStrikeAttackEnd()
+    {
+        characterStatesData.attackFlag = false;
+        characterStatesData.strikeAttackStartFlag = false;
+        characterStatesData.strikeAttackOngoingFlag = false;
+        characterStatesData.strikeAttackEndFlag = false;
+        characterStatesData.upperActionFlag = false;
+        characterStatesData.bodyActionFlag = false;
+        characterStatesData.lastStrikeAttackEndTime = Time.time;
+        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
+    }
+
+    // ─────────────────────────────────────────────
+    // PRESENTATION — animation, sound, visual only
+    // run on client only, never sync
+    // ─────────────────────────────────────────────
+
+    private void PlayNormalAttackPresentation(bool isContinuing)
+    {
+        if (defenseController != null) defenseController.Block(false);
+        if (animationController != null) animationController.PlayNormalAttack(isContinuing);
+    }
+
+    private void PlayStrikeAttackPresentation(bool isContinuing)
+    {
+        if (defenseController != null) defenseController.Block(false);
+        if (animationController != null) animationController.PlayStrikeAttack(isContinuing);
+    }
+
+    private void EndNormalAttackPresentation()
+    {
+        if (animationController != null) animationController.EndUpperAnimation();
+    }
+
+    private void EndStrikeAttackPresentation()
+    {
+        CharacterMovementController movementController = GetComponent<CharacterMovementController>();
+        if (movementController != null) movementController.ForceRefreshBodyAnimation();
+    }
+
+    public void HandleAttackInterrupt()
+    {
+        // presentation only — emit interrupt visual/animation
+        characterObjectsData.characterMesh.GetComponent<CharacterHitBoxesEvents>().EmitAttackInterrupt();
+    }
+
+    // ─────────────────────────────────────────────
+    // CONTROLLERS — entry points, combines logic + state + presentation
+    // on server: call logic + state only
+    // on client: call all three
+    // ─────────────────────────────────────────────
+
+    public void StartNormalAttack()
+    {
+        if (!CanStartNormalAttack()) return;            // logic
+        bool isContinuing = IsNormalAttackContinuing(); // logic
+        SetStateNormalAttackStart();                     // state
+        PlayNormalAttackPresentation(isContinuing);      // presentation
+    }
+
+    public void StartStrikeAttack()
+    {
+        if (!CanStartStrikeAttack()) return;             // logic
+        bool isContinuing = IsStrikeAttackContinuing();  // logic
+        SetStateStrikeAttackStart();                     // state
+        PlayStrikeAttackPresentation(isContinuing);      // presentation
+    }
+
+    private void HandleAttackHit(GameObject target, AttackTypes type)
+    {
+        // logic
+        Vector3 attackDirection = (target.transform.position - gameObject.transform.position).normalized;
+        int baseDamage = type == AttackTypes.normal_attack
+            ? characterStatsData.normalAttackDamage
+            : characterStatsData.strikeAttackDamage;
+        int damage = CalculateAttackDamage(baseDamage, attackDirection); // logic
+
+        // state + presentation on target
+        target.GetComponent<CharacterTakeDamageController>().GetHit(gameObject, damage, attackDirection, type);
+    }
+
+    // ─────────────────────────────────────────────
+    // ANIMATION EVENT HANDLERS
+    // each splits into state + presentation
+    // ─────────────────────────────────────────────
 
     private void HandleNormalAttackOngoing()
     {
         if (characterStatesData.currentProcessAction != CharacterProcessAction.normal_attack) return;
-        characterStatesData.attackFlag = true;
-
-        characterStatesData.normalAttackStartFlag = false;
-        characterStatesData.normalAttackOngoingFlag = true;
-        characterStatesData.normalAttackEndFlag = false;
-
-        //Debug.Log("Start ongoing normal attack - " + Time.time);
+        SetStateNormalAttackOngoing(); // state
+        // no presentation change here
     }
 
     private void HandleNormalAttackEndOngoing()
     {
         if (characterStatesData.currentProcessAction != CharacterProcessAction.normal_attack) return;
-        characterStatesData.attackFlag = false;
-
-        characterStatesData.normalAttackStartFlag = false;
-        characterStatesData.normalAttackOngoingFlag = false;
-        characterStatesData.normalAttackEndFlag = true;
-
-        characterStatesData.upperActionFlag = true;
-
-        // Record the time this attack entered its follow-through so the next input
-        // can decide whether it qualifies as a continuing combo.
-
-        //Debug.Log("End Ongoing Normal attack - " + Time.time);
+        SetStateNormalAttackEndOngoing(); // state
+        // no presentation change here
     }
 
     private void HandleNormalAttackEnd()
     {
         if (characterStatesData.currentProcessAction != CharacterProcessAction.normal_attack) return;
-        if (animationController != null)
-        {
-            animationController.EndUpperAnimation();
-        }
-
-        characterStatesData.attackFlag = false;
-
-        characterStatesData.normalAttackStartFlag = false;
-        characterStatesData.normalAttackOngoingFlag = false;
-        characterStatesData.normalAttackEndFlag = false;
-
-        characterStatesData.upperActionFlag = false;
-
-        characterStatesData.lastNormalAttackEndTime = Time.time;
-        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
-
-        //Debug.Log("End Normal attack - " + Time.time);
+        SetStateNormalAttackEnd();       // state
+        EndNormalAttackPresentation();   // presentation
     }
 
     private void HandleStrikeAttackOngoing()
     {
         if (characterStatesData.currentProcessAction != CharacterProcessAction.strike_attack) return;
-        characterStatesData.attackFlag = true;
-
-        characterStatesData.strikeAttackStartFlag = false;
-        characterStatesData.strikeAttackOngoingFlag = true;
-        characterStatesData.strikeAttackEndFlag = false;
-
-        characterStatesData.upperActionFlag = true;
-        characterStatesData.bodyActionFlag = true;
+        SetStateStrikeAttackOngoing(); // state
+        // no presentation change here
     }
 
     private void HandleStrikeAttackEndOngoing()
     {
         if (characterStatesData.currentProcessAction != CharacterProcessAction.strike_attack) return;
-        characterStatesData.attackFlag = true;
-
-        characterStatesData.strikeAttackStartFlag = false;
-        characterStatesData.strikeAttackOngoingFlag = false;
-        characterStatesData.strikeAttackEndFlag = true;
-
-        characterStatesData.upperActionFlag = true;
-        characterStatesData.bodyActionFlag = true;
-
-        // Record the time this attack entered its follow-through so the next input
-        // can decide whether it qualifies as a continuing combo.
+        SetStateStrikeAttackEndOngoing(); // state
+        // no presentation change here
     }
 
     private void HandleStrikeAttackEnd()
     {
         if (characterStatesData.currentProcessAction != CharacterProcessAction.strike_attack) return;
-        if (animationController != null)
-        {
-            // Force the movement controller to refresh its animation state
-            CharacterMovementController movementController = GetComponent<CharacterMovementController>();
-            if (movementController != null)
-            {
-                movementController.ForceRefreshBodyAnimation();
-            }
-        }
-
-        characterStatesData.attackFlag = false;
-
-        characterStatesData.strikeAttackStartFlag = false;
-        characterStatesData.strikeAttackOngoingFlag = false;
-        characterStatesData.strikeAttackEndFlag = false;
-
-        characterStatesData.upperActionFlag = false;
-        characterStatesData.bodyActionFlag = false;
-
-        characterStatesData.lastStrikeAttackEndTime = Time.time;
-        characterStatesData.ChangeProcessAction(CharacterProcessAction.none);
+        SetStateStrikeAttackEnd();      // state
+        EndStrikeAttackPresentation();  // presentation
     }
-
-    private int CalculateAttackDamage(int baseDamage, Vector3 attackDirection)
-    {
-        Vector3 moveDirection = characterStatesData.currentMoveDirection;
-        float sqrMoveSpeed = characterStatesData.currentSqrMoveSpeed;
-        int combineDamage = baseDamage;
-        
-        float scale =  1 - (Vector3.Angle(moveDirection, attackDirection) / characterStatsData.maxCombineAttackAngleSize);
-
-        combineDamage += (int)((scale > 0 ? scale : 0) * sqrMoveSpeed * characterStatsData.sqrMoveSpeedDamageThreshold);
-
-        return combineDamage;
-    }
-
-    // [Control methods]
-    public void StartNormalAttack()
-    {
-        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
-        if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag) return;
-
-        // Continuing if we are still within the combo window since the last normal attack ended.
-        bool isContinuing = (Time.time - characterStatesData.lastNormalAttackEndTime) <= characterStatsData.continueAttackWindow;
-
-        PlayNormalAttack(isContinuing);
-    }
-
-    public void StartStrikeAttack()
-    {
-        if (characterStatesData.currentProcessAction != CharacterProcessAction.none) return;
-        if (characterStatesData.bodyActionFlag || characterStatesData.upperActionFlag) return;
-
-        // Continuing if we are still within the combo window since the last strike attack ended.
-        bool isContinuing = (Time.time - characterStatesData.lastStrikeAttackEndTime) <= characterStatsData.continueAttackWindow;
-
-        PlayStrikeAttack(isContinuing);
-    }
-
 }

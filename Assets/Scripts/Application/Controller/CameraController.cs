@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController instance;
+
     private Transform horizontalRotator;
     private Transform verticalRotator;
     private Transform cameraObject;
@@ -17,6 +19,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] private LayerMask includeLayers = ~0;
     [Tooltip("Layers the camera should ignore.")]
     [SerializeField] private LayerMask excludeLayers;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -76,5 +83,10 @@ public class CameraController : MonoBehaviour
 
         horizontalRotator.rotation = Quaternion.Euler(0, yaw, 0);
         verticalRotator.localRotation = Quaternion.Euler(pitch, 0, 0);
+    }
+
+    public void SetCharacter(Transform gameObject)
+    {
+        character = gameObject;
     }
 }

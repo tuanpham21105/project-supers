@@ -6,10 +6,9 @@ using UnityEngine;
 public class PlayerKeyboadAndMouseInputController : PlayerInputController
 {
     private PlayerKeyboardAndMouseKeybindsData keybinds;
-    [SerializeField] private GameObject character;
-    private CharacterMovementController characterMovementController;
-    private CharacterAttackController characterAttackController;
-    private CharacterDefenseController characterDefenseController;
+    private CharactersManager charactersManager;
+    private PlayerData playerData;
+
     [SerializeField] private CameraController cameraController;
 
     public Vector2 moveDirectionInput;
@@ -45,15 +44,14 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     private void Start()
     {
-        characterMovementController = character.GetComponent<CharacterMovementController>();
-        characterAttackController = character.GetComponent<CharacterAttackController>();
-        characterDefenseController = character.GetComponent<CharacterDefenseController>();
+        charactersManager = CharactersManager.instance;
+        playerData = PlayerData.instance;
 
         keybinds = PlayerKeyboardAndMouseKeybindsData.playerKeyboardAndMouseKeybindsData;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        characterMovementController.endFlying += HandleLanding;
+        charactersManager.onCharacterFlyingInterrupted += HandleLanding;
     }
 
     private void OnDisable()
@@ -62,10 +60,9 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         Cursor.visible = true;
     }
 
-    private void Oestroy()
+    private void OnDestroy()
     {
-
-        characterMovementController.endFlying -= HandleLanding;  
+        charactersManager.onCharacterFlyingInterrupted -= HandleLanding;
     }
 
     private Vector2 smoothLookInput;
@@ -93,33 +90,34 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     //     // but current implementation handles movement via Move calls triggered by inputs.
     // }
 
-    public void HandleLanding()
+    public void HandleLanding(String player)
     {
-        toggleFlyInput = false;
+        if (player == playerData.player)
+            toggleFlyInput = false;
     }
 
     public override void MoveDirectionInput()
     {
+        bool prevForward = _forwardInput;
+        bool prevBackward = _backwardInput;
+        bool prevLeft = _leftInput;
+        bool prevRight = _rightInput;
+
         _forwardInput = ProcessInput(keybinds.forwardKey, _forwardInput);
         _backwardInput = ProcessInput(keybinds.backwardKey, _backwardInput);
         _leftInput = ProcessInput(keybinds.strafeLeftKey, _leftInput);
         _rightInput = ProcessInput(keybinds.strafeRightKey, _rightInput);
 
-        float x = 0;
-        float y = 0;
+        String player = playerData.player;
 
-        if (_forwardInput) y += 1;
-        if (_backwardInput) y -= 1;
-        if (_leftInput) x -= 1;
-        if (_rightInput) x += 1;
-
-        Vector2 currentMoveInput = new Vector2(x, y).normalized;
-        if (currentMoveInput != moveDirectionInput)
-        {
-            moveDirectionInput = currentMoveInput;
-
-            characterMovementController.Move(moveDirectionInput);
-        }
+        // if (_forwardInput != prevForward)
+            charactersManager.ControlCharacterAction(player, CharacterActions.MoveForward, _forwardInput);
+        // if (_backwardInput != prevBackward)
+            charactersManager.ControlCharacterAction(player, CharacterActions.MoveBackward, _backwardInput);
+        // if (_leftInput != prevLeft)
+            charactersManager.ControlCharacterAction(player, CharacterActions.MoveLeft, _leftInput);
+        // if (_rightInput != prevRight)
+            charactersManager.ControlCharacterAction(player, CharacterActions.MoveRight, _rightInput);
 
         HandleOnceActivation(ref _forwardInput, keybinds.forwardKey);
         HandleOnceActivation(ref _backwardInput, keybinds.backwardKey);
@@ -133,7 +131,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
         sprintInput = currentSprintInput;
 
-        characterMovementController.SetSprint(sprintInput);
+        charactersManager.ControlCharacterAction(playerData.player, CharacterActions.Sprint, sprintInput);
 
         HandleOnceActivation(ref sprintInput, keybinds.sprintKey);
     }
@@ -143,7 +141,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         dashInput = ProcessInput(keybinds.dashKey, dashInput);
         if (dashInput)
         {
-            characterMovementController.Dash();
+            charactersManager.ControlCharacterAction(playerData.player, CharacterActions.Dash, true);
             HandleOnceActivation(ref dashInput, keybinds.dashKey);
         }
     }
@@ -154,7 +152,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
         toggleFlyInput = currentFlyInput;
 
-        characterMovementController.SetFly(toggleFlyInput);
+        charactersManager.ControlCharacterAction(playerData.player, CharacterActions.ToggleFly, toggleFlyInput);
 
         HandleOnceActivation(ref toggleFlyInput, keybinds.toggleFlyKey);
     }
@@ -164,7 +162,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         jumpInput = ProcessInput(keybinds.jumpKey, jumpInput);
         if (jumpInput)
         {
-            characterMovementController.Jump();
+            charactersManager.ControlCharacterAction(playerData.player, CharacterActions.Jump, true);
             HandleOnceActivation(ref jumpInput, keybinds.jumpKey);
         }
     }
@@ -175,7 +173,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         
         flyUpInput = currentInput;
 
-        characterMovementController.SetFlyUp(flyUpInput);
+        charactersManager.ControlCharacterAction(playerData.player, CharacterActions.FlyUp, flyUpInput);
 
         HandleOnceActivation(ref flyUpInput, keybinds.flyUpKey);
     }
@@ -186,7 +184,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         
         flyDownInput = currentInput;
 
-        characterMovementController.SetFlyDown(flyDownInput);
+        charactersManager.ControlCharacterAction(playerData.player, CharacterActions.FlyDown, flyDownInput);
 
         HandleOnceActivation(ref flyDownInput, keybinds.flyDownKey);
     }
@@ -196,7 +194,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         normalAttackInput = ProcessInput(keybinds.normalAttackKey, normalAttackInput);
         if (normalAttackInput)
         {
-            characterAttackController.StartNormalAttack();
+            charactersManager.ControlCharacterAction(playerData.player, CharacterActions.NormalAttack, true);
             HandleOnceActivation(ref normalAttackInput, keybinds.normalAttackKey);
         }
     }
@@ -206,7 +204,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         strikeAttackInput = ProcessInput(keybinds.strikeAttackKey, strikeAttackInput);
         if (strikeAttackInput)
         {
-            characterAttackController.StartStrikeAttack();
+            charactersManager.ControlCharacterAction(playerData.player, CharacterActions.StrikeAttack, true);
             HandleOnceActivation(ref strikeAttackInput, keybinds.strikeAttackKey);
         }
     }
@@ -216,9 +214,8 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         bool currentInput = ProcessInput(keybinds.blockKey, blockInput);
         blockInput = currentInput;
 
-        if (characterDefenseController != null)
-            characterDefenseController.Block(blockInput);
-            
+        charactersManager.ControlCharacterAction(playerData.player, CharacterActions.Block, blockInput);
+
         HandleOnceActivation(ref blockInput, keybinds.blockKey);
     }
 
@@ -227,7 +224,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         deflectInput = ProcessInput(keybinds.deflectKey, deflectInput);
         if (deflectInput)
         {
-            if (characterDefenseController != null) characterDefenseController.Deflect();
+            charactersManager.ControlCharacterAction(playerData.player, CharacterActions.Deflect, true);
             HandleOnceActivation(ref deflectInput, keybinds.deflectKey);
         }
     }
@@ -242,7 +239,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         smoothLookInput.y = Mathf.Lerp(smoothLookInput.y, targetMouseY, 1f / lookSmoothing * Time.deltaTime);
 
         if (cameraController != null) cameraController.Rotate(smoothLookInput);
-        characterMovementController.Rotate(cameraController.GetCameraDirection());
+        charactersManager.ControlCharacterRotation(playerData.player, cameraController.GetCameraDirection());
     }
 
     private bool ProcessInput(Keybind keybind, bool currentState)
