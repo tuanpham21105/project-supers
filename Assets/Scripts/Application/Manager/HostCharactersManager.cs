@@ -22,19 +22,19 @@ public enum CharacterActions
     Deflect
 }
 
-public class CharactersManager : MonoBehaviour
+public class HostCharactersManager : MonoBehaviour
 {
-    public static CharactersManager instance;
+    public static HostCharactersManager instance;
 
     [Header("Dependencies")]
-    private MatchData matchData;
+    private MatchManager matchData;
     private PlayerData playerData;
 
     [Header("Data")]
     private List<GameObject> characters;
     private List<Action> flyingHandlers;
 
-    [Header("Prefabs")]
+    [Header("Prefab")]
     [SerializeField] private GameObject hostCharacterPrefab;
 
     public event Action<String> onCharacterFlyingInterrupted;
@@ -46,8 +46,8 @@ public class CharactersManager : MonoBehaviour
 
     void Start()
     {
-        matchData = GetComponent<MatchData>();
-        playerData = GetComponent<PlayerData>();
+        matchData = MatchManager.instance;
+        playerData = PlayerData.instance;
 
         characters = new List<GameObject>();
         flyingHandlers = new List<Action>();
@@ -63,8 +63,10 @@ public class CharactersManager : MonoBehaviour
                 flyingHandlers.Add(handler);
                 characters.Add(character);
 
-                if (matchData.IsPlayerHost(player)) 
+                if (matchData.IsPlayerHost(player))
+                {
                     CameraController.instance.SetCharacter(character.transform);
+                }
             }
         }
     }

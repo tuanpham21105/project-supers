@@ -88,22 +88,19 @@ public class CharacterAnimationController : MonoBehaviour
         animator = characterObjectsData.characterMesh.GetComponent<Animator>();
     }
 
-    public void PlayBodyAnimation(CharacterBodyAnimation animation, float normalizedTimeOffset = -1f)
+    // 
+    public void PlayBodyAnimation(CharacterBodyAnimation animation)
     {
         if (animator != null)
         {
-            if (normalizedTimeOffset >= 0)
-                animator.CrossFade(animation.ToString(), transitionDuration, 0, normalizedTimeOffset);
-            else
-                animator.CrossFade(animation.ToString(), transitionDuration, 0);
+            animator.CrossFade(animation.ToString(), transitionDuration, 0);
         }
     }
 
-    public void PlayUpperAnimation(CharacterUpperAnimation animation, float speed = 1f)
+    public void PlayUpperAnimation(CharacterUpperAnimation animation)
     {
         if (animator != null)
         {
-            animator.SetFloat("DeflectReadySpeed", speed);
             StartFadeUpperLayer(1f, transitionDuration);
             animator.CrossFade(animation.ToString(), transitionDuration, 1, 0f);
         }
@@ -118,6 +115,15 @@ public class CharacterAnimationController : MonoBehaviour
         }
     }
 
+    public void EndUpperAnimation()
+    {
+        if (animator != null)
+        {
+            StartFadeUpperLayer(0f, transitionDuration);
+        }
+    }
+
+    // 
     public void PlayHitAnimation()
     {
         PlayAdditionalAnimation(hitAnimations[characterStatesData.hitAnimationIndex]);
@@ -151,11 +157,6 @@ public class CharacterAnimationController : MonoBehaviour
         PlayUpperAnimation(normalAttackCombo[characterStatesData.normalAttackComboIndex]);
     }
 
-    public void ResetNormalAttackCombo()
-    {
-        characterStatesData.normalAttackComboIndex = 0;
-    }
-
     public void PlayStrikeAttack(bool isContinuing)
     {
         if (isContinuing)
@@ -171,12 +172,7 @@ public class CharacterAnimationController : MonoBehaviour
             characterStatesData.strikeAttackComboIndex = 0;
         }
 
-        PlayBodyAnimation(strikeAttackCombo[characterStatesData.strikeAttackComboIndex], 0f);
-    }
-
-    public void ResetStrikeAttackCombo()
-    {
-        characterStatesData.strikeAttackComboIndex = 0;
+        PlayBodyAnimation(strikeAttackCombo[characterStatesData.strikeAttackComboIndex]);
     }
 
     public void PlayKnockOutAnimation(bool front)
@@ -185,14 +181,7 @@ public class CharacterAnimationController : MonoBehaviour
         PlayBodyAnimation(animation);
     }
 
-    public void EndUpperAnimation()
-    {
-        if (animator != null)
-        {
-            StartFadeUpperLayer(0f, transitionDuration);
-        }
-    }
-
+    // 
     private void StartFadeUpperLayer(float targetWeight, float duration)
     {
         if (upperLayerFadeCoroutine != null)

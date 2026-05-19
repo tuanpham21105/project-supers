@@ -135,7 +135,7 @@ public class CharacterDefenseController : MonoBehaviour
 
         if (animationController != null)
         {
-            animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect, characterStatesData.currentDeflectSpeed);
+            animationController.PlayUpperAnimation(CharacterUpperAnimation.deflect);
         }
 
         //Debug.Log("Start deflect - " + Time.time);

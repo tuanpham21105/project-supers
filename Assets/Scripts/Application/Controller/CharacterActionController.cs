@@ -10,6 +10,7 @@ public class CharacterActionController : MonoBehaviour
     private CharacterAttackController characterAttackController;
     private CharacterDefenseController characterDefenseController;
 
+    [Header("Runtime")]
     private bool forwardMove;
     private bool backwardMove;
     private bool leftMove;
@@ -26,7 +27,7 @@ public class CharacterActionController : MonoBehaviour
         characterMovementController.endFlying += HandleFlyingInterrupted;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         MoveDirection();
     }
