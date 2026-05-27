@@ -7,6 +7,8 @@
     "com.unity.toolchain.linux-x86_64": "2.0.11",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.4",
+    "com.unity.webrtc": "3.0.0-pre.8",
+    "org.khronos.unitygltf": "2.19.5",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -37,8 +39,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "org.khronos.unitygltf": "2.19.5"
+    "com.unity.modules.xr": "1.0.0"
   },
   "scopedRegistries": [
     {

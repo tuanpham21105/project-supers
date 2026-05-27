@@ -601,7 +601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1d77188b2cb31e61938f8d55f3a1553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: Player2
+  player: Player1
 --- !u!114 &857480764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,6 +623,8 @@ MonoBehaviour:
   clientCharactersManagerPrefab: {fileID: 6786328232715069623, guid: a9f1db36a208e2c99a522ee118ef5eca, type: 3}
   hostInputHandlerPrefab: {fileID: 5895211908331288700, guid: 640f1ef1bcfc0749cb992f506ebdd008, type: 3}
   clientInputHandlerPrefab: {fileID: 1514930491499026344, guid: 5cf61d6c852893efcafd7f815307af4a, type: 3}
+  hostPacketManager: {fileID: 8349449336422909744, guid: f873c8c83684124aeb03fa9707344a37, type: 3}
+  clientPacketManager: {fileID: 757679743014758378, guid: dffc90bc2ebd1073ab50c202b505a18e, type: 3}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

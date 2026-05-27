@@ -21,6 +21,8 @@ public class MatchManager : MonoBehaviour
     [SerializeField] private GameObject clientCharactersManagerPrefab;
     [SerializeField] private GameObject hostInputHandlerPrefab;
     [SerializeField] private GameObject clientInputHandlerPrefab;
+    [SerializeField] private GameObject hostPacketManager;
+    [SerializeField] private GameObject clientPacketManager;
 
     void Awake()
     {
@@ -31,17 +33,25 @@ public class MatchManager : MonoBehaviour
     {
         playerData = PlayerData.instance;
 
+        // Assign data from MatchData
+        hostPlayer = MatchData.hostPlayer;
+        players = MatchData.players;
+
         if (IsPlayerHost(playerData.player))
         {
             Instantiate(hostCharactersManagerPrefab);
 
             Instantiate(hostInputHandlerPrefab);
+
+            Instantiate(hostPacketManager);
         }
         else
         {
             Instantiate(clientCharactersManagerPrefab);
 
             Instantiate(clientInputHandlerPrefab);
+
+            Instantiate(clientPacketManager);
         }
     }
 

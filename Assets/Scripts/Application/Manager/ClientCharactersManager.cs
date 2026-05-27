@@ -18,8 +18,6 @@ public class ClientCharactersManager : MonoBehaviour
     [Header("Prefab")]
     [SerializeField] private GameObject clientCharacterPrefab;
 
-    public event Action onCharacterFlyingInterrupted;
-
     void Awake()
     {
         instance = this;
@@ -41,12 +39,6 @@ public class ClientCharactersManager : MonoBehaviour
             if (playerData.player.CompareTo(player) == 0) 
                 CameraController.instance.SetCharacter(character.transform);
         }
-    }
-
-    public void EmitCharacterFlyingInterrupted(String player)
-    {
-        if (playerData.player.CompareTo(player) == 0)
-            onCharacterFlyingInterrupted?.Invoke();
     }
 
     public void ControlCharacterAnimation(String player, String type, String name)

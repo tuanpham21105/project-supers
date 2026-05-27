@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -80,6 +81,9 @@ public class CharacterAnimationController : MonoBehaviour
     [Header("Runtime")]
     private Coroutine upperLayerFadeCoroutine;
 
+    //Events
+    public event Action<String, String> onPlayAnimation;
+
     void Start()
     {
         characterObjectsData = GetComponent<CharacterObjectsData>();
@@ -94,6 +98,7 @@ public class CharacterAnimationController : MonoBehaviour
         if (animator != null)
         {
             animator.CrossFade(animation.ToString(), transitionDuration, 0);
+            onPlayAnimation?.Invoke("body", animation.ToString());
         }
     }
 
@@ -103,6 +108,7 @@ public class CharacterAnimationController : MonoBehaviour
         {
             StartFadeUpperLayer(1f, transitionDuration);
             animator.CrossFade(animation.ToString(), transitionDuration, 1, 0f);
+            onPlayAnimation?.Invoke("upper", animation.ToString());
         }
     }
 
@@ -112,6 +118,7 @@ public class CharacterAnimationController : MonoBehaviour
         {
             animator.SetLayerWeight(2, 0.5f);
             animator.CrossFade(animation.ToString(), transitionDuration, 2, 0f);
+            onPlayAnimation?.Invoke("additional", animation.ToString());
         }
     }
 
@@ -120,6 +127,7 @@ public class CharacterAnimationController : MonoBehaviour
         if (animator != null)
         {
             StartFadeUpperLayer(0f, transitionDuration);
+            onPlayAnimation?.Invoke("upper", null);
         }
     }
 

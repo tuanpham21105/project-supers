@@ -18,13 +18,13 @@ public class HostPlayerInputHandler : IPlayerInputHandler
         hostCharactersManager.onCharacterFlyingInterrupted -= HandleFlyingInterrupted;
     }
 
-    public override void ControlCharacterAction(string player, CharacterActions action, bool state)
+    public override void ControlCharacterAction(CharacterActions action, bool state)
     {
-        hostCharactersManager.ControlCharacterAction(player, action, state);
+        hostCharactersManager.ControlCharacterAction(PlayerData.instance.player, action, state);
     }
 
-    public override void ControlCharacterRotation(string player, Vector3 direction)
+    public override void ControlCharacterRotation(Vector3 direction)
     {
-        hostCharactersManager.ControlCharacterRotation(player, direction);
+        hostCharactersManager.ControlCharacterRotation(PlayerData.instance.player, direction);
     }
 }

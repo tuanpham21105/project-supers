@@ -11,12 +11,12 @@ public abstract class IPlayerInputHandler : MonoBehaviour
     {
         instance = this;
     }
-    protected void HandleFlyingInterrupted(String player)
+    public void HandleFlyingInterrupted(String player)
     {
         if (PlayerData.instance.player.CompareTo(player) == 0)
             playerInputController.HandleFlyingInterrupted();
     }
-    public abstract void ControlCharacterAction(String player, CharacterActions action, bool state);
+    public abstract void ControlCharacterAction(CharacterActions action, bool state);
 
-    public abstract void ControlCharacterRotation(String player, Vector3 direction);
+    public abstract void ControlCharacterRotation(Vector3 direction);
 }

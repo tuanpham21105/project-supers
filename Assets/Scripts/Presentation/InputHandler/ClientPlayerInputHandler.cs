@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class ClientPlayerInputHandler : IPlayerInputHandler
 {
-    public override void ControlCharacterAction(string player, CharacterActions action, bool state)
+
+    public override void ControlCharacterAction(CharacterActions action, bool state)
     {
-        throw new System.NotImplementedException();
+        ClientPacketSender.instance.sendControlAction(action, state);
     }
 
-    public override void ControlCharacterRotation(string player, Vector3 direction)
+    public override void ControlCharacterRotation(Vector3 direction)
     {
-        throw new System.NotImplementedException();
+        ClientPacketSender.instance.sendControlRotation(direction);
     }
 }

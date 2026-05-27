@@ -29,16 +29,17 @@ public class HostCharactersManager : MonoBehaviour
     [Header("Dependencies")]
     private MatchManager matchData;
     private PlayerData playerData;
+    private HostPacketSender hostPeerConnectionSender;
 
     [Header("Data")]
     private List<GameObject> characters;
     private List<Action> flyingHandlers;
+    private List<Action<String, String>> animationHandlers;
 
     [Header("Prefab")]
     [SerializeField] private GameObject hostCharacterPrefab;
 
     public event Action<String> onCharacterFlyingInterrupted;
-
     void Awake()
     {
         instance = this;
@@ -48,9 +49,11 @@ public class HostCharactersManager : MonoBehaviour
     {
         matchData = MatchManager.instance;
         playerData = PlayerData.instance;
+        hostPeerConnectionSender = HostPacketSender.instance;
 
         characters = new List<GameObject>();
         flyingHandlers = new List<Action>();
+        animationHandlers = new List<Action<String, String>>();
 
         if (matchData.IsPlayerHost(playerData.player))
         {
@@ -58,9 +61,15 @@ public class HostCharactersManager : MonoBehaviour
             {
                 Vector3 randomPos = new Vector3(Random.Range(-30f, 30f), 1.5f, Random.Range(30f, 30f));
                 GameObject character = Instantiate(hostCharacterPrefab, randomPos, Quaternion.identity);
+
                 Action handler = HandleCharacterFlyingInterrupted(player);
                 character.GetComponent<CharacterMovementController>().endFlying += handler;
                 flyingHandlers.Add(handler);
+
+                Action<String, String> animationHandler = HandleCharacterPlayAnimation(player);
+                character.GetComponent<CharacterAnimationController>().onPlayAnimation += animationHandler;
+                animationHandlers.Add(animationHandler);
+
                 characters.Add(character);
 
                 if (matchData.IsPlayerHost(player))
@@ -71,17 +80,48 @@ public class HostCharactersManager : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        UpdateCharacterStates();
+    }
+
     void OnDestroy()
     {
         for (int i = 0; i < characters.Count; i++)
         {
             characters[i].GetComponent<CharacterMovementController>().endFlying -= flyingHandlers[i];
+            characters[i].GetComponent<CharacterAnimationController>().onPlayAnimation -= animationHandlers[i];
         }
     }
 
     Action HandleCharacterFlyingInterrupted(String player)
     {
+        hostPeerConnectionSender.sendPlayerCharacterFlyingInterrupted(player);
         return () => onCharacterFlyingInterrupted?.Invoke(player);
+    }
+
+    Action<String, String> HandleCharacterPlayAnimation(String player)
+    {
+        return (type, animation) =>
+        {
+            hostPeerConnectionSender.sendPlayerCharacterAnimation(player, type, animation);
+        };
+    }
+
+    void UpdateCharacterStates()
+    {
+        PlayersCharacterStatesDto data = new PlayersCharacterStatesDto();
+        for (int i = 0; i < matchData.GetPlayers().Count; i++)
+        {
+            CharacterStatesDTO states = new CharacterStatesDTO();
+            states.position = characters[i].transform.position;
+            states.rotation = characters[i].transform.rotation;
+            states.physicsColliderHeight = characters[i].GetComponent<CharacterController>().height;
+            states.physicsColliderRadius = characters[i].GetComponent<CharacterController>().radius;
+            data.playersStates.Add(new KeyValuePair<string, CharacterStatesDTO>(matchData.GetPlayers()[i], states));
+        }
+        hostPeerConnectionSender.sendPlayersCharacterStates(data);
+        // hostPeerConnectionSender.sendPlayerCharacterStates(playerData.player, );
     }
 
     public void ControlCharacterAction(String player, CharacterActions action, bool state)
