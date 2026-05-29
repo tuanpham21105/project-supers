@@ -203,7 +203,7 @@ MonoBehaviour:
   _leftInput: 0
   _rightInput: 0
   doubleClickThreshold: 0.3
-  holdThreshold: 0.17
+  holdThreshold: 0.2
   lookSmoothing: 0.05
 --- !u!114 &263090315
 MonoBehaviour:
@@ -566,7 +566,6 @@ GameObject:
   m_Component:
   - component: {fileID: 857480762}
   - component: {fileID: 857480764}
-  - component: {fileID: 857480763}
   m_Layer: 0
   m_Name: System
   m_TagString: Untagged
@@ -589,19 +588,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &857480763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 857480761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1d77188b2cb31e61938f8d55f3a1553, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: Player1
 --- !u!114 &857480764
 MonoBehaviour:
   m_ObjectHideFlags: 0

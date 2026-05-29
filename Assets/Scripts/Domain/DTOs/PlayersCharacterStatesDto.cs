@@ -5,5 +5,5 @@ using UnityEngine;
 
 public class PlayersCharacterStatesDto
 {
-    public List<KeyValuePair<String, CharacterStatesDTO>> playersStates = new();
+    public Dictionary<string, CharacterStatesDTO> playersStates = new();
 }

@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Packet
 {
-    public String type;
-
-    public String getType() => type;
+    public string type;
 }
 
+[Serializable]
 public class FlyingInterruptedEventPacket : Packet
 {
-    public String player;
+    public string player;
 
     public FlyingInterruptedEventPacket()
     {
@@ -20,9 +20,10 @@ public class FlyingInterruptedEventPacket : Packet
     }
 }
 
+[Serializable]
 public class StatesPacket : Packet
 {
-    public PlayersCharacterStatesDto states;
+    public PlayersCharacterStatesDto data;
 
     public StatesPacket()
     {
@@ -30,11 +31,12 @@ public class StatesPacket : Packet
     }
 }
 
+[Serializable]
 public class AnimationEventPacket : Packet
 {
-    public String player;
-    public String animationType;
-    public String animation;
+    public string player;
+    public string animationType;
+    public string animation;
 
     public AnimationEventPacket()
     {
@@ -42,9 +44,10 @@ public class AnimationEventPacket : Packet
     }
 }
 
+[Serializable]
 public class ActionEventPacket : Packet
 {
-    public String action;
+    public string action;
     public bool state;
 
     public ActionEventPacket()
@@ -53,9 +56,10 @@ public class ActionEventPacket : Packet
     }
 }
 
+[Serializable]
 public class RotateActionEventPacket : Packet
 {
-    public Vector3 direction;
+    public Vec3 direction;
 
     public RotateActionEventPacket()
     {

@@ -26,8 +26,9 @@ public class MessageResponseDto
 
 public class MatchMakingService : MonoBehaviour
 {
-    private const string BaseUrl = "http://localhost:8080";
-    private const string BasePath = "/api/player/match";
+    // private string BaseUrl = NetworkData.BaseUrl() + NetworkData.BaseUrl();
+    private string BaseUrl = "http://localhost:8080";
+    private string BasePath = "/api/player/match";
 
     // ── Request body ──────────────────────────────────────────────────────────
 
@@ -46,7 +47,7 @@ public class MatchMakingService : MonoBehaviour
     }
 
     /// <summary>Sends a POST /cancel request to cancel matchmaking.</summary>
-    public void CancelMatch(Action<MessageResponseDto> onSuccess = null, Action<string> onError = null)
+    public void CancelMatchMaking(Action<MessageResponseDto> onSuccess = null, Action<string> onError = null)
     {
         StartCoroutine(PostRequest<MessageResponseDto>("/cancel", onSuccess, onError));
     }

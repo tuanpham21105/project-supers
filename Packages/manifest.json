@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.endel.nativewebsocket": "https://github.com/endel/NativeWebSocket.git#upm-2",
     "com.unity.collab-proxy": "2.12.4",
     "com.unity.ide.visualstudio": "2.0.27",
     "com.unity.textmeshpro": "3.0.7",

@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using com.cyborgAssets.inspectorButtonPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Unity.WebRTC;
 
 public enum WsMessageType
 {
@@ -28,8 +29,6 @@ public class MatchMakingManager : MonoBehaviour
     private MatchMakingService matchMakingService;
     private WebSocketService webSocketService;
 
-    [SerializeField] private WsMessageType waitingForMessage;
-
     void Start()
     {
         matchMakingService = GetComponent<MatchMakingService>();
@@ -37,8 +36,8 @@ public class MatchMakingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts matchmaking by invoking the find match API and establishing a WebSocket connection.
-    /// Also sets up the event listeners for WebSocket messages.
+    /// Starts matchmaking by connecting to WebSocket and requesting a match.
+    /// Listens for MATCH_READY message to initialize P2P connection.
     /// </summary>
     [ProButton]
     public void StartMatchMaking()
@@ -49,25 +48,17 @@ public class MatchMakingManager : MonoBehaviour
             return;
         }
 
+        Debug.Log("[MatchMakingManager] Starting matchmaking...");
         ResetMatchData();
 
-        waitingForMessage = WsMessageType.MATCH_READY;
-
-        // Connect to WebSocket service
+        // Connect to WebSocket
         webSocketService.Connect();
+        Debug.Log("[MatchMakingManager] WebSocket connected");
 
+        // Subscribe to message events
         webSocketService.OnMessageReceived += HandleMessageReceived;
-        PeerConnectionManager.Instance.OnSendOffer -= HandleSendOffer;
-        PeerConnectionManager.Instance.OnSendAnswer -= HandleSendAnswer;
-        PeerConnectionManager.Instance.OnSendIceCandidate -= HandleSendIceCandidate;
 
-        PeerConnectionManager.Instance.OnSendOffer += HandleSendOffer;
-        PeerConnectionManager.Instance.OnSendAnswer += HandleSendAnswer;
-        PeerConnectionManager.Instance.OnSendIceCandidate += HandleSendIceCandidate;
-
-        PeerConnectionManager.Instance.OnConnectionStateChanged += HandleConnected;
-
-        // Call findMatch API
+        // Request a match
         matchMakingService.FindMatch(
             onSuccess: (matchResponse) =>
             {
@@ -80,49 +71,209 @@ public class MatchMakingManager : MonoBehaviour
         );
     }
 
-    void ResetMatchData()
-    {
-        MatchData.matchId = "";
-        MatchData.hostPlayer = "";
-        MatchData.players = new List<string>();
+    public void CancelMatchMakingExternal() {
+        StartCoroutine(CancelMatchMaking());
     }
 
     /// <summary>
-    /// Cancels the matchmaking process by calling the cancel match API and disconnecting from WebSocket.
+    /// Cancels the matchmaking process and cleans up all connections.
     /// </summary>
     [ProButton]
-    public void CancelMatchMaking()
+    public IEnumerator CancelMatchMaking()
     {
         if (matchMakingService == null || webSocketService == null)
         {
             Debug.LogError("[MatchMakingManager] MatchMakingService or WebSocketService dependency is missing.");
-            return;
+            yield break;
         }
 
-        // Call cancelMatch API
-        matchMakingService.CancelMatch(
+        Debug.Log("[MatchMakingManager] Canceling matchmaking...");
+
+        // Unsubscribe from events
+        webSocketService.OnMessageReceived -= HandleMessageReceived;
+
+        // Disconnect WebSocket
+        webSocketService.Disconnect();
+        Debug.Log("[MatchMakingManager] WebSocket disconnected");
+
+        // Disconnect P2P
+        if (P2PManager.instance != null)
+        {
+            P2PManager.instance.Disconnect();
+            Debug.Log("[MatchMakingManager] P2P disconnected");
+        }
+
+        // Call cancelMatch API and wait for completion
+        bool cancelCompleted = false;
+        matchMakingService.CancelMatchMaking(
             onSuccess: (messageResponse) =>
             {
                 Debug.Log($"[MatchMakingManager] CancelMatch succeeded: {messageResponse.Message}");
+                cancelCompleted = true;
             },
             onError: (error) =>
             {
                 Debug.LogError($"[MatchMakingManager] CancelMatch failed: {error}");
+                cancelCompleted = true;
             }
         );
 
-        // Disconnect WebSocket
-        webSocketService.Disconnect();
+        // Wait for API call to complete
+        yield return new WaitUntil(() => cancelCompleted);
+        Debug.Log("[MatchMakingManager] Matchmaking cancelled successfully");
+    }
 
-        // Unsubscribe from events to clean up
-        webSocketService.OnMessageReceived -= HandleMessageReceived;
-
-        if (PeerConnectionManager.Instance != null)
+    private void HandleMessageReceived(Message message)
+    {
+        if (message == null)
         {
-            PeerConnectionManager.Instance.OnSendOffer -= HandleSendOffer;
-            PeerConnectionManager.Instance.OnSendAnswer -= HandleSendAnswer;
-            PeerConnectionManager.Instance.OnSendIceCandidate -= HandleSendIceCandidate;
+            Debug.LogWarning("[MatchMakingManager] Received null message");
+            return;
         }
+
+        Debug.Log($"[MatchMakingManager] Message received - Type: {message.type}, MatchId: {message.matchId}, Value: {message.value}");
+
+        if (message.type.CompareTo(WsMessageType.MATCH_READY.ToString()) == 0)
+        {
+            HandleMatchReadyMessage(message);
+        }
+    }
+
+    private void HandleMatchReadyMessage(Message message)
+    {
+        // if (message.MatchId.CompareTo(MatchData.matchId) != 0)
+        // {
+        //     Debug.LogWarning($"[MatchMakingManager] Message matchId mismatch: {message.MatchId} vs {MatchData.matchId}");
+        //     return;
+        // }
+
+        try
+        {
+            ReadyMatchDto readyMatchDto = message.GetValue<ReadyMatchDto>();
+            Debug.Log($"[MatchMakingManager] Match ready - Id: {readyMatchDto.id}, Host: {readyMatchDto.hostPlayer}, Client: {readyMatchDto.clientPlayer}");
+
+            // Assign match data
+            MatchData.matchId = readyMatchDto.id;
+            MatchData.hostPlayer = readyMatchDto.hostPlayer;
+            MatchData.players.Clear();
+            MatchData.players.Add(readyMatchDto.hostPlayer);
+            MatchData.players.Add(readyMatchDto.clientPlayer);
+
+            // Initialize P2P connection
+            if (P2PManager.instance == null)
+            {
+                Debug.LogError("[MatchMakingManager] P2PManager is not available");
+                return;
+            }
+
+            // Subscribe to P2P connection event
+            P2PManager.instance.OnConnected += HandleP2PConnected;
+            P2PManager.instance.OnReady += HandleP2PReady;
+
+            if (PlayerData.instance.player.CompareTo(readyMatchDto.hostPlayer) == 0)
+            {
+                Debug.Log("[MatchMakingManager] Initializing as HOST");
+                P2PManager.instance.Init(readyMatchDto.id);
+            }
+            else
+            {
+                Debug.Log("[MatchMakingManager] Initializing as CLIENT");
+                P2PManager.instance.Init("Client-" + readyMatchDto.id);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[MatchMakingManager] Failed to parse MATCH_READY message: {ex.Message}");
+        }
+    }
+
+
+    [ProButton]
+    private void HandleP2PConnected()
+    {
+        Debug.Log("[MatchMakingManager] P2P connected, starting cleanup and scene transition...");
+        StartCoroutine(CleanupAndLoadScene());
+    }
+
+    private void HandleP2PReady()
+    {
+        Debug.Log("[MatchMakingManager] P2P ready");
+
+        // Unsubscribe from OnReady event
+        if (P2PManager.instance != null)
+        {
+            P2PManager.instance.OnReady -= HandleP2PReady;
+        }
+
+        // If client, connect to host
+        if (PlayerData.instance.player.CompareTo(MatchData.hostPlayer) != 0)
+        {
+            Debug.Log("[MatchMakingManager] Connecting to match as CLIENT");
+            P2PManager.instance.ConnectTo(MatchData.matchId);
+        }
+        else
+        {
+            Debug.Log("[MatchMakingManager] Waiting for client connection as HOST");
+        }
+    }
+
+    private IEnumerator CleanupAndLoadScene()
+    {
+        // Unsubscribe from all events
+        if (webSocketService != null)
+        {
+            webSocketService.OnMessageReceived -= HandleMessageReceived;
+            Debug.Log("[MatchMakingManager] Unsubscribed from WebSocket events");
+        }
+
+        if (P2PManager.instance != null)
+        {
+            P2PManager.instance.OnConnected -= HandleP2PConnected;
+            P2PManager.instance.OnReady -= HandleP2PReady;
+            Debug.Log("[MatchMakingManager] Unsubscribed from P2P events");
+        }
+
+        // Disconnect WebSocket
+        if (webSocketService != null)
+        {
+            webSocketService.Disconnect();
+            Debug.Log("[MatchMakingManager] WebSocket disconnected");
+        }
+
+        // Stop all coroutines on this object
+        // StopAllCoroutines();
+        // Debug.Log("[MatchMakingManager] All coroutines stopped");
+
+        // Give one frame to ensure cleanup is complete
+
+        yield return new WaitForSeconds(0.5f);
+
+        // Host load first
+        if (PlayerData.instance.player.CompareTo(MatchData.hostPlayer) == 0)
+        {
+            LoadScene();
+            yield break;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        // Client load later
+        if (PlayerData.instance.player.CompareTo(MatchData.hostPlayer) != 0)
+            LoadScene();
+    }
+
+    [ProButton]
+    public void LoadScene() {
+        Debug.Log("[MatchMakingManager] Loading SampleScene...");
+        SceneManager.LoadScene("SampleScene");
+    }
+
+    private void ResetMatchData()
+    {
+        MatchData.matchId = "";
+        MatchData.hostPlayer = "";
+        MatchData.players.Clear();
+        Debug.Log("[MatchMakingManager] MatchData reset");
     }
 
     private void OnDestroy()
@@ -131,141 +282,6 @@ public class MatchMakingManager : MonoBehaviour
         if (webSocketService != null)
         {
             webSocketService.OnMessageReceived -= HandleMessageReceived;
-        }
-
-        if (PeerConnectionManager.Instance != null)
-        {
-            PeerConnectionManager.Instance.OnSendOffer -= HandleSendOffer;
-            PeerConnectionManager.Instance.OnSendAnswer -= HandleSendAnswer;
-            PeerConnectionManager.Instance.OnSendIceCandidate -= HandleSendIceCandidate;
-        }
-    }
-
-    private async void HandleMessageReceived(Message message)
-    {
-        if (message == null) return;
-
-        // ICE candidates can arrive multiple times and anytime after offer/answer.
-        // We shouldn't block them with the strict waitingForMessage check.
-        if (message.Type == WsMessageType.ICE_CANDIDATE.ToString())
-        {
-            // Both host and client should receive ICE candidates
-            IceCandidateData data = null;
-            
-            // Check if it's already the right type, or parse it if it's a JSON object
-            if (message.Value is IceCandidateData)
-            {
-                data = message.Value as IceCandidateData;
-            }
-            else if (message.Value != null)
-            {
-                // In case your JSON deserializer returns a generic object/JObject
-                try {
-                    data = JsonUtility.FromJson<IceCandidateData>(message.Value.ToString());
-                } catch { }
-            }
-
-            if (data != null)
-            {
-                PeerConnectionManager.Instance.AddIceCandidate(data);
-            }
-            return; // We process and return, keeping the current waitingForMessage state intact
-        }
-
-        if (message.Type != waitingForMessage.ToString()) return;
-
-        // Print out when receive ws message
-        Debug.Log($"[MatchMakingManager] WS Message Received: Type={message.Type}, Sender={message.Sender}, Value={message.Value}");
-
-        if (message.Type.CompareTo(WsMessageType.MATCH_READY.ToString()) == 0)
-        {
-            HandleMatchReadyMessage(message);
-
-            if (MatchData.hostPlayer == PlayerData.instance.player)
-            {
-                PeerConnectionManager.Instance.CreateConnection(true);
-                await PeerConnectionManager.Instance.CreateOffer();
-                waitingForMessage  = WsMessageType.ANSWER;
-            }
-            else
-            {
-                PeerConnectionManager.Instance.CreateConnection(false);
-                waitingForMessage = WsMessageType.OFFER;
-            }
-        }
-        else if (message.Type.CompareTo(WsMessageType.OFFER.ToString()) == 0)
-        {
-            if (MatchData.hostPlayer != PlayerData.instance.player) {
-                string sdp = message.Value as string;
-
-                await PeerConnectionManager.Instance.ReceiveOffer(sdp);
-
-                waitingForMessage = WsMessageType.ANSWER; // Usually wait for nothing or ICE candidates next, but ICE is handled above
-            }
-        }
-        else if (message.Type.CompareTo(WsMessageType.ANSWER.ToString()) == 0) 
-        {
-            if (MatchData.hostPlayer == PlayerData.instance.player) {
-                string sdp = message.Value as string;
-
-                await PeerConnectionManager.Instance.ReceiveAnswer(sdp);
-
-                waitingForMessage = WsMessageType.none;
-            }
-        }
-    }
-
-    public void HandleMatchReadyMessage(Message message)
-    {
-        ReadyMatchDto readyMatchDto = message.Value as ReadyMatchDto;
-        
-        MatchData.matchId = readyMatchDto.id;
-        MatchData.hostPlayer = readyMatchDto.hostPlayer;
-        MatchData.players.Add(readyMatchDto.hostPlayer);
-        MatchData.players.Add(readyMatchDto.clientPlayer);
-    }
-
-    private void HandleSendOffer(string offer)
-    {
-        Message message = new Message();
-        message.Type = WsMessageType.OFFER.ToString();
-        message.Sender = PlayerData.instance.player;
-        message.Receiver = "";
-        message.MatchId = MatchData.matchId;
-        message.Value = offer;
-
-        webSocketService.Send(message);
-    }
-
-    private void HandleSendAnswer(string answer)
-    {
-        Message message = new Message();
-        message.Type = WsMessageType.ANSWER.ToString();
-        message.Sender = PlayerData.instance.player;
-        message.Receiver = "";
-        message.MatchId = MatchData.matchId;
-        message.Value = answer;
-
-        webSocketService.Send(message);
-    }
-
-    private void HandleSendIceCandidate(IceCandidateData data)
-    {
-        Message message = new Message();
-        message.Type = WsMessageType.ICE_CANDIDATE.ToString();
-        message.Sender = PlayerData.instance.player;
-        message.Receiver = "";
-        message.MatchId = MatchData.matchId;
-        message.Value = data;
-
-        webSocketService.Send(message);
-    }
-
-    private void HandleConnected(RTCPeerConnectionState state)
-    {
-        if (state == RTCPeerConnectionState.Connected)
-        {
-            SceneManager.LoadScene("SampleScene");
         }
     }
 }

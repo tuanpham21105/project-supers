@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using com.cyborgAssets.inspectorButtonPro;
 using UnityEngine;
 
 public abstract class IPlayerInputHandler : MonoBehaviour
@@ -11,7 +12,11 @@ public abstract class IPlayerInputHandler : MonoBehaviour
     {
         instance = this;
     }
-    public void HandleFlyingInterrupted(String player)
+    protected void BaseStart()
+    {
+        playerInputController = PlayerInputController.instance;
+    }
+    public void HandleFlyingInterrupted(string player)
     {
         if (PlayerData.instance.player.CompareTo(player) == 0)
             playerInputController.HandleFlyingInterrupted();

@@ -6,7 +6,7 @@ public class ClientPacketSender : MonoBehaviour
 {
     public static ClientPacketSender instance;
 
-    private PeerConnectionManager peerConnectionManager;
+    private P2PManager p2PManager;
 
     void Awake()
     {
@@ -15,23 +15,35 @@ public class ClientPacketSender : MonoBehaviour
 
     void Start()
     {
-        peerConnectionManager = PeerConnectionManager.Instance;
+        p2PManager = P2PManager.instance;
     }
 
     public void sendControlAction(CharacterActions action, bool state)
     {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[ClientPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
         ActionEventPacket packet = new ActionEventPacket();
         packet.action = action.ToString();
         packet.state = state;
 
-        peerConnectionManager.Send(packet);
+        P2PManager.instance.SendJson(packet);
     }
 
     public void sendControlRotation(Vector3 direction)
     {
-        RotateActionEventPacket packet = new RotateActionEventPacket();
-        packet.direction = direction;
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[ClientPacketSender] P2PManager dependency is missing.");
+            return;
+        }
 
-        peerConnectionManager.Send(packet);
+        RotateActionEventPacket packet = new RotateActionEventPacket();
+        packet.direction = Vec3.From(direction);
+
+        P2PManager.instance.SendJsonUnreliable(packet);
     }
 }

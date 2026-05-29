@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class ClientPlayerInputHandler : IPlayerInputHandler
 {
+    void Start()
+    {
+        BaseStart();
+
+        ClientPacketReceiver.instance.onFlyingInterrupted += HandleFlyingInterrupted;
+    }
+
+    void OnDestroy()
+    {
+        ClientPacketReceiver.instance.onFlyingInterrupted -= HandleFlyingInterrupted;
+    }
 
     public override void ControlCharacterAction(CharacterActions action, bool state)
     {

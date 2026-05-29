@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class HostPacketReceiver : MonoBehaviour
@@ -8,8 +9,8 @@ public class HostPacketReceiver : MonoBehaviour
     public static HostPacketReceiver instance;
 
     private HostCharactersManager hostCharactersManager;
-    private PeerConnectionManager peerConnectionManager;
-    private List<Action<Packet>> clientInputHandlers;
+    private P2PManager p2PManager;
+    private List<Action<string>> clientInputHandlers = new List<Action<string>>();
 
     void Awake()
     {
@@ -18,30 +19,50 @@ public class HostPacketReceiver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[HostPacketReceiver] P2PManager dependency is missing.");
+            return;
+        }
+
         hostCharactersManager = HostCharactersManager.instance;
-        peerConnectionManager = PeerConnectionManager.Instance;
+        p2PManager = P2PManager.instance;
 
         foreach (string a in MatchManager.instance.GetPlayers())
         {
             if (a == MatchManager.instance.GetHostPlayer()) continue;
 
-            Action<Packet> action = handleClientInput(a);
-            peerConnectionManager.OnMessageReceived += action;
+            Action<string> action = handleClientInput(a);
+            p2PManager.OnReliableData += action;
+            p2PManager.OnUnreliableData += action;
             clientInputHandlers.Add(action);
         }
     }
 
-    Action<Packet> handleClientInput(string player)
+    void OnDestroy()
     {
-        return (packet) =>
+        foreach (Action<string> a in clientInputHandlers)
         {
-            if (packet is ActionEventPacket packet1)
+            p2PManager.OnReliableData -= a;
+            p2PManager.OnUnreliableData -= a;
+        }       
+    }
+
+    Action<string> handleClientInput(string player)
+    {
+        return (data) =>
+        {
+            Packet packet = JsonConvert.DeserializeObject<Packet>(data);
+
+            if (packet.type.CompareTo("ACTION") == 0)
             {
+                ActionEventPacket packet1 = JsonConvert.DeserializeObject<ActionEventPacket>(data);
                 hostCharactersManager.ControlCharacterAction(player, Enum.Parse<CharacterActions>(packet1.action), packet1.state);
             }
-            else if (packet is RotateActionEventPacket packet2)
+            else if (packet.type.CompareTo("ROTATION") == 0)
             {
-                hostCharactersManager.ControlCharacterRotation(player, packet2.direction);
+                RotateActionEventPacket packet2 = JsonConvert.DeserializeObject<RotateActionEventPacket>(data);
+                hostCharactersManager.ControlCharacterRotation(player, packet2.direction.ToVector3());
             }
         };
     }

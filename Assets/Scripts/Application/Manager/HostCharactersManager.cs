@@ -89,15 +89,18 @@ public class HostCharactersManager : MonoBehaviour
     {
         for (int i = 0; i < characters.Count; i++)
         {
-            characters[i].GetComponent<CharacterMovementController>().endFlying -= flyingHandlers[i];
-            characters[i].GetComponent<CharacterAnimationController>().onPlayAnimation -= animationHandlers[i];
+            if (characters[i] != null)
+                characters[i].GetComponent<CharacterMovementController>().endFlying -= flyingHandlers[i];
+                characters[i].GetComponent<CharacterAnimationController>().onPlayAnimation -= animationHandlers[i];
         }
     }
 
     Action HandleCharacterFlyingInterrupted(String player)
     {
-        hostPeerConnectionSender.sendPlayerCharacterFlyingInterrupted(player);
-        return () => onCharacterFlyingInterrupted?.Invoke(player);
+        return () => {
+            HostPacketSender.instance.sendPlayerCharacterFlyingInterrupted(player);
+            onCharacterFlyingInterrupted?.Invoke(player);
+        };
     }
 
     Action<String, String> HandleCharacterPlayAnimation(String player)
@@ -114,14 +117,13 @@ public class HostCharactersManager : MonoBehaviour
         for (int i = 0; i < matchData.GetPlayers().Count; i++)
         {
             CharacterStatesDTO states = new CharacterStatesDTO();
-            states.position = characters[i].transform.position;
-            states.rotation = characters[i].transform.rotation;
+            states.position = Vec3.From(characters[i].transform.position);
+            states.forward = Vec3.From(characters[i].transform.forward);
             states.physicsColliderHeight = characters[i].GetComponent<CharacterController>().height;
             states.physicsColliderRadius = characters[i].GetComponent<CharacterController>().radius;
-            data.playersStates.Add(new KeyValuePair<string, CharacterStatesDTO>(matchData.GetPlayers()[i], states));
+            data.playersStates.Add(matchData.GetPlayers()[i], states);
         }
         hostPeerConnectionSender.sendPlayersCharacterStates(data);
-        // hostPeerConnectionSender.sendPlayerCharacterStates(playerData.player, );
     }
 
     public void ControlCharacterAction(String player, CharacterActions action, bool state)

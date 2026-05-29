@@ -20,4 +20,9 @@ public class PlayerData : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
+
+    public void updatePlayerName(string text)
+    {
+        player = text;
+    }
 }

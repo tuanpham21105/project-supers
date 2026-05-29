@@ -14,27 +14,47 @@ public class HostPacketSender : MonoBehaviour
 
     public void sendPlayerCharacterFlyingInterrupted(String player)
     {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
         FlyingInterruptedEventPacket packet = new FlyingInterruptedEventPacket();
         packet.player = player;
+    
+        Debug.Log($"[HostPacketSender] {player} flying is interrupted.");
 
-        PeerConnectionManager.Instance.Send(packet);
+        P2PManager.instance.SendJson(packet);
     }
 
     public void sendPlayerCharacterAnimation(String player, String type, String animation)
     {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
         AnimationEventPacket packet = new AnimationEventPacket();
         packet.player = player;
         packet.animationType = type;
         packet.animation = animation;
 
-        PeerConnectionManager.Instance.Send(packet);
+        P2PManager.instance.SendJson(packet);
     }
 
     public void sendPlayersCharacterStates(PlayersCharacterStatesDto data)
     {
-        StatesPacket packet = new StatesPacket();
-        packet.states = data;
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
 
-        PeerConnectionManager.Instance.Send(packet, false);
+        StatesPacket packet = new StatesPacket();
+        packet.data = data;
+
+        P2PManager.instance.SendJsonUnreliable(packet);
     }
 }

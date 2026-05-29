@@ -39,15 +39,13 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     private void Awake()
     {
-        PlayerInputController.instance = this;
+        instance = this;
     }
 
     private void Start()
     {
         playerInputHandler = IPlayerInputHandler.instance;
         playerData = PlayerData.instance;
-
-        playerInputHandler.playerInputController = this;
 
         keybinds = PlayerKeyboardAndMouseKeybindsData.playerKeyboardAndMouseKeybindsData;
         Cursor.lockState = CursorLockMode.Locked;

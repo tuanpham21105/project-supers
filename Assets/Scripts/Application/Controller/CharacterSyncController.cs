@@ -63,10 +63,10 @@ public class CharacterSyncController : MonoBehaviour
         }
     }
    
-    public void ApplyTransform(Vector3 position, Quaternion rotation)
+    public void ApplyTransform(Vector3 position, Vector3 forward)
     {
         transform.position = position;
-        transform.rotation = rotation;
+        transform.forward = forward;
     }
 
     public void ApplyPhysicsCollider(float radius, float height)

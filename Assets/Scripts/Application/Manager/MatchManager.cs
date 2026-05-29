@@ -34,8 +34,15 @@ public class MatchManager : MonoBehaviour
         playerData = PlayerData.instance;
 
         // Assign data from MatchData
-        hostPlayer = MatchData.hostPlayer;
-        players = MatchData.players;
+        if (MatchData.hostPlayer != null && MatchData.hostPlayer != "")
+        {
+            hostPlayer = MatchData.hostPlayer;
+        }
+
+        if (MatchData.players.Count > 0)
+        {
+            players = MatchData.players;
+        }
 
         if (IsPlayerHost(playerData.player))
         {

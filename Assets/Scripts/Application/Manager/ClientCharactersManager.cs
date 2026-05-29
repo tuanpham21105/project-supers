@@ -58,7 +58,7 @@ public class ClientCharactersManager : MonoBehaviour
         GameObject character = characters[index];
         CharacterSyncController controller = character.GetComponent<CharacterSyncController>();
 
-        controller.ApplyTransform(characterStatesDTO.position, characterStatesDTO.rotation);
+        controller.ApplyTransform(characterStatesDTO.position.ToVector3(), characterStatesDTO.forward.ToVector3());
         controller.ApplyPhysicsCollider(characterStatesDTO.physicsColliderRadius, characterStatesDTO.physicsColliderHeight);
     }
 }

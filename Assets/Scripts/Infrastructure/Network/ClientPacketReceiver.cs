@@ -1,13 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using com.cyborgAssets.inspectorButtonPro;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class ClientPacketReceiver : MonoBehaviour
 {
     public static ClientPacketReceiver instance;
     
+    private MatchManager matchManager;
     private ClientCharactersManager clientCharactersManager;
-    private ClientPlayerInputHandler clientPlayerInputHandler;
+    
+    public event Action<string> onFlyingInterrupted;
 
     void Awake()
     {
@@ -16,30 +21,51 @@ public class ClientPacketReceiver : MonoBehaviour
 
     void Start()
     {
-        clientCharactersManager = ClientCharactersManager.instance;
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[ClientPacketReceiver] P2PManager dependency is missing.");
+            return;
+        }
 
-        PeerConnectionManager.Instance.OnMessageReceived += handleReceiveMessage;
+        clientCharactersManager = ClientCharactersManager.instance;
+        matchManager = MatchManager.instance;
+
+        P2PManager.instance.OnReliableData += handleReceiveMessage;
+        P2PManager.instance.OnUnreliableData += handleReceiveMessage;
     }
 
-    void handleReceiveMessage(Packet packet)
+    void OnDestroy()
     {
-        if (packet is FlyingInterruptedEventPacket packet1)
+
+        P2PManager.instance.OnReliableData -= handleReceiveMessage;
+        P2PManager.instance.OnUnreliableData -= handleReceiveMessage;
+    }
+
+    void handleReceiveMessage(string data)
+    {
+        Packet packet = JsonConvert.DeserializeObject<Packet>(data);
+
+        if (packet.type.CompareTo("FLYING_INTERRUPTED") == 0)
         {
+            FlyingInterruptedEventPacket packet1 = JsonConvert.DeserializeObject<FlyingInterruptedEventPacket>(data);
             receivePlayerCharacterFlyingInterrupted(packet1);
         }
-        else if (packet is AnimationEventPacket packet2)
+        else if (packet.type.CompareTo("ANIMATION") == 0)
         {
+            AnimationEventPacket packet2 = JsonConvert.DeserializeObject<AnimationEventPacket>(data);
             receivePlayerCharacterAnimation(packet2);
         }
-        else if (packet is StatesPacket packet3)
+        else if (packet.type.CompareTo("STATES") == 0)
         {
+            StatesPacket packet3 = JsonConvert.DeserializeObject<StatesPacket>(data);
             receivePlayerCharacterStates(packet3);
         }
     } 
 
     void receivePlayerCharacterFlyingInterrupted(FlyingInterruptedEventPacket packet)
     {
-        clientPlayerInputHandler.HandleFlyingInterrupted(packet.player);
+        onFlyingInterrupted?.Invoke(packet.player);
+        Debug.Log($"[ClientPacketReceiver] {packet.player} flying is interrupted.");
     }
 
     void receivePlayerCharacterAnimation(AnimationEventPacket packet)
@@ -49,9 +75,10 @@ public class ClientPacketReceiver : MonoBehaviour
 
     void receivePlayerCharacterStates(StatesPacket packet)
     {
-        foreach (KeyValuePair<string, CharacterStatesDTO> a in packet.states.playersStates)
+        foreach (string a in matchManager.GetPlayers())
         {
-            clientCharactersManager.ControlCharacterStates(a.Key, a.Value);
+            CharacterStatesDTO states = packet.data.playersStates[a];
+            clientCharactersManager.ControlCharacterStates(a, states);
         }
     }
 }

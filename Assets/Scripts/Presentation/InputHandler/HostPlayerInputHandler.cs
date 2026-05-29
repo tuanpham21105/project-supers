@@ -8,6 +8,8 @@ public class HostPlayerInputHandler : IPlayerInputHandler
 
     void Start()
     {
+        BaseStart();
+        
         hostCharactersManager = HostCharactersManager.instance;
 
         hostCharactersManager.onCharacterFlyingInterrupted += HandleFlyingInterrupted;
@@ -20,11 +22,13 @@ public class HostPlayerInputHandler : IPlayerInputHandler
 
     public override void ControlCharacterAction(CharacterActions action, bool state)
     {
-        hostCharactersManager.ControlCharacterAction(PlayerData.instance.player, action, state);
+        if (hostCharactersManager != null)
+            hostCharactersManager.ControlCharacterAction(PlayerData.instance.player, action, state);
     }
 
     public override void ControlCharacterRotation(Vector3 direction)
     {
-        hostCharactersManager.ControlCharacterRotation(PlayerData.instance.player, direction);
+        if (hostCharactersManager != null)
+            hostCharactersManager.ControlCharacterRotation(PlayerData.instance.player, direction);
     }
 }
