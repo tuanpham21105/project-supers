@@ -8,7 +8,7 @@ public class HostPacketReceiver : MonoBehaviour
 {
     public static HostPacketReceiver instance;
 
-    private HostCharactersManager hostCharactersManager;
+    private CharactersManager hostCharactersManager;
     private P2PManager p2PManager;
     private List<Action<string>> clientInputHandlers = new List<Action<string>>();
 
@@ -25,7 +25,7 @@ public class HostPacketReceiver : MonoBehaviour
             return;
         }
 
-        hostCharactersManager = HostCharactersManager.instance;
+        hostCharactersManager = CharactersManager.instance;
         p2PManager = P2PManager.instance;
 
         foreach (string a in MatchManager.instance.GetPlayers())

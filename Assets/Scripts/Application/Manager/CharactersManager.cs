@@ -22,9 +22,9 @@ public enum CharacterActions
     Deflect
 }
 
-public class HostCharactersManager : MonoBehaviour
+public class CharactersManager : MonoBehaviour
 {
-    public static HostCharactersManager instance;
+    public static CharactersManager instance;
 
     [Header("Dependencies")]
     private MatchManager matchData;
@@ -37,7 +37,7 @@ public class HostCharactersManager : MonoBehaviour
     private List<Action<String, String>> animationHandlers;
 
     [Header("Prefab")]
-    [SerializeField] private GameObject hostCharacterPrefab;
+    [SerializeField] private GameObject characterPrefab;
 
     public event Action<String> onCharacterFlyingInterrupted;
     void Awake()
@@ -55,29 +55,26 @@ public class HostCharactersManager : MonoBehaviour
         flyingHandlers = new List<Action>();
         animationHandlers = new List<Action<String, String>>();
 
-        if (matchData.IsPlayerHost(playerData.player))
+        foreach (String player in matchData.GetPlayers())
         {
-            foreach (String player in matchData.GetPlayers())
-            {
-                Vector3 randomPos = new Vector3(Random.Range(-30f, 30f), 1.5f, Random.Range(30f, 30f));
-                GameObject character = Instantiate(hostCharacterPrefab, randomPos, Quaternion.identity);
+            Vector3 randomPos = new Vector3(Random.Range(-30f, 30f), 1.5f, Random.Range(30f, 30f));
+            GameObject character = Instantiate(characterPrefab, randomPos, Quaternion.identity);
 
-                Action handler = HandleCharacterFlyingInterrupted(player);
-                character.GetComponent<CharacterMovementController>().endFlying += handler;
-                flyingHandlers.Add(handler);
+            Action handler = HandleCharacterFlyingInterrupted(player);
+            character.GetComponent<CharacterMovementController>().endFlying += handler;
+            flyingHandlers.Add(handler);
 
-                Action<String, String> animationHandler = HandleCharacterPlayAnimation(player);
-                character.GetComponent<CharacterAnimationController>().onPlayAnimation += animationHandler;
-                animationHandlers.Add(animationHandler);
+            Action<String, String> animationHandler = HandleCharacterPlayAnimation(player);
+            character.GetComponent<CharacterAnimationController>().onPlayAnimation += animationHandler;
+            animationHandlers.Add(animationHandler);
 
-                characters.Add(character);
+            characters.Add(character);
 
-                if (matchData.IsPlayerHost(player))
-                {
-                    CameraController.instance.SetCharacter(character.transform);
-                }
-            }
+            if (playerData.player.CompareTo(player) == 0) 
+                CameraController.instance.SetCharacter(character.transform);
         }
+
+        switchCharacterMode(MatchManager.instance.IsPlayerHost());
     }
 
     void FixedUpdate()
@@ -185,5 +182,44 @@ public class HostCharactersManager : MonoBehaviour
         GameObject character = characters[index];
         CharacterActionController controller = character.GetComponent<CharacterActionController>();
         controller.Rotation(direction);
+    }
+
+    //
+    public void ControlCharacterAnimation(String player, String type, String name)
+    {
+        int index = matchData.GetPlayerIndex(player);
+        GameObject character = characters[index];
+        CharacterSyncController controller = character.GetComponent<CharacterSyncController>();
+        if (Enum.TryParse(type, true, out CharacterAnimationTypes animationType))
+        {
+            controller.PlayAnimation(animationType, name);
+        }
+    }
+
+    public void ControlCharacterStates(String player, CharacterStatesDTO characterStatesDTO)
+    {
+        int index = matchData.GetPlayerIndex(player);
+        GameObject character = characters[index];
+        CharacterSyncController controller = character.GetComponent<CharacterSyncController>();
+
+        controller.ApplyTransform(characterStatesDTO.position.ToVector3(), characterStatesDTO.forward.ToVector3());
+        controller.ApplyPhysicsCollider(characterStatesDTO.physicsColliderRadius, characterStatesDTO.physicsColliderHeight);
+    }
+
+    // Switch Character mode
+    public void switchCharacterMode(bool isHost)
+    {
+        foreach (GameObject character in characters)
+        {
+            character.GetComponent<CharacterController>().enabled = isHost;
+            character.GetComponent<CharacterObjectService>().enabled = isHost;
+            character.GetComponent<CharacterMovementController>().enabled = isHost;
+            character.GetComponent<CharacterAttackController>().enabled = isHost;
+            character.GetComponent<CharacterDefenseController>().enabled = isHost;
+            character.GetComponent<CharacterDebuffController>().enabled = isHost;
+            character.GetComponent<CharacterTakeDamageController>().enabled = isHost;
+            character.GetComponent<CharacterActionController>().enabled = isHost;
+            character.GetComponent<CharacterObjectsData>().characterHurtBox.SetActive(isHost);
+        }
     }
 }

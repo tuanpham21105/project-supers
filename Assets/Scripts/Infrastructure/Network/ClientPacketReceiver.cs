@@ -10,7 +10,6 @@ public class ClientPacketReceiver : MonoBehaviour
     public static ClientPacketReceiver instance;
     
     private MatchManager matchManager;
-    private ClientCharactersManager clientCharactersManager;
     
     public event Action<string> onFlyingInterrupted;
 
@@ -27,7 +26,6 @@ public class ClientPacketReceiver : MonoBehaviour
             return;
         }
 
-        clientCharactersManager = ClientCharactersManager.instance;
         matchManager = MatchManager.instance;
 
         P2PManager.instance.OnReliableData += handleReceiveMessage;
@@ -60,6 +58,11 @@ public class ClientPacketReceiver : MonoBehaviour
             StatesPacket packet3 = JsonConvert.DeserializeObject<StatesPacket>(data);
             receivePlayerCharacterStates(packet3);
         }
+        else if (packet.type.CompareTo("NEW_HOST") == 0)
+        {
+            NewHostEventPacket packet4 = JsonConvert.DeserializeObject<NewHostEventPacket>(data);
+            receiveHost(packet4);
+        }
     } 
 
     void receivePlayerCharacterFlyingInterrupted(FlyingInterruptedEventPacket packet)
@@ -70,7 +73,7 @@ public class ClientPacketReceiver : MonoBehaviour
 
     void receivePlayerCharacterAnimation(AnimationEventPacket packet)
     {
-        clientCharactersManager.ControlCharacterAnimation(packet.player, packet.animationType, packet.animation);
+        CharactersManager.instance.ControlCharacterAnimation(packet.player, packet.animationType, packet.animation);
     }
 
     void receivePlayerCharacterStates(StatesPacket packet)
@@ -78,7 +81,12 @@ public class ClientPacketReceiver : MonoBehaviour
         foreach (string a in matchManager.GetPlayers())
         {
             CharacterStatesDTO states = packet.data.playersStates[a];
-            clientCharactersManager.ControlCharacterStates(a, states);
+            CharactersManager.instance.ControlCharacterStates(a, states);
         }
+    }
+
+    void receiveHost(NewHostEventPacket packet) 
+    {
+        MatchManager.instance.SetPlayerHost(packet.newHost);
     }
 }

@@ -66,3 +66,14 @@ public class RotateActionEventPacket : Packet
         type = "ROTATION";
     }
 }
+
+[Serializable]
+public class NewHostEventPacket : Packet
+{
+    public string newHost;
+
+    public NewHostEventPacket()
+    {
+        type = "NEW_HOST";
+    }
+}

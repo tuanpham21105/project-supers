@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerKeyboadAndMouseInputController : PlayerInputController
 {
     private PlayerKeyboardAndMouseKeybindsData keybinds;
-    private IPlayerInputHandler playerInputHandler;
+    private PlayerInputHandler playerInputHandler;
     private PlayerData playerData;
 
     [SerializeField] private CameraController cameraController;
@@ -44,7 +44,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     private void Start()
     {
-        playerInputHandler = IPlayerInputHandler.instance;
+        playerInputHandler = PlayerInputHandler.instance;
         playerData = PlayerData.instance;
 
         keybinds = PlayerKeyboardAndMouseKeybindsData.playerKeyboardAndMouseKeybindsData;

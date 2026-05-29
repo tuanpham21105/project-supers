@@ -20,6 +20,13 @@ public class HostPacketSender : MonoBehaviour
             return;
         }
 
+        // Verify sender is the host
+        if (!MatchManager.instance.IsPlayerHost())
+        {
+            // Debug.LogWarning("[HostPacketSender] Only the host can send host actions.");
+            return;
+        }
+
         FlyingInterruptedEventPacket packet = new FlyingInterruptedEventPacket();
         packet.player = player;
     
@@ -33,6 +40,13 @@ public class HostPacketSender : MonoBehaviour
         if (P2PManager.instance == null)
         {
             Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        // Verify sender is the host
+        if (!MatchManager.instance.IsPlayerHost())
+        {
+            // Debug.LogWarning("[HostPacketSender] Only the host can send host actions.");
             return;
         }
 
@@ -52,9 +66,37 @@ public class HostPacketSender : MonoBehaviour
             return;
         }
 
+        // Verify sender is the host
+        if (!MatchManager.instance.IsPlayerHost())
+        {
+            // Debug.LogWarning("[HostPacketSender] Only the host can send host actions.");
+            return;
+        }
+
         StatesPacket packet = new StatesPacket();
         packet.data = data;
 
         P2PManager.instance.SendJsonUnreliable(packet);
+    }
+
+    public void sendNewHost(string newHost)
+    {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        // Verify sender is the host
+        if (!MatchManager.instance.IsPlayerHost())
+        {
+            // Debug.LogWarning("[HostPacketSender] Only the host can send host actions.");
+            return;
+        }
+
+        NewHostEventPacket packet = new NewHostEventPacket();
+        packet.newHost = newHost;
+
+        P2PManager.instance.SendJson(packet);
     }
 }

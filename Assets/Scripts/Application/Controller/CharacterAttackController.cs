@@ -60,7 +60,8 @@ public class CharacterAttackController : MonoBehaviour
             animationEvents.OnStrikeAttackEnd -= HandleStrikeAttackEnd;
         }
 
-        characterStatesData.OnAttackInterrupt -= HandleAttackInterrupt;
+        if (characterStatesData != null)
+            characterStatesData.OnAttackInterrupt -= HandleAttackInterrupt;
 
         if (characterHitBoxesEvents != null)
             characterHitBoxesEvents.OnAttackHit -= HandleAttackHit;

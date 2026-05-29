@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using com.cyborgAssets.inspectorButtonPro;
 using UnityEngine;
 
 public class MatchManager : MonoBehaviour
@@ -16,17 +17,12 @@ public class MatchManager : MonoBehaviour
 
     [SerializeField] private List<String> players;
 
-    [Header("Prefab")]
-    [SerializeField] private GameObject hostCharactersManagerPrefab;
-    [SerializeField] private GameObject clientCharactersManagerPrefab;
-    [SerializeField] private GameObject hostInputHandlerPrefab;
-    [SerializeField] private GameObject clientInputHandlerPrefab;
-    [SerializeField] private GameObject hostPacketManager;
-    [SerializeField] private GameObject clientPacketManager;
-
     void Awake()
     {
         instance = this;
+        
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
     }
 
     void Start()
@@ -44,22 +40,30 @@ public class MatchManager : MonoBehaviour
             players = MatchData.players;
         }
 
-        if (IsPlayerHost(playerData.player))
+        TabVisibilityService.instance.OnTabHidden += handleLostFocus;
+
+        // Only the host sends LOAD_MATCH to tell the client to load the scene
+        if (IsPlayerHost())
         {
-            Instantiate(hostCharactersManagerPrefab);
-
-            Instantiate(hostInputHandlerPrefab);
-
-            Instantiate(hostPacketManager);
+            StartCoroutine(SendLoadMatchToClient());
         }
-        else
+    }
+
+    private IEnumerator SendLoadMatchToClient()
+    {
+        // Wait a frame to ensure everything is initialized after scene load
+        yield return null;
+
+        Debug.Log("[MatchManager] Host sending LOAD_MATCH packet to client");
+        P2PManager.instance.SendJson(new Packet()
         {
-            Instantiate(clientCharactersManagerPrefab);
+            type = "LOAD_MATCH"
+        });
+    }
 
-            Instantiate(clientInputHandlerPrefab);
-
-            Instantiate(clientPacketManager);
-        }
+    void OnDestroy()
+    {
+        TabVisibilityService.instance.OnTabHidden -= handleLostFocus;
     }
 
     public String GetHostPlayer() => hostPlayer;
@@ -71,8 +75,51 @@ public class MatchManager : MonoBehaviour
         return players.FindIndex(p => p.CompareTo(player) == 0);
     }
 
-    public bool IsPlayerHost(String player)
+    public bool IsPlayerHost()
     {
-        return hostPlayer.CompareTo(player) == 0;
+        return hostPlayer.CompareTo(PlayerData.instance.player) == 0;
+    }
+    [ProButton]
+    public void SetPlayerHost(string player)
+    {
+        Debug.Log($"[MatchManager] Setting new host: {player} (local player: {PlayerData.instance.player})");
+
+        hostPlayer = player;
+
+        bool isLocalPlayerNewHost = player.CompareTo(PlayerData.instance.player) == 0;
+        CharactersManager.instance.switchCharacterMode(isLocalPlayerNewHost);
+    }
+
+    public string GetClientPlayer()
+    {   
+        foreach (string a in players)
+        {
+            if (hostPlayer.CompareTo(a) != 0)
+            {
+                return a;
+            }
+        }
+
+        return hostPlayer;
+    }
+
+    public void handleLostFocus()
+    {
+        if (!IsPlayerHost()) return;
+
+        string newHost = GetClientPlayer();
+
+        Debug.Log("Lost Focus");
+
+        try
+        {
+            HostPacketSender.instance.sendNewHost(newHost);
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+
+        SetPlayerHost(newHost);
     }
 }

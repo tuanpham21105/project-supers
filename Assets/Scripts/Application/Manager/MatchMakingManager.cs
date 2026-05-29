@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using com.cyborgAssets.inspectorButtonPro;
+using Newtonsoft.Json;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -99,6 +100,9 @@ public class MatchMakingManager : MonoBehaviour
         // Disconnect P2P
         if (P2PManager.instance != null)
         {
+            P2PManager.instance.OnConnected -= HandleP2PConnected;
+            P2PManager.instance.OnReady -= HandleP2PReady;
+            P2PManager.instance.OnReliableData -= handleLoadMatch;
             P2PManager.instance.Disconnect();
             Debug.Log("[MatchMakingManager] P2P disconnected");
         }
@@ -205,6 +209,13 @@ public class MatchMakingManager : MonoBehaviour
             P2PManager.instance.OnReady -= HandleP2PReady;
         }
 
+        // Subscribe to LOAD_MATCH packet listener for both host and client
+        if (P2PManager.instance != null)
+        {
+            P2PManager.instance.OnReliableData += handleLoadMatch;
+            Debug.Log("[MatchMakingManager] Subscribed to LOAD_MATCH listener");
+        }
+
         // If client, connect to host
         if (PlayerData.instance.player.CompareTo(MatchData.hostPlayer) != 0)
         {
@@ -229,8 +240,7 @@ public class MatchMakingManager : MonoBehaviour
         if (P2PManager.instance != null)
         {
             P2PManager.instance.OnConnected -= HandleP2PConnected;
-            P2PManager.instance.OnReady -= HandleP2PReady;
-            Debug.Log("[MatchMakingManager] Unsubscribed from P2P events");
+            Debug.Log("[MatchMakingManager] Unsubscribed from P2P OnConnected event");
         }
 
         // Disconnect WebSocket
@@ -240,30 +250,32 @@ public class MatchMakingManager : MonoBehaviour
             Debug.Log("[MatchMakingManager] WebSocket disconnected");
         }
 
-        // Stop all coroutines on this object
-        // StopAllCoroutines();
-        // Debug.Log("[MatchMakingManager] All coroutines stopped");
-
-        // Give one frame to ensure cleanup is complete
-
-        yield return new WaitForSeconds(0.5f);
-
-        // Host load first
+        // Only host loads scene first
         if (PlayerData.instance.player.CompareTo(MatchData.hostPlayer) == 0)
         {
-            LoadScene();
-            yield break;
+            yield return new WaitForSeconds(0.5f);
+            Debug.Log("[MatchMakingManager] Host loading SampleScene...");
+            SceneManager.LoadScene("SampleScene");
         }
-
-        yield return new WaitForSeconds(0.5f);
-
-        // Client load later
-        if (PlayerData.instance.player.CompareTo(MatchData.hostPlayer) != 0)
-            LoadScene();
+        else
+        {
+            Debug.Log("[MatchMakingManager] Client waiting for LOAD_MATCH packet from host...");
+        }
     }
 
-    [ProButton]
-    public void LoadScene() {
+    private void handleLoadMatch(string data)
+    {
+        Packet packet = JsonConvert.DeserializeObject<Packet>(data);
+
+        if (packet.type.CompareTo("LOAD_MATCH") == 0)
+        {
+            Debug.Log("[MatchMakingManager] Received LOAD_MATCH packet, loading scene...");
+            LoadScene();
+        }
+    }
+
+    public void LoadScene()
+    {
         Debug.Log("[MatchMakingManager] Loading SampleScene...");
         SceneManager.LoadScene("SampleScene");
     }
@@ -282,6 +294,13 @@ public class MatchMakingManager : MonoBehaviour
         if (webSocketService != null)
         {
             webSocketService.OnMessageReceived -= HandleMessageReceived;
+        }
+
+        if (P2PManager.instance != null)
+        {
+            P2PManager.instance.OnConnected -= HandleP2PConnected;
+            P2PManager.instance.OnReady -= HandleP2PReady;
+            P2PManager.instance.OnReliableData -= handleLoadMatch;
         }
     }
 }

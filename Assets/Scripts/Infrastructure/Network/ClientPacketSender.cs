@@ -26,6 +26,13 @@ public class ClientPacketSender : MonoBehaviour
             return;
         }
 
+        // Verify sender is the host
+        if (MatchManager.instance.IsPlayerHost())
+        {
+            // Debug.LogWarning("[ClientPacketSender] Host cannot send client actions.");
+            return;
+        }
+
         ActionEventPacket packet = new ActionEventPacket();
         packet.action = action.ToString();
         packet.state = state;
@@ -38,6 +45,13 @@ public class ClientPacketSender : MonoBehaviour
         if (P2PManager.instance == null)
         {
             Debug.LogError("[ClientPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        // Verify sender is the host
+        if (MatchManager.instance.IsPlayerHost())
+        {
+            // Debug.LogWarning("[ClientPacketSender] Host cannot send client actions.");
             return;
         }
 
