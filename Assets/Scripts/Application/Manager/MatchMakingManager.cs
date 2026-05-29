@@ -39,8 +39,7 @@ public class MatchMakingManager : MonoBehaviour
     /// <summary>
     /// Starts matchmaking by connecting to WebSocket and requesting a match.
     /// Listens for MATCH_READY message to initialize P2P connection.
-    /// </summary>
-    [ProButton]
+    /// </summary
     public void StartMatchMaking()
     {
         if (matchMakingService == null || webSocketService == null)
@@ -79,7 +78,6 @@ public class MatchMakingManager : MonoBehaviour
     /// <summary>
     /// Cancels the matchmaking process and cleans up all connections.
     /// </summary>
-    [ProButton]
     public IEnumerator CancelMatchMaking()
     {
         if (matchMakingService == null || webSocketService == null)
@@ -191,8 +189,6 @@ public class MatchMakingManager : MonoBehaviour
         }
     }
 
-
-    [ProButton]
     private void HandleP2PConnected()
     {
         Debug.Log("[MatchMakingManager] P2P connected, starting cleanup and scene transition...");
