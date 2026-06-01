@@ -414,13 +414,13 @@ namespace com.cyborgAssets.internalIBPEditor
                 var rect = EditorGUILayout.GetControlRect();
                 var currentColor = GUI.color;
                 GUI.color = checkResult ? currentColor : Color.red;
-                var buttonPressed = GUI.Button(rect, methodParams.Key.Name);
+                var butted = GUI.Button(rect, methodParams.Key.Name);
                 GUI.color = currentColor;
 
                 if (string.IsNullOrEmpty(error) && !checkResult)
                     error = attribute.Error;
 
-                if (buttonPressed)
+                if (butted)
                 {
                     //AssemblyUpdate();
 

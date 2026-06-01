@@ -273,13 +273,13 @@ namespace com.cyborgAssets.internalIBPProPrem
                 var rect = EditorGUILayout.GetControlRect();
                 var currentColor = GUI.color;
                 GUI.color = checkResult ? currentColor : Color.red;
-                var buttonPressed = GUI.Button(rect, serializedMethodName);
+                var butted = GUI.Button(rect, serializedMethodName);
                 GUI.color = currentColor;
 
                 if (string.IsNullOrEmpty(error) && !checkResult)
                     error = attribute.Error;
 
-                if (buttonPressed)
+                if (butted)
                 {
                     //AbstractEditor.AssemblyUpdate();
 
