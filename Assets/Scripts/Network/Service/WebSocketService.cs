@@ -6,13 +6,20 @@ using UnityEngine;
 
 public class WebSocketService : MonoBehaviour
 {
-    private string baseUrl = "ws://localhost:8080";
+    [SerializeField] private NetworkDataSO networkData;
+
+    [SerializeField] private string baseUrl = "";
     private string basePath = "/ws/";
     private WebSocket _ws;
 
     public event Action<WsMessage> OnMessageReceived;
     public event Action OnConnected;
     public event Action OnDisconnected;
+
+    void Awake()
+    {
+        baseUrl = networkData.BaseWebSocketSchema() + networkData.BaseUrl();
+    }
 
     // ─────────────────────────────────────────────
     // Connect / Disconnect
