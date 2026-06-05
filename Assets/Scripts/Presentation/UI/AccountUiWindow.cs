@@ -15,6 +15,11 @@ public class AccountUiWindow : WindowUiController
         
     }
 
+    public void GoToEditPassword()
+    {
+        
+    }
+
     public void Logout()
     {
         

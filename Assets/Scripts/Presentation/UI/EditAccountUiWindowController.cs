@@ -7,8 +7,6 @@ public class EditAccountUiWindowController : WindowUiController
     [SerializeField] private GameObject emailInputFieldObject;
     [SerializeField] private TMP_InputField usernameInputField;
     [SerializeField] private GameObject usernameInputFieldObject;
-    [SerializeField] private TMP_InputField passwordInputField;
-    [SerializeField] private GameObject passwordInputFieldObject;
 
     public void Save()
     {
