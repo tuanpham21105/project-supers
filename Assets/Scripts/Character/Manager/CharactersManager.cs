@@ -70,7 +70,7 @@ public class CharactersManager : MonoBehaviour
 
             characters.Add(character);
 
-            if (playerData.player.CompareTo(player) == 0) 
+            if (playerData.username.CompareTo(player) == 0) 
                 CameraController.instance.SetCharacter(character.transform);
         }
 

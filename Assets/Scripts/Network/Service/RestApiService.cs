@@ -34,106 +34,105 @@ public class RestApiService : MonoBehaviour
 
         baseUrl = networkData.BaseRestSchema() + networkData.BaseUrl();
     }
-
-    // ─────────────────────────────────────────────
-    // Public Methods
-    // ─────────────────────────────────────────────
-
-    public void Get<T>(
-        string path,
-        Action<T> onSuccess,
-        Action<string> onError = null,
-        Dictionary<string, string> headers = null)
-    {
-        StartCoroutine(SendRequest<T>(
-            method:    "GET",
-            path:      path,
-            body:      null,
-            headers:   headers,
-            onSuccess: onSuccess,
-            onError:   onError
-        ));
-    }
-
-    public void Post<T>(
-        string path,
-        object body,
-        Action<T> onSuccess,
-        Action<string> onError = null,
-        Dictionary<string, string> headers = null)
-    {
-        StartCoroutine(SendRequest<T>(
-            method:    "POST",
-            path:      path,
-            body:      body,
-            headers:   headers,
-            onSuccess: onSuccess,
-            onError:   onError
-        ));
-    }
-
-    public void Put<T>(
-        string path,
-        object body,
-        Action<T> onSuccess,
-        Action<string> onError = null,
-        Dictionary<string, string> headers = null)
-    {
-        StartCoroutine(SendRequest<T>(
-            method:    "PUT",
-            path:      path,
-            body:      body,
-            headers:   headers,
-            onSuccess: onSuccess,
-            onError:   onError
-        ));
-    }
-
-    public void Patch<T>(
-        string path,
-        object body,
-        Action<T> onSuccess,
-        Action<string> onError = null,
-        Dictionary<string, string> headers = null)
-    {
-        StartCoroutine(SendRequest<T>(
-            method:    "PATCH",
-            path:      path,
-            body:      body,
-            headers:   headers,
-            onSuccess: onSuccess,
-            onError:   onError
-        ));
-    }
-
-    public void Delete<T>(
-        string path,
-        Action<T> onSuccess,
-        Action<string> onError = null,
-        Dictionary<string, string> headers = null,
-        object body = null)
-    {
-        StartCoroutine(SendRequest<T>(
-            method:    "DELETE",
-            path:      path,
-            body:      body,
-            headers:   headers,
-            onSuccess: onSuccess,
-            onError:   onError
-        ));
-    }
-
+    
     // ─────────────────────────────────────────────
     // Core
     // ─────────────────────────────────────────────
 
-    private IEnumerator SendRequest<T>(
+    public IEnumerator SendRequestWithJwt<T>(
         string method,
         string path,
         object body,
         Dictionary<string, string> headers,
         Action<T> onSuccess,
-        Action<string> onError)
+        Action<long, string> onError)
+    {
+        yield return SendRequestWithJwtInternal<T>(method, path, body, headers, onSuccess, onError, false);
+    }
+
+    private IEnumerator SendRequestWithJwtInternal<T>(
+        string method,
+        string path,
+        object body,
+        Dictionary<string, string> headers,
+        Action<T> onSuccess,
+        Action<long, string> onError,
+        bool isRetry)
+    {
+        if (headers == null)
+        {
+            headers = new Dictionary<string, string>();
+        }
+        else
+        {
+            headers = new Dictionary<string, string>(headers);
+        }
+
+        string token = CookieService.Get("accessToken");
+        if (!string.IsNullOrEmpty(token))
+        {
+            headers["Authorization"] = "Bearer " + token;
+        }
+        else
+        {
+            headers.Remove("Authorization");
+        }
+
+        yield return SendRequest<T>(
+            method,
+            path,
+            body,
+            headers,
+            onSuccess,
+            (statusCode, errMsg) =>
+            {
+                if (statusCode == 403 && !isRetry)
+                {
+                    Debug.LogWarning("[REST] 403 Forbidden/Unauthorized. Attempting to refresh access token...");
+                    if (PlayerAuthService.instance != null)
+                    {
+                        PlayerAuthService.instance.RefreshAccessToken(
+                            (refreshResponse) =>
+                            {
+                                Debug.Log("[REST] Token refresh successful. Retrying original request...");
+                                StartCoroutine(SendRequestWithJwtInternal<T>(
+                                    method,
+                                    path,
+                                    body,
+                                    headers,
+                                    onSuccess,
+                                    onError,
+                                    true
+                                ));
+                            },
+                            (refreshCode, refreshMsg) =>
+                            {
+                                Debug.LogError($"[REST] Token refresh failed ({refreshCode}): {refreshMsg}. Logging out...");
+                                PlayerAuthService.instance.Logout();
+                                onError?.Invoke(statusCode, errMsg);
+                            }
+                        );
+                    }
+                    else
+                    {
+                        onError?.Invoke(statusCode, errMsg);
+                    }
+                }
+                else
+                {
+                    onError?.Invoke(statusCode, errMsg);
+                }
+            }
+        );
+    }
+
+    public IEnumerator SendRequest<T>(
+        string method,
+        string path,
+        object body,
+        Dictionary<string, string> headers,
+        Action<T> onSuccess,
+        Action<long, string> onError)
     {
         string url = baseUrl + path;
         byte[] bodyBytes = null;
@@ -167,8 +166,8 @@ public class RestApiService : MonoBehaviour
             if (req.result != UnityWebRequest.Result.Success)
             {
                 string errMsg = $"[REST] {method} {url} → {req.responseCode} {req.error}";
-                Debug.LogError(errMsg);
-                onError?.Invoke(errMsg);
+                Debug.LogError(errMsg); 
+                onError?.Invoke(req.responseCode, errMsg);
                 yield break;
             }
 
@@ -185,7 +184,7 @@ public class RestApiService : MonoBehaviour
             {
                 string errMsg = $"[REST] Parse error: {e.Message}\nRaw: {responseText}";
                 Debug.LogError(errMsg);
-                onError?.Invoke(errMsg);
+                onError?.Invoke(200, errMsg);
             }
         }
     }

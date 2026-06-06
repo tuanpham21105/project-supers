@@ -7,7 +7,9 @@ public class PlayerData : MonoBehaviour
 {
     public static PlayerData instance;
 
-    public String player;
+    public String email;
+    public String username;
+    public String createdDate;
 
     void Awake()
     {
@@ -21,8 +23,8 @@ public class PlayerData : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void updatePlayerName(string text)
+    public void updateUsername(string text)
     {
-        player = text;
+        username = text;
     }
 }

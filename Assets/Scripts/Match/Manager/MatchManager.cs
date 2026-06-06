@@ -77,16 +77,16 @@ public class MatchManager : MonoBehaviour
 
     public bool IsPlayerHost()
     {
-        return hostPlayer.CompareTo(PlayerData.instance.player) == 0;
+        return hostPlayer.CompareTo(PlayerData.instance.username) == 0;
     }
     [ProButton]
     public void SetPlayerHost(string player)
     {
-        Debug.Log($"[MatchManager] Setting new host: {player} (local player: {PlayerData.instance.player})");
+        Debug.Log($"[MatchManager] Setting new host: {player} (local player: {PlayerData.instance.username})");
 
         hostPlayer = player;
 
-        bool isLocalPlayerNewHost = player.CompareTo(PlayerData.instance.player) == 0;
+        bool isLocalPlayerNewHost = player.CompareTo(PlayerData.instance.username) == 0;
         CharactersManager.instance.switchCharacterMode(isLocalPlayerNewHost);
     }
 

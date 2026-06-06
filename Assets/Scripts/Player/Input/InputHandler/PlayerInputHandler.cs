@@ -30,14 +30,14 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void HandleFlyingInterrupted(string player)
     {
-        if (PlayerData.instance.player.CompareTo(player) == 0)
+        if (PlayerData.instance.username.CompareTo(player) == 0)
             playerInputController.HandleFlyingInterrupted();
     }
 
     public void ControlCharacterAction(CharacterActions action, bool state)
     {
         if (MatchManager.instance.IsPlayerHost())
-            CharactersManager.instance.ControlCharacterAction(PlayerData.instance.player, action, state);
+            CharactersManager.instance.ControlCharacterAction(PlayerData.instance.username, action, state);
         else
             ClientPacketSender.instance.sendControlAction(action, state);
     }
@@ -45,7 +45,7 @@ public class PlayerInputHandler : MonoBehaviour
     public void ControlCharacterRotation(Vector3 direction)
     {
         if (MatchManager.instance.IsPlayerHost())
-            CharactersManager.instance.ControlCharacterRotation(PlayerData.instance.player, direction);
+            CharactersManager.instance.ControlCharacterRotation(PlayerData.instance.username, direction);
         else
             ClientPacketSender.instance.sendControlRotation(direction);
     }

@@ -27,7 +27,7 @@ public class WebSocketService : MonoBehaviour
 
     public async Task Connect()
     {
-        string url = baseUrl + basePath + PlayerData.instance.player;
+        string url = baseUrl + basePath + PlayerData.instance.username;
         _ws = new WebSocket(url);
 
         _ws.OnOpen += () =>
