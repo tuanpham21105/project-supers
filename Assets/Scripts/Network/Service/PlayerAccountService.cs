@@ -52,12 +52,17 @@ public class PlayerAccountService : MonoBehaviour
     /// <summary>
     /// Updates the current player's account details (email, username, password).
     /// </summary>
-    public void UpdatePlayerAccount(PlayerAccountUpdateRequest request, Action<PlayerAccountResponse> onSuccess, Action<long, string> onError)
+    public void UpdatePlayerAccount(String email, String username, Action<PlayerAccountResponse> onSuccess, Action<long, string> onError)
     {
+        PlayerAccountUpdateRequest body = new PlayerAccountUpdateRequest()
+        {
+            email = email,
+            username = username
+        };
         StartCoroutine(RestApiService.instance.SendRequestWithJwt<PlayerAccountResponse>(
             "PUT",
             "/api/player/account",
-            request,
+            body,
             null,
             onSuccess,
             onError

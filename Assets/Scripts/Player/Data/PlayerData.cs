@@ -10,6 +10,7 @@ public class PlayerData : MonoBehaviour
     public String email;
     public String username;
     public String createdDate;
+    public bool isGuest;
 
     void Awake()
     {

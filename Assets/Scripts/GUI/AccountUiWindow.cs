@@ -10,18 +10,18 @@ public class AccountUiWindow : WindowUiController
     [SerializeField] private TMP_InputField createdDateTextField;
     [SerializeField] private GameObject createdDateTextFieldObject;
 
-    public void GoToEditAccount()
-    {
-        
-    }
-
-    public void GoToEditPassword()
-    {
-        
-    }
-
     public void Logout()
     {
-        
+        PlayerAuthService.instance.Logout();
+        SceneService.instance.ReloadCurrentScene();
+    }
+
+    public override void OnOpenWindow()
+    {
+        base.OnOpenWindow();
+
+        usernameTextField.text = PlayerData.instance.username;
+        emailTextField.text = PlayerData.instance.email;
+        createdDateTextField.text = PlayerData.instance.createdDate;
     }
 }

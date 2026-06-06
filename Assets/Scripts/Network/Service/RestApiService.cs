@@ -86,9 +86,9 @@ public class RestApiService : MonoBehaviour
             onSuccess,
             (statusCode, errMsg) =>
             {
-                if (statusCode == 403 && !isRetry)
+                if (statusCode == 401 && !isRetry)
                 {
-                    Debug.LogWarning("[REST] 403 Forbidden/Unauthorized. Attempting to refresh access token...");
+                    Debug.LogWarning("[REST] 401 Unauthorized. Attempting to refresh access token...");
                     if (PlayerAuthService.instance != null)
                     {
                         PlayerAuthService.instance.RefreshAccessToken(
@@ -165,9 +165,27 @@ public class RestApiService : MonoBehaviour
             // Error
             if (req.result != UnityWebRequest.Result.Success)
             {
-                string errMsg = $"[REST] {method} {url} → {req.responseCode} {req.error}";
-                Debug.LogError(errMsg); 
-                onError?.Invoke(req.responseCode, errMsg);
+                string errorResponseText = req.downloadHandler.text;
+                string finalErrorMsg = req.error;
+
+                if (!string.IsNullOrEmpty(errorResponseText))
+                {
+                    try
+                    {
+                        var errorResponse = JsonConvert.DeserializeObject<MessageResponse<string>>(errorResponseText, _jsonSettings);
+                        if (errorResponse != null && !string.IsNullOrEmpty(errorResponse.message))
+                        {
+                            finalErrorMsg = errorResponse.message;
+                        }
+                    }
+                    catch
+                    {
+                        // If parsing fails, stick with the default req.error
+                    }
+                }
+
+                Debug.LogError($"[REST] {method} {url} → {req.responseCode} | Error: {finalErrorMsg}");
+                onError?.Invoke(req.responseCode, finalErrorMsg);
                 yield break;
             }
 

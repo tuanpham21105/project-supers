@@ -8,13 +8,26 @@ public class GuestAccountUiWindowController : WindowUiController
     [SerializeField] private TMP_InputField createdDateextField;
     [SerializeField] private GameObject createdDateTextFieldObject;
 
-    public void GoToSignUp()
-    {
-        
-    }
-
     public void DeleteGuestAccount()
     {
-        
+        PlayerAccountService.instance.DeletePlayerAccount(
+            (response) =>
+            {
+                Debug.Log("[GuestAccountUiWindowController] Delete account successful.");
+                SceneService.instance.ReloadCurrentScene();
+            },
+            (code, message) =>
+            {
+                Debug.LogError($"[GuestAccountUiWindowController] Delete account failed: {message}");
+            }
+        );
+    }
+
+    public override void OnOpenWindow()
+    {
+        base.OnOpenWindow();
+
+        guestUsernameTextField.text = PlayerData.instance.username;
+        createdDateextField.text = PlayerData.instance.createdDate;
     }
 }

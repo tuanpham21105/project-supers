@@ -146,6 +146,30 @@ public class PlayerAuthService : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks if an access token exists in cookies.
+    /// </summary>
+    public bool IsAccessTokenExists()
+    {
+        return !string.IsNullOrEmpty(CookieService.Get(AccessTokenKey));
+    }
+
+    /// <summary>
+    /// Checks if a refresh token exists in cookies.
+    /// </summary>
+    public bool IsRefreshTokenExists()
+    {
+        return !string.IsNullOrEmpty(CookieService.Get(RefreshTokenKey));
+    }
+
+    /// <summary>
+    /// Checks if the player is logged in (both tokens exist).
+    /// </summary>
+    public bool IsLoggedIn()
+    {
+        return IsAccessTokenExists() && IsRefreshTokenExists();
+    }
+
+    /// <summary>
     /// Helper to save auth response tokens to cookies.
     /// </summary>
     private void SaveTokens(PlayerAuthResponse response)
