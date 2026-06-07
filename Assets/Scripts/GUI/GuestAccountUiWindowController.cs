@@ -14,6 +14,7 @@ public class GuestAccountUiWindowController : WindowUiController
             (response) =>
             {
                 Debug.Log("[GuestAccountUiWindowController] Delete account successful.");
+                PlayerAuthService.instance.Logout();
                 SceneService.instance.ReloadCurrentScene();
             },
             (code, message) =>

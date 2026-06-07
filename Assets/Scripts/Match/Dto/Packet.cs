@@ -77,3 +77,14 @@ public class NewHostEventPacket : Packet
         type = "NEW_HOST";
     }
 }
+
+[Serializable]
+public class ClientInfoPacket : Packet
+{
+    public String clientUsername;
+
+    public ClientInfoPacket()
+    {
+        type = "CLIENT_INFO";
+    }
+}

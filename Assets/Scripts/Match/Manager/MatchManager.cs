@@ -40,13 +40,13 @@ public class MatchManager : MonoBehaviour
             players = MatchData.players;
         }
 
-        TabVisibilityService.instance.OnTabHidden += handleLostFocus;
-
         // Only the host sends LOAD_MATCH to tell the client to load the scene
         if (IsPlayerHost())
         {
             StartCoroutine(SendLoadMatchToClient());
         }
+
+        TabVisibilityService.instance.OnTabHidden += handleLostFocus;
     }
 
     private IEnumerator SendLoadMatchToClient()

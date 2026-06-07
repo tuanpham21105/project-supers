@@ -1,36 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Đặt GameObject này ở scene đầu tiên.
+/// Gọi SceneService.instance để dùng ở bất kỳ đâu.
+/// </summary>
 public class SceneService : MonoBehaviour
 {
     public static SceneService instance;
 
+    [Header("Scene Names")]
+    [SerializeField] private string loadingSceneName = "LoadingScene";
+
+    // Scene đích được lưu lại để LoadingSceneController đọc
+    public static string TargetScene { get; private set; }
+
     void Awake()
     {
-        if (instance != null && instance != this)
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
         {
             Destroy(gameObject);
-            return;
         }
-
-        instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
+    // ─────────────────────────────────────────────
+    // Public API
+    // ─────────────────────────────────────────────
+
+    /// <summary>Load scene mới qua Loading Screen</summary>
+    public void LoadScene(string sceneName)
+    {
+        TargetScene = sceneName;
+        SceneManager.LoadScene(loadingSceneName);
+    }
+
+    /// <summary>Reload scene hiện tại qua Loading Screen</summary>
     public void ReloadCurrentScene()
     {
-        StartCoroutine(ReloadScene());
+        LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    IEnumerator ReloadScene()
+    /// <summary>Load scene trực tiếp không qua Loading Screen</summary>
+    public void LoadSceneDirect(string sceneName)
     {
-        AsyncOperation op =
-            SceneManager.LoadSceneAsync(
-                SceneManager.GetActiveScene().buildIndex);
-
-        while (!op.isDone)
-            yield return null;
+        SceneManager.LoadScene(sceneName);
     }
 }

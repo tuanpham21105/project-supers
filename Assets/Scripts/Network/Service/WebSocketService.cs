@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NativeWebSocket;
 using Newtonsoft.Json;
@@ -12,12 +13,23 @@ public class WebSocketService : MonoBehaviour
     private string basePath = "/ws/";
     private WebSocket _ws;
 
+    public static WebSocketService instance;
+
     public event Action<WsMessage> OnMessageReceived;
     public event Action OnConnected;
     public event Action OnDisconnected;
 
     void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         baseUrl = networkData.BaseWebSocketSchema() + networkData.BaseUrl();
     }
 
@@ -27,8 +39,17 @@ public class WebSocketService : MonoBehaviour
 
     public async Task Connect()
     {
-        string url = baseUrl + basePath + PlayerData.instance.username;
-        _ws = new WebSocket(url);
+        string token = CookieService.Get("accessToken");
+        
+        string url = baseUrl + basePath + PlayerData.instance.username + "?token=" + token;
+
+        // Thêm headers vào Dictionary
+        Dictionary<string, string> headers = new Dictionary<string, string>
+        {
+            { "Authorization", "Bearer " + token}
+        };
+
+        _ws = new WebSocket(url, headers);
 
         _ws.OnOpen += () =>
         {
