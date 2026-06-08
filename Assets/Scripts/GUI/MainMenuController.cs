@@ -58,6 +58,7 @@ public class MainMenuController : MonoBehaviour
                 Debug.Log($"[MainMenuController] Player data loaded: {response.username}");
 
                 MainMenuSidebarUiController.instance.SetupSidebarUi();
+                MainMenuHeaderUiController.instance.SetupHeaderUi();
             },
             (code, message) =>
             {

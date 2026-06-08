@@ -19,7 +19,15 @@ public class MatchMakingController : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnDestroy()
@@ -236,6 +244,8 @@ public class MatchMakingController : MonoBehaviour
             MatchData.players.Add(PlayerData.instance.username);
 
             StopCoroutine(peerConnectionTimeoutCouroutine);
+
+            SceneService.instance.LoadSceneDirect("LoadingScene");
         }
         else if (packet.type.CompareTo("LOAD_MATCH") == 0 && PlayerData.instance.username.CompareTo(MatchData.hostPlayer) != 0)
         {
