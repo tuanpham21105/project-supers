@@ -79,7 +79,7 @@ public class MatchManager : MonoBehaviour
     {
         return hostPlayer.CompareTo(PlayerData.instance.username) == 0;
     }
-    [ProButton]
+   
     public void SetPlayerHost(string player)
     {
         Debug.Log($"[MatchManager] Setting new host: {player} (local player: {PlayerData.instance.username})");
