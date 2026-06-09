@@ -118,6 +118,67 @@ public class CharactersManager : MonoBehaviour
             states.forward = Vec3.From(characters[i].transform.forward);
             states.physicsColliderHeight = characters[i].GetComponent<CharacterController>().height;
             states.physicsColliderRadius = characters[i].GetComponent<CharacterController>().radius;
+
+            CharacterStatesData statesData = characters[i].GetComponent<CharacterStatesData>();
+            
+            states.currentProcessAction = statesData.currentProcessAction.ToString();
+
+            states.moveFlag = statesData.moveFlag;
+            states.jumpFlag = statesData.jumpFlag;
+            states.sprintFlag = statesData.sprintFlag;
+            states.dashFlag = statesData.dashFlag;
+            states.dashCooldownFlag = statesData.dashCooldownFlag;
+            states.flyFlag = statesData.flyFlag;
+            states.flyUpFlag = statesData.flyUpFlag;
+            states.flyDownFlag = statesData.flyDownFlag;
+            states.fastFlyFlag = statesData.fastFlyFlag;
+            states.attackFlag = statesData.attackFlag;
+            states.normalAttackStartFlag = statesData.normalAttackStartFlag;
+            states.normalAttackOngoingFlag = statesData.normalAttackOngoingFlag;
+            states.normalAttackEndFlag = statesData.normalAttackEndFlag;
+            states.strikeAttackStartFlag = statesData.strikeAttackStartFlag;
+            states.strikeAttackOngoingFlag = statesData.strikeAttackOngoingFlag;
+            states.strikeAttackEndFlag = statesData.strikeAttackEndFlag;
+            states.knockAwayFlag = statesData.knockAwayFlag;
+            states.blockFlag = statesData.blockFlag;
+            states.deflectFlag = statesData.deflectFlag;
+            states.upperActionFlag = statesData.upperActionFlag;
+            states.bodyActionFlag = statesData.bodyActionFlag;
+            states.hitFlag = statesData.hitFlag;
+            states.deflectedFlag = statesData.deflectedFlag;
+            states.deadFlag = statesData.deadFlag;
+            states.fallFlag = statesData.fallFlag;
+
+            states.currentEndurance = statesData.currentEndurance;
+            states.moveSpeed = statesData.moveSpeed;
+
+            states.inputAxes = Vec3.From(statesData.inputAxes);
+            states.lookInput = Vec3.From(statesData.lookInput);
+            states.direction = Vec3.From(statesData.direction);
+
+            states.currentBodyAnimation = statesData.currentBodyAnimation.ToString();
+
+            states.lastNormalAttackEndTime = statesData.lastNormalAttackEndTime;
+            states.lastStrikeAttackEndTime = statesData.lastStrikeAttackEndTime;
+
+            states.lastDeflectTime = statesData.lastDeflectTime;
+            states.currentDeflectSpeed = statesData.currentDeflectSpeed;
+
+            states.normalAttackComboIndex = statesData.normalAttackComboIndex;
+            states.strikeAttackComboIndex = statesData.strikeAttackComboIndex;
+            states.hitAnimationIndex = statesData.hitAnimationIndex;
+
+            states.verticalVelocity = statesData.verticalVelocity;
+            states.impactForce = Vec3.From(statesData.impactForce);
+            states.dashForce = Vec3.From(statesData.dashForce);
+            states.dashTimer = statesData.dashTimer;
+            states.horizontalMove = Vec3.From(statesData.horizontalMove);
+            states.isImpactActive = statesData.isImpactActive;
+            states.currentMoveDirection = Vec3.From(statesData.currentMoveDirection);
+            states.currentSqrMoveSpeed = statesData.currentSqrMoveSpeed;
+
+            states.isFront = statesData.isFront;
+
             data.playersStates.Add(matchData.GetPlayers()[i], states);
         }
         hostPeerConnectionSender.sendPlayersCharacterStates(data);
@@ -132,46 +193,46 @@ public class CharactersManager : MonoBehaviour
         switch (action)
         {
             case CharacterActions.MoveForward:
-                controller.MoveForward(state);
+                controller.SetMoveForward(state);
                 break;
             case CharacterActions.MoveBackward:
-                controller.MoveBackward(state);
+                controller.SetMoveBackward(state);
                 break;
             case CharacterActions.MoveLeft:
-                controller.MoveLeft(state);
+                controller.SetMoveLeft(state);
                 break;
             case CharacterActions.MoveRight:
-                controller.MoveRight(state);
+                controller.SetMoveRight(state);
                 break;
             case CharacterActions.Sprint:
-                controller.Sprint(state);
+                controller.SetSprint(state);
                 break;
             case CharacterActions.Dash:
-                controller.Dash(state);
+                controller.SetDash(state);
                 break;
             case CharacterActions.ToggleFly:
-                controller.ToggleFly(state);
+                controller.SetToggleFly(state);
                 break;
             case CharacterActions.Jump:
-                controller.Jump(state);
+                controller.SetJump(state);
                 break;
             case CharacterActions.FlyUp:
-                controller.FlyUp(state);
+                controller.SetFlyUp(state);
                 break;
             case CharacterActions.FlyDown:
-                controller.FlyDown(state);
+                controller.SetFlyDown(state);
                 break;
             case CharacterActions.NormalAttack:
-                controller.NormalAttack(state);
+                controller.SetNormalAttack(state);
                 break;
             case CharacterActions.StrikeAttack:
-                controller.StrikeAttack(state);
+                controller.SetStrikeAttack(state);
                 break;
             case CharacterActions.Block:
-                controller.Block(state);
+                controller.SetBlock(state);
                 break;
             case CharacterActions.Deflect:
-                controller.Deflect(state);
+                controller.SetDeflect(state);
                 break;
         }
     }
@@ -181,7 +242,7 @@ public class CharactersManager : MonoBehaviour
         int index = matchData.GetPlayerIndex(player);
         GameObject character = characters[index];
         CharacterActionController controller = character.GetComponent<CharacterActionController>();
-        controller.Rotation(direction);
+        controller.SetRotation(direction);
     }
 
     //
@@ -204,6 +265,7 @@ public class CharactersManager : MonoBehaviour
 
         controller.ApplyTransform(characterStatesDTO.position.ToVector3(), characterStatesDTO.forward.ToVector3());
         controller.ApplyPhysicsCollider(characterStatesDTO.physicsColliderRadius, characterStatesDTO.physicsColliderHeight);
+        controller.ApplyStates(characterStatesDTO);
     }
 
     // Switch Character mode

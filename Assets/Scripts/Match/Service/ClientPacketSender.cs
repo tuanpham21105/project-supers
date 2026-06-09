@@ -27,11 +27,10 @@ public class ClientPacketSender : MonoBehaviour
         }
 
         // Verify sender is the host
-        if (MatchManager.instance.IsPlayerHost())
-        {
-            // Debug.LogWarning("[ClientPacketSender] Host cannot send client actions.");
-            return;
-        }
+        // if (MatchManager.instance.IsPlayerHost())
+        // {
+        //     return;
+        // }
 
         ActionEventPacket packet = new ActionEventPacket();
         packet.action = action.ToString();

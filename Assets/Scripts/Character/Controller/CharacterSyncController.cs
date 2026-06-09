@@ -74,4 +74,73 @@ public class CharacterSyncController : MonoBehaviour
         GetComponent<CharacterController>().radius = radius;
         GetComponent<CharacterController>().height = height;
     }
+
+    public void ApplyStates(CharacterStatesDto statesDto)
+    {
+        CharacterStatesData statesData = GetComponent<CharacterStatesData>();
+
+        if (Enum.TryParse(statesDto.currentProcessAction, out CharacterProcessAction processAction))
+        {
+            statesData.currentProcessAction = processAction;
+        }
+
+        statesData.moveFlag = statesDto.moveFlag;
+        statesData.jumpFlag = statesDto.jumpFlag;
+        statesData.sprintFlag = statesDto.sprintFlag;
+        statesData.dashFlag = statesDto.dashFlag;
+        statesData.dashCooldownFlag = statesDto.dashCooldownFlag;
+        statesData.flyFlag = statesDto.flyFlag;
+        statesData.flyUpFlag = statesDto.flyUpFlag;
+        statesData.flyDownFlag = statesDto.flyDownFlag;
+        statesData.fastFlyFlag = statesDto.fastFlyFlag;
+        statesData.attackFlag = statesDto.attackFlag;
+        statesData.normalAttackStartFlag = statesDto.normalAttackStartFlag;
+        statesData.normalAttackOngoingFlag = statesDto.normalAttackOngoingFlag;
+        statesData.normalAttackEndFlag = statesDto.normalAttackEndFlag;
+        statesData.strikeAttackStartFlag = statesDto.strikeAttackStartFlag;
+        statesData.strikeAttackOngoingFlag = statesDto.strikeAttackOngoingFlag;
+        statesData.strikeAttackEndFlag = statesDto.strikeAttackEndFlag;
+        statesData.knockAwayFlag = statesDto.knockAwayFlag;
+        statesData.blockFlag = statesDto.blockFlag;
+        statesData.deflectFlag = statesDto.deflectFlag;
+        statesData.upperActionFlag = statesDto.upperActionFlag;
+        statesData.bodyActionFlag = statesDto.bodyActionFlag;
+        statesData.hitFlag = statesDto.hitFlag;
+        statesData.deflectedFlag = statesDto.deflectedFlag;
+        statesData.deadFlag = statesDto.deadFlag;
+        statesData.fallFlag = statesDto.fallFlag;
+
+        statesData.currentEndurance = statesDto.currentEndurance;
+        statesData.moveSpeed = statesDto.moveSpeed;
+
+        statesData.inputAxes = statesDto.inputAxes.ToVector2();
+        statesData.lookInput = statesDto.lookInput.ToVector3();
+        statesData.direction = statesDto.direction.ToVector3();
+
+        if (Enum.TryParse(statesDto.currentBodyAnimation, out CharacterBodyAnimation bodyAnimation))
+        {
+            statesData.currentBodyAnimation = bodyAnimation;
+        }
+
+        statesData.lastNormalAttackEndTime = statesDto.lastNormalAttackEndTime;
+        statesData.lastStrikeAttackEndTime = statesDto.lastStrikeAttackEndTime;
+
+        statesData.lastDeflectTime = statesDto.lastDeflectTime;
+        statesData.currentDeflectSpeed = statesDto.currentDeflectSpeed;
+
+        statesData.normalAttackComboIndex = statesDto.normalAttackComboIndex;
+        statesData.strikeAttackComboIndex = statesDto.strikeAttackComboIndex;
+        statesData.hitAnimationIndex = statesDto.hitAnimationIndex;
+
+        statesData.verticalVelocity = statesDto.verticalVelocity;
+        statesData.impactForce = statesDto.impactForce.ToVector3();
+        statesData.dashForce = statesDto.dashForce.ToVector3();
+        statesData.dashTimer = statesDto.dashTimer;
+        statesData.horizontalMove = statesDto.horizontalMove.ToVector3();
+        statesData.isImpactActive = statesDto.isImpactActive;
+        statesData.currentMoveDirection = statesDto.currentMoveDirection.ToVector3();
+        statesData.currentSqrMoveSpeed = statesDto.currentSqrMoveSpeed;
+
+        statesData.isFront = statesDto.isFront;
+    }
 }

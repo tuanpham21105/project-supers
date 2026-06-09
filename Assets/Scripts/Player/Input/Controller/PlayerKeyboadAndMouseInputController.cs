@@ -11,7 +11,6 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     [SerializeField] private CameraController cameraController;
 
-    public Vector2 moveDirectionInput;
     public bool sprintInput;
     public bool dashInput;
     public bool toggleFlyInput;
@@ -100,13 +99,13 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         _leftInput = ProcessInput(keybinds.strafeLeftKey, _leftInput);
         _rightInput = ProcessInput(keybinds.strafeRightKey, _rightInput);
 
-        // if (_forwardInput != prevForward)
+        if (_forwardInput != prevForward)
             playerInputHandler.ControlCharacterAction(CharacterActions.MoveForward, _forwardInput);
-        // if (_backwardInput != prevBackward)
+        if (_backwardInput != prevBackward)
             playerInputHandler.ControlCharacterAction(CharacterActions.MoveBackward, _backwardInput);
-        // if (_leftInput != prevLeft)
+        if (_leftInput != prevLeft)
             playerInputHandler.ControlCharacterAction(CharacterActions.MoveLeft, _leftInput);
-        // if (_rightInput != prevRight)
+        if (_rightInput != prevRight)
             playerInputHandler.ControlCharacterAction(CharacterActions.MoveRight, _rightInput);
 
         HandleOnceActivation(ref _forwardInput, keybinds.forwardKey);
@@ -117,19 +116,22 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     public override void SprintInput()
     {
+        bool prev = sprintInput;
         bool currentSprintInput = ProcessInput(keybinds.sprintKey, sprintInput);
 
         sprintInput = currentSprintInput;
 
-        playerInputHandler.ControlCharacterAction(CharacterActions.Sprint, sprintInput);
+        if (sprintInput != prev)
+            playerInputHandler.ControlCharacterAction(CharacterActions.Sprint, sprintInput);
 
         HandleOnceActivation(ref sprintInput, keybinds.sprintKey);
     }
 
     public override void DashInput()
     {
+        bool prev = dashInput;
         dashInput = ProcessInput(keybinds.dashKey, dashInput);
-        if (dashInput)
+        if (dashInput != prev && dashInput)
         {
             playerInputHandler.ControlCharacterAction(CharacterActions.Dash, true);
             HandleOnceActivation(ref dashInput, keybinds.dashKey);
@@ -138,19 +140,22 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     public override void ToggleFlyInput()
     {
+        bool prev = toggleFlyInput;
         bool currentFlyInput = ProcessInput(keybinds.toggleFlyKey, toggleFlyInput);
 
         toggleFlyInput = currentFlyInput;
 
-        playerInputHandler.ControlCharacterAction(CharacterActions.ToggleFly, toggleFlyInput);
+        if (toggleFlyInput != prev)
+            playerInputHandler.ControlCharacterAction(CharacterActions.ToggleFly, toggleFlyInput);
 
         HandleOnceActivation(ref toggleFlyInput, keybinds.toggleFlyKey);
     }
 
     public override void JumpInput()
     {
+        bool prev = jumpInput;
         jumpInput = ProcessInput(keybinds.jumpKey, jumpInput);
-        if (jumpInput)
+        if (jumpInput != prev && jumpInput)
         {
             playerInputHandler.ControlCharacterAction(CharacterActions.Jump, true);
             HandleOnceActivation(ref jumpInput, keybinds.jumpKey);
@@ -159,30 +164,35 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     public override void FlyUpInput()
     {
+        bool prev = flyUpInput;
         bool currentInput = ProcessInput(keybinds.flyUpKey, flyUpInput);
         
         flyUpInput = currentInput;
 
-        playerInputHandler.ControlCharacterAction(CharacterActions.FlyUp, flyUpInput);
+        if (flyUpInput != prev)
+            playerInputHandler.ControlCharacterAction(CharacterActions.FlyUp, flyUpInput);
 
         HandleOnceActivation(ref flyUpInput, keybinds.flyUpKey);
     }
 
     public override void FlyDownInput()
     {
+        bool prev = flyDownInput;
         bool currentInput = ProcessInput(keybinds.flyDownKey, flyDownInput);
         
         flyDownInput = currentInput;
 
-        playerInputHandler.ControlCharacterAction(CharacterActions.FlyDown, flyDownInput);
+        if (flyDownInput != prev)
+            playerInputHandler.ControlCharacterAction(CharacterActions.FlyDown, flyDownInput);
 
         HandleOnceActivation(ref flyDownInput, keybinds.flyDownKey);
     }
 
     public override void NormalAttackInput()
     {
+        bool prev = normalAttackInput;
         normalAttackInput = ProcessInput(keybinds.normalAttackKey, normalAttackInput);
-        if (normalAttackInput)
+        if (normalAttackInput != prev && normalAttackInput)
         {
             playerInputHandler.ControlCharacterAction(CharacterActions.NormalAttack, true);
             HandleOnceActivation(ref normalAttackInput, keybinds.normalAttackKey);
@@ -191,8 +201,9 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     public override void StrikeAttackInput()
     {
+        bool prev = strikeAttackInput;
         strikeAttackInput = ProcessInput(keybinds.strikeAttackKey, strikeAttackInput);
-        if (strikeAttackInput)
+        if (strikeAttackInput != prev && strikeAttackInput)
         {
             playerInputHandler.ControlCharacterAction(CharacterActions.StrikeAttack, true);
             HandleOnceActivation(ref strikeAttackInput, keybinds.strikeAttackKey);
@@ -201,18 +212,21 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     public override void BlockInput()
     {
+        bool prev = blockInput;
         bool currentInput = ProcessInput(keybinds.blockKey, blockInput);
         blockInput = currentInput;
 
-        playerInputHandler.ControlCharacterAction(CharacterActions.Block, blockInput);
+        if (blockInput != prev)
+            playerInputHandler.ControlCharacterAction(CharacterActions.Block, blockInput);
 
         HandleOnceActivation(ref blockInput, keybinds.blockKey);
     }
 
     public override void DeflectInput()
     {
+        bool prev = deflectInput;
         deflectInput = ProcessInput(keybinds.deflectKey, deflectInput);
-        if (deflectInput)
+        if (deflectInput != prev && deflectInput)
         {
             playerInputHandler.ControlCharacterAction(CharacterActions.Deflect, true);
             HandleOnceActivation(ref deflectInput, keybinds.deflectKey);

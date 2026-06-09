@@ -11,10 +11,21 @@ public class CharacterActionController : MonoBehaviour
     private CharacterDefenseController characterDefenseController;
 
     [Header("Runtime")]
-    private bool forwardMove;
-    private bool backwardMove;
-    private bool leftMove;
-    private bool rightMove;
+
+    private bool sprintInput;
+    private bool dashInput;
+    private bool toggleFlyInput;
+    private bool jumpInput;
+    private bool flyUpInput;
+    private bool flyDownInput;
+    private bool normalAttackInput;
+    private bool strikeAttackInput;
+    private bool blockInput;
+    private bool deflectInput;
+    private bool forwardInput;
+    private bool backwardInput;
+    private bool leftInput;
+    private bool rightInput;
     
     public event Action onFlyingInterrupted;
 
@@ -29,7 +40,19 @@ public class CharacterActionController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!MatchManager.instance.IsPlayerHost()) return;
+
         MoveDirection();
+        Sprint();
+        Dash();
+        ToggleFly();
+        Jump();
+        FlyUp();
+        FlyDown();
+        NormalAttack();
+        StrikeAttack();
+        Block();
+        Deflect();
     }
 
     void OnDestroy()
@@ -42,99 +65,149 @@ public class CharacterActionController : MonoBehaviour
         onFlyingInterrupted?.Invoke();
     }
 
-    public void MoveForward(bool state)
-    {
-        forwardMove = state;
-    }
-
-    public void MoveBackward(bool state)
-    {
-        backwardMove = state;
-    }
-
-    public void MoveRight(bool state)
-    {
-        rightMove = state;
-    }
-
-    public void MoveLeft(bool state)
-    {
-        leftMove = state;
-    }
-
     private void MoveDirection()
     {
         float x = 0;
         float y = 0;
 
-        if (forwardMove) y += 1;
-        if (backwardMove) y -= 1;
-        if (leftMove) x -= 1;
-        if (rightMove) x += 1;
+        if (forwardInput) y += 1;
+        if (backwardInput) y -= 1;
+        if (leftInput) x -= 1;
+        if (rightInput) x += 1;
 
         Vector2 currentMoveInput = new Vector2(x, y).normalized;
 
         characterMovementController.Move(currentMoveInput);
     }
 
-    public void Sprint(bool state)
+    public void Sprint()
     {
-        characterMovementController.SetSprint(state);
+        characterMovementController.SetSprint(sprintInput);
     }
 
-    public void Dash(bool state)
+    public void Dash()
     {
-        if (state)
+        if (dashInput)
             characterMovementController.Dash();
     }
 
-    public void ToggleFly(bool state)
+    public void ToggleFly()
     {
-        characterMovementController.SetFly(state);
+        characterMovementController.SetFly(toggleFlyInput);
     }
 
-    public void Jump(bool state)
+    public void Jump()
     {
-        if (state)
+        if (jumpInput)
             characterMovementController.Jump();
     }
 
-    public void FlyUp(bool state)
+    public void FlyUp()
     {
-
-        characterMovementController.SetFlyUp(state);
+        characterMovementController.SetFlyUp(flyUpInput);
     }
 
-    public void FlyDown(bool state)
+    public void FlyDown()
     {
-
-        characterMovementController.SetFlyDown(state);
+        characterMovementController.SetFlyDown(flyDownInput);
     }
 
-    public void NormalAttack(bool state)
+    public void NormalAttack()
     {
-        if (state)
+        if (normalAttackInput)
             characterAttackController.StartNormalAttack();
     }
 
-    public void StrikeAttack(bool state)
+    public void StrikeAttack()
     {
-        if (state)
+        if (strikeAttackInput)
             characterAttackController.StartStrikeAttack();
     }
 
-    public void Block(bool state)
+    public void Block()
     {
-        characterDefenseController.Block(state);
+        characterDefenseController.Block(blockInput);
     }
 
-    public void Deflect(bool state)
+    public void Deflect()
     {
-        if (state)
+        if (deflectInput)
             characterDefenseController.Deflect();
     }
 
-    public void Rotation(Vector3 direction)
+    //
+
+    public void SetMoveForward(bool state)
+    {
+        forwardInput = state;
+    }
+
+    public void SetMoveBackward(bool state)
+    {
+        backwardInput = state;
+    }
+
+    public void SetMoveRight(bool state)
+    {
+        rightInput = state;
+    }
+
+    public void SetMoveLeft(bool state)
+    {
+        leftInput = state;
+    }
+
+    public void SetSprint(bool state)
+    {
+        sprintInput = state;
+    }
+
+    public void SetDash(bool state)
+    {
+        dashInput = state;
+    }
+
+    public void SetToggleFly(bool state)
+    {
+        toggleFlyInput = state;
+    }
+
+    public void SetJump(bool state)
+    {
+        jumpInput = state;
+    }
+
+    public void SetFlyUp(bool state)
+    {
+        flyUpInput = state;
+    }
+
+    public void SetFlyDown(bool state)
+    {
+        flyDownInput = state;
+    }
+
+    public void SetNormalAttack(bool state)
+    {
+        normalAttackInput = state;
+    }
+
+    public void SetStrikeAttack(bool state)
+    {
+        strikeAttackInput = state;
+    }
+
+    public void SetBlock(bool state)
+    {
+        blockInput = state;
+    }
+
+    public void SetDeflect(bool state)
+    {
+        deflectInput = state;
+    }
+
+    public void SetRotation(Vector3 direction)
     {
         characterMovementController.Rotate(direction);
     }

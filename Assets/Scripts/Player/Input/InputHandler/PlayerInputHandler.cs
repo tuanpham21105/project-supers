@@ -36,10 +36,8 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void ControlCharacterAction(CharacterActions action, bool state)
     {
-        if (MatchManager.instance.IsPlayerHost())
-            CharactersManager.instance.ControlCharacterAction(PlayerData.instance.username, action, state);
-        else
-            ClientPacketSender.instance.sendControlAction(action, state);
+        CharactersManager.instance.ControlCharacterAction(PlayerData.instance.username, action, state);
+        ClientPacketSender.instance.sendControlAction(action, state);
     }
 
     public void ControlCharacterRotation(Vector3 direction)
