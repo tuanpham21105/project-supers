@@ -18,6 +18,11 @@ public class ClientPacketSender : MonoBehaviour
         p2PManager = P2PManager.instance;
     }
 
+    void OnDestroy()
+    {
+        instance = null;
+    }
+
     public void sendControlAction(CharacterActions action, bool state)
     {
         if (P2PManager.instance == null)

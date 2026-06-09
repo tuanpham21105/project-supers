@@ -12,20 +12,20 @@ public class CharacterActionController : MonoBehaviour
 
     [Header("Runtime")]
 
-    private bool sprintInput;
-    private bool dashInput;
-    private bool toggleFlyInput;
-    private bool jumpInput;
-    private bool flyUpInput;
-    private bool flyDownInput;
-    private bool normalAttackInput;
-    private bool strikeAttackInput;
-    private bool blockInput;
-    private bool deflectInput;
-    private bool forwardInput;
-    private bool backwardInput;
-    private bool leftInput;
-    private bool rightInput;
+    [SerializeField] private bool sprintInput;
+    [SerializeField] private bool dashInput;
+    [SerializeField] private bool toggleFlyInput;
+    [SerializeField] private bool jumpInput;
+    [SerializeField] private bool flyUpInput;
+    [SerializeField] private bool flyDownInput;
+    [SerializeField] private bool normalAttackInput;
+    [SerializeField] private bool strikeAttackInput;
+    [SerializeField] private bool blockInput;
+    [SerializeField] private bool deflectInput;
+    [SerializeField] private bool forwardInput;
+    [SerializeField] private bool backwardInput;
+    [SerializeField] private bool leftInput;
+    [SerializeField] private bool rightInput;
     
     public event Action onFlyingInterrupted;
 
@@ -38,7 +38,7 @@ public class CharacterActionController : MonoBehaviour
         characterMovementController.endFlying += HandleFlyingInterrupted;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (!MatchManager.instance.IsPlayerHost()) return;
 
@@ -63,6 +63,7 @@ public class CharacterActionController : MonoBehaviour
     void HandleFlyingInterrupted()
     {
         onFlyingInterrupted?.Invoke();
+        toggleFlyInput = false;
     }
 
     private void MoveDirection()

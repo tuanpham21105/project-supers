@@ -4,6 +4,12 @@ public class WindowUiController : MonoBehaviour
 {
     [SerializeField] protected GameObject window;
 
+    void Start()
+    {
+        if (window == null)
+            window = gameObject;
+    }
+
     public void OpenWindow()
     {
         OnOpenWindow();

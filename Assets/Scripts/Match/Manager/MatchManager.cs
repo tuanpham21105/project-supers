@@ -8,9 +8,14 @@ public class MatchManager : MonoBehaviour
 {
     public static MatchManager instance;
 
+    private bool isMatchStart = false;
+    public bool IsMatchStart() => isMatchStart;
+    public event Action onMatchStarting;
+
     [Header("Dependencies")]
     private PlayerData playerData;
     [SerializeField] private Transform playerInputObject;
+    [SerializeField] private MatchReadyOverlayUiController matchReadyOverlayUiController;
 
     [Header("Data")]
     [SerializeField] private String hostPlayer;
@@ -40,13 +45,48 @@ public class MatchManager : MonoBehaviour
             players = MatchData.players;
         }
 
+        if (MatchData.players.Count == 1)
+        {
+            StartCoroutine(StartMatch());
+            return;
+        }
+
         // Only the host sends LOAD_MATCH to tell the client to load the scene
         if (IsPlayerHost())
         {
             StartCoroutine(SendLoadMatchToClient());
         }
+        else
+        {
+            StartCoroutine(SendReadyToHost());
+        }
 
         TabVisibilityService.instance.OnTabHidden += handleLostFocus;
+    }
+
+    public void ClientReady()
+    {
+        StartCoroutine(StartMatch());
+    }
+
+    IEnumerator StartMatch()
+    {
+        matchReadyOverlayUiController.SetText("3");
+        yield return new WaitForSecondsRealtime(1f);
+
+        matchReadyOverlayUiController.SetText("2");
+        yield return new WaitForSecondsRealtime(1f);
+
+        matchReadyOverlayUiController.SetText("1");
+        yield return new WaitForSecondsRealtime(1f);
+
+        matchReadyOverlayUiController.SetText("Fight!!!");
+
+        isMatchStart = true;
+
+        yield return new WaitForSecondsRealtime(0.7f);
+
+        matchReadyOverlayUiController.CloseWindow();
     }
 
     private IEnumerator SendLoadMatchToClient()
@@ -59,6 +99,20 @@ public class MatchManager : MonoBehaviour
         {
             type = "LOAD_MATCH"
         });
+    }
+
+    private IEnumerator SendReadyToHost()
+    {
+        // Wait a frame to ensure everything is initialized after scene load
+        yield return null;
+
+        Debug.Log("[MatchManager] Client sending READY packet to host");
+        P2PManager.instance.SendJson(new Packet()
+        {
+            type = "READY"
+        }); 
+
+        ClientReady();
     }
 
     void OnDestroy()
@@ -105,7 +159,7 @@ public class MatchManager : MonoBehaviour
 
     public void handleLostFocus()
     {
-        if (!IsPlayerHost()) return;
+        if (!IsPlayerHost() || !isMatchStart) return;
 
         string newHost = GetClientPlayer();
 
@@ -113,7 +167,8 @@ public class MatchManager : MonoBehaviour
 
         try
         {
-            HostPacketSender.instance.sendNewHost(newHost);
+            if (HostPacketSender.instance != null) 
+                HostPacketSender.instance.sendNewHost(newHost);
         }
         catch (Exception e)
         {

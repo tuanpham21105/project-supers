@@ -11,6 +11,21 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     [SerializeField] private CameraController cameraController;
 
+    public bool prevSprintInput;
+    public bool prevDashInput;
+    public bool prevToggleFlyInput;
+    public bool prevJumpInput;
+    public bool prevFlyUpInput;
+    public bool prevFlyDownInput;
+    public bool prevNormalAttackInput;
+    public bool prevStrikeAttackInput;
+    public bool prevBlockInput;
+    public bool prevDeflectInput;
+    public bool prevForwardInput;
+    public bool prevBackwardInput;
+    public bool prevLeftInput;
+    public bool prevRightInput;
+
     public bool sprintInput;
     public bool dashInput;
     public bool toggleFlyInput;
@@ -23,11 +38,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public bool deflectInput;
     public float verticalRotationInput;
     public float horizontalRotationInput;
-
-    public bool _forwardInput;
-    public bool _backwardInput;
-    public bool _leftInput;
-    public bool _rightInput;
+    public bool forwardInput;
+    public bool backwardInput;
+    public bool leftInput;
+    public bool rightInput;
 
     private Dictionary<String, float> lastClickTime = new Dictionary<String, float>();
     [SerializeField] private float doubleClickThreshold = 0.3f;
@@ -89,148 +103,141 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     public override void MoveDirectionInput()
     {
-        bool prevForward = _forwardInput;
-        bool prevBackward = _backwardInput;
-        bool prevLeft = _leftInput;
-        bool prevRight = _rightInput;
+        prevForwardInput = forwardInput;
+        prevBackwardInput = backwardInput;
+        prevLeftInput = leftInput;
+        prevRightInput = rightInput;
 
-        _forwardInput = ProcessInput(keybinds.forwardKey, _forwardInput);
-        _backwardInput = ProcessInput(keybinds.backwardKey, _backwardInput);
-        _leftInput = ProcessInput(keybinds.strafeLeftKey, _leftInput);
-        _rightInput = ProcessInput(keybinds.strafeRightKey, _rightInput);
+        forwardInput = ProcessInput(keybinds.forwardKey, forwardInput);
+        backwardInput = ProcessInput(keybinds.backwardKey, backwardInput);
+        leftInput = ProcessInput(keybinds.strafeLeftKey, leftInput);
+        rightInput = ProcessInput(keybinds.strafeRightKey, rightInput);
 
-        if (_forwardInput != prevForward)
-            playerInputHandler.ControlCharacterAction(CharacterActions.MoveForward, _forwardInput);
-        if (_backwardInput != prevBackward)
-            playerInputHandler.ControlCharacterAction(CharacterActions.MoveBackward, _backwardInput);
-        if (_leftInput != prevLeft)
-            playerInputHandler.ControlCharacterAction(CharacterActions.MoveLeft, _leftInput);
-        if (_rightInput != prevRight)
-            playerInputHandler.ControlCharacterAction(CharacterActions.MoveRight, _rightInput);
+        if (forwardInput != prevForwardInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.MoveForward, forwardInput);
+        if (backwardInput != prevBackwardInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.MoveBackward, backwardInput);
+        if (leftInput != prevLeftInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.MoveLeft, leftInput);
+        if (rightInput != prevRightInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.MoveRight, rightInput);
 
-        HandleOnceActivation(ref _forwardInput, keybinds.forwardKey);
-        HandleOnceActivation(ref _backwardInput, keybinds.backwardKey);
-        HandleOnceActivation(ref _leftInput, keybinds.strafeLeftKey);
-        HandleOnceActivation(ref _rightInput, keybinds.strafeRightKey);
+        // StartCoroutine(HandleOnceActivation(prevForwardInput, forwardInput, keybinds.forwardKey, CharacterActions.MoveForward));
+        // StartCoroutine(HandleOnceActivation(prevBackwardInput, backwardInput, keybinds.backwardKey, CharacterActions.MoveBackward));
+        // StartCoroutine(HandleOnceActivation(prevLeftInput, leftInput, keybinds.strafeLeftKey, CharacterActions.MoveLeft));
+        // StartCoroutine(HandleOnceActivation(prevRightInput, rightInput, keybinds.strafeRightKey, CharacterActions.MoveRight));
     }
 
     public override void SprintInput()
     {
-        bool prev = sprintInput;
+        prevSprintInput = sprintInput;
         bool currentSprintInput = ProcessInput(keybinds.sprintKey, sprintInput);
 
         sprintInput = currentSprintInput;
 
-        if (sprintInput != prev)
+        if (sprintInput != prevSprintInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.Sprint, sprintInput);
 
-        HandleOnceActivation(ref sprintInput, keybinds.sprintKey);
+        // StartCoroutine(HandleOnceActivation(prevSprintInput, sprintInput, keybinds.sprintKey, CharacterActions.Sprint));
     }
 
     public override void DashInput()
     {
-        bool prev = dashInput;
+        prevDashInput = dashInput;
         dashInput = ProcessInput(keybinds.dashKey, dashInput);
-        if (dashInput != prev && dashInput)
-        {
-            playerInputHandler.ControlCharacterAction(CharacterActions.Dash, true);
-            HandleOnceActivation(ref dashInput, keybinds.dashKey);
-        }
+
+        if (dashInput != prevDashInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.Dash, dashInput);
+
+        // StartCoroutine(HandleOnceActivation(prevDashInput, dashInput, keybinds.dashKey, CharacterActions.Dash));
     }
 
     public override void ToggleFlyInput()
     {
-        bool prev = toggleFlyInput;
-        bool currentFlyInput = ProcessInput(keybinds.toggleFlyKey, toggleFlyInput);
+        prevToggleFlyInput = toggleFlyInput;
+        toggleFlyInput = ProcessInput(keybinds.toggleFlyKey, toggleFlyInput);
 
-        toggleFlyInput = currentFlyInput;
-
-        if (toggleFlyInput != prev)
+        if (toggleFlyInput != prevToggleFlyInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.ToggleFly, toggleFlyInput);
 
-        HandleOnceActivation(ref toggleFlyInput, keybinds.toggleFlyKey);
+        // StartCoroutine(HandleOnceActivation(prevToggleFlyInput, toggleFlyInput, keybinds.toggleFlyKey, CharacterActions.ToggleFly));
     }
 
     public override void JumpInput()
     {
-        bool prev = jumpInput;
+        prevJumpInput = jumpInput;
         jumpInput = ProcessInput(keybinds.jumpKey, jumpInput);
-        if (jumpInput != prev && jumpInput)
-        {
-            playerInputHandler.ControlCharacterAction(CharacterActions.Jump, true);
-            HandleOnceActivation(ref jumpInput, keybinds.jumpKey);
-        }
+
+        if (jumpInput != prevJumpInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.Jump, jumpInput);
+
+        // StartCoroutine(HandleOnceActivation(prevJumpInput, jumpInput, keybinds.jumpKey, CharacterActions.Jump));
     }
 
     public override void FlyUpInput()
     {
-        bool prev = flyUpInput;
-        bool currentInput = ProcessInput(keybinds.flyUpKey, flyUpInput);
-        
-        flyUpInput = currentInput;
+        prevFlyUpInput = flyUpInput;
+        flyUpInput = ProcessInput(keybinds.flyUpKey, flyUpInput);
 
-        if (flyUpInput != prev)
+        if (flyUpInput != prevFlyUpInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.FlyUp, flyUpInput);
 
-        HandleOnceActivation(ref flyUpInput, keybinds.flyUpKey);
+        // StartCoroutine(HandleOnceActivation(prevFlyUpInput, flyUpInput, keybinds.flyUpKey, CharacterActions.FlyUp));
     }
 
     public override void FlyDownInput()
     {
-        bool prev = flyDownInput;
-        bool currentInput = ProcessInput(keybinds.flyDownKey, flyDownInput);
-        
-        flyDownInput = currentInput;
+        prevFlyDownInput = flyDownInput;
+        flyDownInput = ProcessInput(keybinds.flyDownKey, flyDownInput);
 
-        if (flyDownInput != prev)
+        if (flyDownInput != prevFlyDownInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.FlyDown, flyDownInput);
 
-        HandleOnceActivation(ref flyDownInput, keybinds.flyDownKey);
+        // StartCoroutine(HandleOnceActivation(prevFlyDownInput, flyDownInput, keybinds.flyDownKey, CharacterActions.FlyDown));
     }
 
     public override void NormalAttackInput()
     {
-        bool prev = normalAttackInput;
+        prevNormalAttackInput = normalAttackInput;
         normalAttackInput = ProcessInput(keybinds.normalAttackKey, normalAttackInput);
-        if (normalAttackInput != prev && normalAttackInput)
-        {
-            playerInputHandler.ControlCharacterAction(CharacterActions.NormalAttack, true);
-            HandleOnceActivation(ref normalAttackInput, keybinds.normalAttackKey);
-        }
+
+        if (normalAttackInput != prevNormalAttackInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.NormalAttack, normalAttackInput);
+
+        // StartCoroutine(HandleOnceActivation(prevNormalAttackInput, normalAttackInput, keybinds.normalAttackKey, CharacterActions.NormalAttack));
     }
 
     public override void StrikeAttackInput()
     {
-        bool prev = strikeAttackInput;
+        prevStrikeAttackInput = strikeAttackInput;
         strikeAttackInput = ProcessInput(keybinds.strikeAttackKey, strikeAttackInput);
-        if (strikeAttackInput != prev && strikeAttackInput)
-        {
-            playerInputHandler.ControlCharacterAction(CharacterActions.StrikeAttack, true);
-            HandleOnceActivation(ref strikeAttackInput, keybinds.strikeAttackKey);
-        }
+
+        if (strikeAttackInput != prevStrikeAttackInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.StrikeAttack, strikeAttackInput);
+
+        // StartCoroutine(HandleOnceActivation(prevStrikeAttackInput, strikeAttackInput, keybinds.strikeAttackKey, CharacterActions.StrikeAttack));
     }
 
     public override void BlockInput()
     {
-        bool prev = blockInput;
-        bool currentInput = ProcessInput(keybinds.blockKey, blockInput);
-        blockInput = currentInput;
+        prevBlockInput = blockInput;
+        blockInput = ProcessInput(keybinds.blockKey, blockInput);
 
-        if (blockInput != prev)
+        if (blockInput != prevBlockInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.Block, blockInput);
 
-        HandleOnceActivation(ref blockInput, keybinds.blockKey);
+        // StartCoroutine(HandleOnceActivation(prevBlockInput, blockInput, keybinds.blockKey, CharacterActions.Block));
     }
 
     public override void DeflectInput()
     {
-        bool prev = deflectInput;
+        prevDeflectInput = deflectInput;
         deflectInput = ProcessInput(keybinds.deflectKey, deflectInput);
-        if (deflectInput != prev && deflectInput)
-        {
-            playerInputHandler.ControlCharacterAction(CharacterActions.Deflect, true);
-            HandleOnceActivation(ref deflectInput, keybinds.deflectKey);
-        }
+
+        if (deflectInput != prevDeflectInput)
+            playerInputHandler.ControlCharacterAction(CharacterActions.Deflect, deflectInput);
+            
+        // StartCoroutine(HandleOnceActivation(prevDeflectInput, deflectInput, keybinds.deflectKey, CharacterActions.Deflect));
     }
 
     public override void RotationInput()
@@ -312,11 +319,13 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         return false;
     }
 
-    private void HandleOnceActivation(ref bool inputState, Keybind keybind)
+    private IEnumerator HandleOnceActivation(bool prevInputState, bool inputState, Keybind keybind, CharacterActions action)
     {
-        if (inputState && (keybind.action == ActivateAction.Once || keybind.action == ActivateAction.Any))
+        if (!prevInputState && inputState && keybind.action == ActivateAction.Once)
         {
-            inputState = false;
+            yield return new WaitForFixedUpdate();
+
+            playerInputHandler.ControlCharacterAction(action, false);
         }
     }
 }

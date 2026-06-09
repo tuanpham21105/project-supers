@@ -65,4 +65,13 @@ public class MainWindowUiController : WindowUiController
         cancelButton.SetActive(false);
         findingMatchDisplayText.SetActive(false);
     }
+
+    public void GoToTrainingArea()
+    {
+        MatchData.hostPlayer = PlayerData.instance.username;
+        MatchData.players.Clear();
+        MatchData.players.Add(PlayerData.instance.username);
+
+        SceneService.instance.LoadScene("TrainingAreaScene");
+    }
 }

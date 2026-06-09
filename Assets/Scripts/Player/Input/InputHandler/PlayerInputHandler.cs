@@ -15,7 +15,7 @@ public class PlayerInputHandler : MonoBehaviour
     void Start()
     {
         playerInputController = PlayerInputController.instance;
-
+        
         CharactersManager.instance.onCharacterFlyingInterrupted += HandleFlyingInterrupted;
 
         ClientPacketReceiver.instance.onFlyingInterrupted += HandleFlyingInterrupted;
@@ -37,7 +37,8 @@ public class PlayerInputHandler : MonoBehaviour
     public void ControlCharacterAction(CharacterActions action, bool state)
     {
         CharactersManager.instance.ControlCharacterAction(PlayerData.instance.username, action, state);
-        ClientPacketSender.instance.sendControlAction(action, state);
+        if (ClientPacketSender.instance != null) 
+            ClientPacketSender.instance.sendControlAction(action, state);
     }
 
     public void ControlCharacterRotation(Vector3 direction)
@@ -45,6 +46,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (MatchManager.instance.IsPlayerHost())
             CharactersManager.instance.ControlCharacterRotation(PlayerData.instance.username, direction);
         else
-            ClientPacketSender.instance.sendControlRotation(direction);
+            if (ClientPacketSender.instance != null) 
+                ClientPacketSender.instance.sendControlRotation(direction);
     }
 }

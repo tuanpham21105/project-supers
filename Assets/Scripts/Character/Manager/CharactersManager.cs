@@ -95,7 +95,8 @@ public class CharactersManager : MonoBehaviour
     Action HandleCharacterFlyingInterrupted(String player)
     {
         return () => {
-            HostPacketSender.instance.sendPlayerCharacterFlyingInterrupted(player);
+            if (HostPacketSender.instance != null) 
+                HostPacketSender.instance.sendPlayerCharacterFlyingInterrupted(player);
             onCharacterFlyingInterrupted?.Invoke(player);
         };
     }
@@ -104,7 +105,8 @@ public class CharactersManager : MonoBehaviour
     {
         return (type, animation) =>
         {
-            hostPeerConnectionSender.sendPlayerCharacterAnimation(player, type, animation);
+            if (HostPacketSender.instance != null) 
+                hostPeerConnectionSender.sendPlayerCharacterAnimation(player, type, animation);
         };
     }
 
@@ -181,11 +183,15 @@ public class CharactersManager : MonoBehaviour
 
             data.playersStates.Add(matchData.GetPlayers()[i], states);
         }
-        hostPeerConnectionSender.sendPlayersCharacterStates(data);
+
+        if (HostPacketSender.instance != null) 
+            hostPeerConnectionSender.sendPlayersCharacterStates(data);
     }
 
     public void ControlCharacterAction(String player, CharacterActions action, bool state)
     {
+        if (!MatchManager.instance.IsMatchStart()) return;
+
         int index = matchData.GetPlayerIndex(player);
         GameObject character = characters[index];
         CharacterActionController controller = character.GetComponent<CharacterActionController>();
@@ -239,6 +245,8 @@ public class CharactersManager : MonoBehaviour
 
     public void ControlCharacterRotation(String player, Vector3 direction)
     {
+        if (!MatchManager.instance.IsMatchStart()) return;
+        
         int index = matchData.GetPlayerIndex(player);
         GameObject character = characters[index];
         CharacterActionController controller = character.GetComponent<CharacterActionController>();

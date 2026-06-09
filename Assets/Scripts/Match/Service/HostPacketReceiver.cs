@@ -32,7 +32,7 @@ public class HostPacketReceiver : MonoBehaviour
         {
             if (a == MatchManager.instance.GetHostPlayer()) continue;
 
-            Action<string> action = handleClientInput(a);
+            Action<string> action = handleClientPacket(a);
             p2PManager.OnReliableData += action;
             p2PManager.OnUnreliableData += action;
             clientInputHandlers.Add(action);
@@ -48,7 +48,7 @@ public class HostPacketReceiver : MonoBehaviour
         }       
     }
 
-    Action<string> handleClientInput(string player)
+    Action<string> handleClientPacket(string player)
     {
         return (data) =>
         {
@@ -63,6 +63,10 @@ public class HostPacketReceiver : MonoBehaviour
             {
                 RotateActionEventPacket packet2 = JsonConvert.DeserializeObject<RotateActionEventPacket>(data);
                 hostCharactersManager.ControlCharacterRotation(player, packet2.direction.ToVector3());
+            }
+            else if (packet.type.CompareTo("READY") == 0)
+            {
+                MatchManager.instance.ClientReady();
             }
         };
     }

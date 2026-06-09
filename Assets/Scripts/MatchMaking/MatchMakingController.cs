@@ -39,6 +39,10 @@ public class MatchMakingController : MonoBehaviour
 
     public async void StartMatchMaking()
     {
+        MatchData.hostPlayer = "";
+        MatchData.matchId = "";
+        MatchData.players.Clear();
+
         if (isMatchMaking) return;
 
         Debug.Log("[MatchMaking] Starting...");

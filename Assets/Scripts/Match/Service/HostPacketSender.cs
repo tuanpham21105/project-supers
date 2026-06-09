@@ -12,6 +12,11 @@ public class HostPacketSender : MonoBehaviour
         instance = this;
     }
 
+    void OnDestroy()
+    {
+        instance = null;
+    }
+
     public void sendPlayerCharacterFlyingInterrupted(String player)
     {
         if (P2PManager.instance == null)
