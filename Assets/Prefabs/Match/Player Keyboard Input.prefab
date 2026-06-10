@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1075016108543639428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7164072246339193565}
+  - component: {fileID: 1963563638818687621}
+  - component: {fileID: 6724145364871430464}
+  - component: {fileID: 347299579735352545}
+  m_Layer: 0
+  m_Name: Player Keyboard Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7164072246339193565
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075016108543639428}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1963563638818687621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075016108543639428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe74ff9102efc803999f99998d9b3248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSensitivity: 5
+  forwardKey:
+    name: Move Forward
+    key: 119
+    mode: 0
+    action: 3
+  backwardKey:
+    name: Move Backward
+    key: 115
+    mode: 0
+    action: 3
+  strafeLeftKey:
+    name: Strafe Left
+    key: 97
+    mode: 0
+    action: 3
+  strafeRightKey:
+    name: Strafe Right
+    key: 100
+    mode: 0
+    action: 3
+  jumpKey:
+    name: Jump
+    key: 32
+    mode: 0
+    action: 3
+  sprintKey:
+    name: Sprint
+    key: 304
+    mode: 0
+    action: 3
+  dashKey:
+    name: Dash
+    key: 304
+    mode: 0
+    action: 3
+  toggleFlyKey:
+    name: Toggle Fly
+    key: 32
+    mode: 1
+    action: 2
+  flyUpKey:
+    name: Fly Up
+    key: 32
+    mode: 0
+    action: 1
+  flyDownKey:
+    name: Fly Down
+    key: 306
+    mode: 0
+    action: 1
+  normalAttackKey:
+    name: Normal Attack
+    key: 323
+    mode: 0
+    action: 3
+  strikeAttackKey:
+    name: Strike Attack
+    key: 101
+    mode: 0
+    action: 3
+  blockKey:
+    name: Block
+    key: 324
+    mode: 0
+    action: 1
+  deflectKey:
+    name: Deflect
+    key: 324
+    mode: 0
+    action: 0
+--- !u!114 &6724145364871430464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075016108543639428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe35abd0cc1286f469b1820fbfb90320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraController: {fileID: 0}
+  prevSprintInput: 0
+  prevDashInput: 0
+  prevToggleFlyInput: 0
+  prevJumpInput: 0
+  prevFlyUpInput: 0
+  prevFlyDownInput: 0
+  prevNormalAttackInput: 0
+  prevStrikeAttackInput: 0
+  prevBlockInput: 0
+  prevDeflectInput: 0
+  prevForwardInput: 0
+  prevBackwardInput: 0
+  prevLeftInput: 0
+  prevRightInput: 0
+  sprintInput: 0
+  dashInput: 0
+  toggleFlyInput: 0
+  jumpInput: 0
+  flyUpInput: 0
+  flyDownInput: 0
+  normalAttackInput: 0
+  strikeAttackInput: 0
+  blockInput: 0
+  deflectInput: 0
+  verticalRotationInput: 0
+  horizontalRotationInput: 0
+  forwardInput: 0
+  backwardInput: 0
+  leftInput: 0
+  rightInput: 0
+  doubleClickThreshold: 0.3
+  holdThreshold: 0.2
+  lookSmoothing: 0.05
+--- !u!114 &347299579735352545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075016108543639428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df71071585e6141e48be9ab8e5396064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInputController: {fileID: 6724145364871430464}

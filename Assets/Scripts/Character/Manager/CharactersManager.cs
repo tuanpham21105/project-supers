@@ -55,10 +55,18 @@ public class CharactersManager : MonoBehaviour
         flyingHandlers = new List<Action>();
         animationHandlers = new List<Action<String, String>>();
 
-        foreach (String player in matchData.GetPlayers())
+        InitCharacters();
+    }
+
+    void InitCharacters()
+    {
+        for (int i = 0; i < matchData.GetPlayers().Count; i++)
         {
-            Vector3 randomPos = new Vector3(Random.Range(-30f, 30f), 1.5f, Random.Range(30f, 30f));
-            GameObject character = Instantiate(characterPrefab, randomPos, Quaternion.identity);
+            String player = matchData.GetPlayers()[i];
+            Transform spawnPoint = MapData.instance.getSpawnPoints()[i]; 
+
+            GameObject character = Instantiate(characterPrefab, spawnPoint.position, Quaternion.identity);
+            character.transform.LookAt(MapData.instance.transform);
 
             Action handler = HandleCharacterFlyingInterrupted(player);
             character.GetComponent<CharacterMovementController>().endFlying += handler;

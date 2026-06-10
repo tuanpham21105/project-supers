@@ -260,6 +260,6 @@ public class MatchMakingController : MonoBehaviour
     private void loadMatch()
     {
         P2PManager.instance.OnReliableData -= handlePacketReceived;
-        SceneService.instance.LoadScene("SampleScene");
+        SceneService.instance.LoadScene("BattleScene");
     }
 }
