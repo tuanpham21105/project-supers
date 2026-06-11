@@ -72,7 +72,7 @@ public class MatchMakingController : MonoBehaviour
         WebSocketService.instance.OnMessageReceived -= OnWsMessageReceived;
 
         // 3. Send cancel match making request
-        PlayerMatchMakingService.instance.CancelMatchMaking(
+        PlayerMatchService.instance.CancelMatchMaking(
             (response) =>
             {
                 Debug.Log("[MatchMaking] Cancelled successfully");
@@ -99,7 +99,7 @@ public class MatchMakingController : MonoBehaviour
         WebSocketService.instance.OnMessageReceived += OnWsMessageReceived;
 
         // 3. Send start match making request
-        PlayerMatchMakingService.instance.StartMatchMaking(
+        PlayerMatchService.instance.StartMatchMaking(
             (response) =>
             {
                 Debug.Log($"[MatchMaking] Success: Match ID {response.id}");
