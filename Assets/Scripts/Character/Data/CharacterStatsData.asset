@@ -20,7 +20,7 @@ MonoBehaviour:
   dashForce: 80
   dashDuration: 0.125
   dashCooldown: 1
-  endurance: 50
+  endurance: 5000
   knockOutThreshold: 0.01
   blockThreshold: 0.7
   normalAttackDamage: 100

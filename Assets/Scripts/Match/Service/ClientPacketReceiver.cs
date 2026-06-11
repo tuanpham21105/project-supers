@@ -58,10 +58,13 @@ public class ClientPacketReceiver : MonoBehaviour
             StatesPacket packet3 = JsonConvert.DeserializeObject<StatesPacket>(data);
             receivePlayerCharacterStates(packet3);
         }
-        else if (packet.type.CompareTo("NEW_HOST") == 0)
+        else if (packet.type.CompareTo("LOST_FOCUS") == 0)
         {
-            NewHostEventPacket packet4 = JsonConvert.DeserializeObject<NewHostEventPacket>(data);
-            receiveHost(packet4);
+            MatchManager.instance.emitHostLostFocus();
+        }
+        else if (packet.type.CompareTo("GAIN_FOCUS") == 0)
+        {
+            MatchManager.instance.emitHostGainFocus();
         }
     } 
 
@@ -83,10 +86,5 @@ public class ClientPacketReceiver : MonoBehaviour
             CharacterStatesDto states = packet.data.playersStates[a];
             CharactersManager.instance.ControlCharacterStates(a, states);
         }
-    }
-
-    void receiveHost(NewHostEventPacket packet) 
-    {
-        MatchManager.instance.SetPlayerHost(packet.newHost);
     }
 }

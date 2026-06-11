@@ -11,6 +11,8 @@ public class MatchManager : MonoBehaviour
     private bool isMatchStart = false;
     public bool IsMatchStart() => isMatchStart;
     public event Action onMatchStarting;
+    public event Action onHostLostFocus;
+    public event Action onHostGainFocus;
 
     [Header("Dependencies")]
     private PlayerData playerData;
@@ -47,7 +49,7 @@ public class MatchManager : MonoBehaviour
 
         if (MatchData.players.Count == 1)
         {
-            StartCoroutine(StartMatch());
+            isMatchStart = true;
             return;
         }
 
@@ -55,13 +57,13 @@ public class MatchManager : MonoBehaviour
         if (IsPlayerHost())
         {
             StartCoroutine(SendLoadMatchToClient());
+            TabVisibilityService.instance.OnTabVisible += handleGainFocus;
+            TabVisibilityService.instance.OnTabHidden += handleLostFocus;
         }
         else
         {
             StartCoroutine(SendReadyToHost());
         }
-
-        TabVisibilityService.instance.OnTabHidden += handleLostFocus;
     }
 
     public void ClientReady()
@@ -117,7 +119,11 @@ public class MatchManager : MonoBehaviour
 
     void OnDestroy()
     {
-        TabVisibilityService.instance.OnTabHidden -= handleLostFocus;
+        if (IsPlayerHost())
+        {
+            TabVisibilityService.instance.OnTabVisible -= handleGainFocus;
+            TabVisibilityService.instance.OnTabHidden -= handleLostFocus;
+        }
     }
 
     public String GetHostPlayer() => hostPlayer;
@@ -157,24 +163,25 @@ public class MatchManager : MonoBehaviour
         return hostPlayer;
     }
 
-    public void handleLostFocus()
+    void handleGainFocus()
     {
-        if (!IsPlayerHost() || !isMatchStart) return;
+        if (HostPacketSender.instance != null)
+            HostPacketSender.instance.sendGainFocus();
+    }
 
-        string newHost = GetClientPlayer();
+    void handleLostFocus()
+    {
+        if (HostPacketSender.instance != null)
+            HostPacketSender.instance.sendLostFocus();
+    }
 
-        Debug.Log("Lost Focus");
+    public void emitHostGainFocus()
+    {
+        onHostGainFocus?.Invoke();
+    }
 
-        try
-        {
-            if (HostPacketSender.instance != null) 
-                HostPacketSender.instance.sendNewHost(newHost);
-        }
-        catch (Exception e)
-        {
-            return;
-        }
-
-        SetPlayerHost(newHost);
+    public void emitHostLostFocus()
+    {
+        onHostLostFocus?.Invoke();
     }
 }

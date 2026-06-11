@@ -40,6 +40,8 @@ public class CharactersManager : MonoBehaviour
     [SerializeField] private GameObject characterPrefab;
 
     public event Action<String> onCharacterFlyingInterrupted;
+    public event Action<String, float> onCharacterHealthChange;
+
     void Awake()
     {
         instance = this;
@@ -130,6 +132,7 @@ public class CharactersManager : MonoBehaviour
             states.physicsColliderRadius = characters[i].GetComponent<CharacterController>().radius;
 
             CharacterStatesData statesData = characters[i].GetComponent<CharacterStatesData>();
+            CharacterStatsData statsData = characters[i].GetComponent<CharacterStatsData>();
             
             states.currentProcessAction = statesData.currentProcessAction.ToString();
 
@@ -190,6 +193,8 @@ public class CharactersManager : MonoBehaviour
             states.isFront = statesData.isFront;
 
             data.playersStates.Add(matchData.GetPlayers()[i], states);
+
+            onCharacterHealthChange?.Invoke(matchData.GetPlayers()[i], (float)statesData.currentEndurance / (float)statsData.endurance);
         }
 
         if (HostPacketSender.instance != null) 
@@ -282,6 +287,8 @@ public class CharactersManager : MonoBehaviour
         controller.ApplyTransform(characterStatesDTO.position.ToVector3(), characterStatesDTO.forward.ToVector3());
         controller.ApplyPhysicsCollider(characterStatesDTO.physicsColliderRadius, characterStatesDTO.physicsColliderHeight);
         controller.ApplyStates(characterStatesDTO);
+
+        onCharacterHealthChange?.Invoke(player, (float)characterStatesDTO.currentEndurance / (float)character.GetComponent<CharacterStatsData>().endurance);
     }
 
     // Switch Character mode

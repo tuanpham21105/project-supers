@@ -84,7 +84,7 @@ public class HostPacketSender : MonoBehaviour
         P2PManager.instance.SendJsonUnreliable(packet);
     }
 
-    public void sendNewHost(string newHost)
+    public void sendLostFocus()
     {
         if (P2PManager.instance == null)
         {
@@ -99,8 +99,29 @@ public class HostPacketSender : MonoBehaviour
             return;
         }
 
-        NewHostEventPacket packet = new NewHostEventPacket();
-        packet.newHost = newHost;
+        Packet packet = new Packet();
+        packet.type = "LOST_FOCUS";
+
+        P2PManager.instance.SendJson(packet);
+    }
+
+    public void sendGainFocus()
+    {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        // Verify sender is the host
+        if (!MatchManager.instance.IsPlayerHost())
+        {
+            // Debug.LogWarning("[HostPacketSender] Only the host can send host actions.");
+            return;
+        }
+
+        Packet packet = new Packet();
+        packet.type = "GAIN_FOCUS";
 
         P2PManager.instance.SendJson(packet);
     }

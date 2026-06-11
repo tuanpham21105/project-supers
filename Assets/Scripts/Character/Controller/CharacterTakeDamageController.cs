@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using com.cyborgAssets.inspectorButtonPro;
 using UnityEngine;
 
 public class CharacterTakeDamageController : MonoBehaviour
@@ -21,6 +23,7 @@ public class CharacterTakeDamageController : MonoBehaviour
         characterStatesData.currentEndurance = characterStatsData.endurance;
     }
     
+    [ProButton]
     private void ApplyDamage(int damage, bool isFront, Vector3 direction)
     {
         if (damage <= 0) return;
