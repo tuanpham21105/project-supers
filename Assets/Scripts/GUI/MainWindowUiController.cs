@@ -8,11 +8,6 @@ public class MainWindowUiController : WindowUiController
     [SerializeField] private GameObject cancelButton;
     [SerializeField] private GameObject findingMatchDisplayText;
 
-    void Start()
-    {
-        
-    }
-
     void OnDestroy()
     {
         MatchMakingController.instance.onStartMatchMakingSuccess -= handleStartMatchMakingSuccess;

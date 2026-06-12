@@ -20,7 +20,7 @@ public class MatchConnectionManager : MonoBehaviour
 
     void Start()
     {
-        
+        P2PManager.instance.OnDisconnected += handleOnPeerDisconnected;
     }
 
     void OnDestroy()
@@ -29,7 +29,6 @@ public class MatchConnectionManager : MonoBehaviour
 
         if (P2PManager.instance != null)
         {
-            P2PManager.instance.OnConnected -= handleOnPeerConnected;
             P2PManager.instance.OnDisconnected -= handleOnPeerDisconnected;
         }
     }
@@ -37,9 +36,9 @@ public class MatchConnectionManager : MonoBehaviour
     void handleOnPeerDisconnected()
     {
         P2PManager.instance.OnDisconnected -= handleOnPeerDisconnected;
-        P2PManager.instance.OnConnected += handleOnPeerConnected;
         Debug.Log("[MatchConnectionManager] Disconnected.");
         OnDisconnected?.Invoke();
+        Debug.Log("[MatchConnectionManager] Reconnecting...");
         onReconnecting?.Invoke();
 
         if (MatchManager.instance.IsPlayerHost())
@@ -51,18 +50,20 @@ public class MatchConnectionManager : MonoBehaviour
     void handleOnPeerConnected()
     {
         P2PManager.instance.OnDisconnected += handleOnPeerDisconnected;
-        P2PManager.instance.OnDisconnected += handleOnPeerDisconnected;
+
+        onReconnected?.Invoke();
         Debug.Log("[MatchConnectionManager] Reconnected.");
     }
 
     IEnumerator ReconnectHost()
     {
-        P2PManager.instance.Disconnect();
+        P2PManager.instance.DestroyPeer();
         yield return new WaitForSecondsRealtime(reconnectDelay);
 
         bool initSuccess = false;
         for (int i = 0; i < 3; i++)
         {
+            Debug.Log($"[MatchConnectionManager] Retrying... (attempt {i + 1}/3)");
             bool ready = false;
             bool error = false;
 
@@ -103,15 +104,15 @@ public class MatchConnectionManager : MonoBehaviour
             yield break;
         }
 
-        onReconnected?.Invoke();
+        handleOnPeerConnected();
     }
 
     IEnumerator ReconnectClient()
     {
-        P2PManager.instance.Disconnect();
+        P2PManager.instance.DestroyPeer();
         yield return new WaitForSecondsRealtime(reconnectDelay);
 
-        P2PManager.instance.Init(PlayerData.instance.username + " - " + MatchData.matchId);
+        P2PManager.instance.Init("Client " + MatchData.matchId);
 
         bool ready = false;
         Action onReady = () => ready = true;
@@ -122,6 +123,7 @@ public class MatchConnectionManager : MonoBehaviour
         bool connected = false;
         for (int i = 0; i < 3; i++)
         {
+            Debug.Log($"[MatchConnectionManager] Retrying... (attempt {i + 1}/3)");
             Action onConnectedHandler = null;
             onConnectedHandler = () =>
             {
@@ -148,7 +150,7 @@ public class MatchConnectionManager : MonoBehaviour
             MatchFinishManager.instance.Finish();
             yield break;
         }
-
-        onReconnected?.Invoke();
+        
+        handleOnPeerConnected();
     }
 }

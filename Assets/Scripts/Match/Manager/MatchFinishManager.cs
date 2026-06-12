@@ -57,7 +57,7 @@ public class MatchFinishManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(5f);
 
-        P2PManager.instance.Disconnect();
+        P2PManager.instance.DestroyPeer();
 
         SceneService.instance.LoadScene("StartScene");
     }

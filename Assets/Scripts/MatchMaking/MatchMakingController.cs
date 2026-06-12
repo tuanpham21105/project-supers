@@ -43,7 +43,7 @@ public class MatchMakingController : MonoBehaviour
         MatchData.matchId = "";
         MatchData.players.Clear();
 
-        P2PManager.instance.Disconnect();
+        P2PManager.instance.DestroyPeer();
 
         if (isMatchMaking) return;
 
@@ -199,7 +199,7 @@ public class MatchMakingController : MonoBehaviour
 
         P2PManager.instance.OnReliableData -= handlePacketReceived;
 
-        P2PManager.instance.DisconnectFromPeer();
+        P2PManager.instance.DestroyPeer();
 
         isMatchMaking = true;
 

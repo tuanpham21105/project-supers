@@ -8,6 +8,13 @@ public class WindowUiController : MonoBehaviour
     {
         if (window == null)
             window = gameObject;
+
+        Initialize();
+    }
+
+    public virtual void Initialize()
+    {
+        
     }
 
     public void OpenWindow()

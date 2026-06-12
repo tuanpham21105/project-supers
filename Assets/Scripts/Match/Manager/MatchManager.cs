@@ -11,8 +11,6 @@ public class MatchManager : MonoBehaviour
     private bool isMatchStart = false;
     public bool IsMatchStart() => isMatchStart;
     public event Action onMatchStarting;
-    public event Action onHostLostFocus;
-    public event Action onHostGainFocus;
 
     [Header("Dependencies")]
     private PlayerData playerData;
@@ -61,8 +59,8 @@ public class MatchManager : MonoBehaviour
         if (IsPlayerHost())
         {
             StartCoroutine(SendLoadMatchToClient());
-            TabVisibilityService.instance.OnTabVisible += handleGainFocus;
-            TabVisibilityService.instance.OnTabHidden += handleLostFocus;
+            // TabVisibilityService.instance.OnTabVisible += handleGainFocus;
+            // TabVisibilityService.instance.OnTabHidden += handleLostFocus;
         }
         else
         {
@@ -125,8 +123,8 @@ public class MatchManager : MonoBehaviour
     {
         if (IsPlayerHost())
         {
-            TabVisibilityService.instance.OnTabVisible -= handleGainFocus;
-            TabVisibilityService.instance.OnTabHidden -= handleLostFocus;
+            // TabVisibilityService.instance.OnTabVisible -= handleGainFocus;
+            // TabVisibilityService.instance.OnTabHidden -= handleLostFocus;
         }
 
         if (MatchFinishManager.instance != null)
@@ -176,27 +174,17 @@ public class MatchManager : MonoBehaviour
         return hostPlayer;
     }
 
-    void handleGainFocus()
-    {
-        if (HostPacketSender.instance != null)
-            HostPacketSender.instance.sendGainFocus();
-    }
+    // void handleGainFocus()
+    // {
+    //     if (HostPacketSender.instance != null)
+    //         HostPacketSender.instance.sendGainFocus();
+    // }
 
-    void handleLostFocus()
-    {
-        if (HostPacketSender.instance != null)
-            HostPacketSender.instance.sendLostFocus();
-    }
-
-    public void emitHostGainFocus()
-    {
-        onHostGainFocus?.Invoke();
-    }
-
-    public void emitHostLostFocus()
-    {
-        onHostLostFocus?.Invoke();
-    }
+    // void handleLostFocus()
+    // {
+    //     if (HostPacketSender.instance != null)
+    //         HostPacketSender.instance.sendLostFocus();
+    // }
 
     void handleMatchFinish(int status)
     {
@@ -211,10 +199,5 @@ public class MatchManager : MonoBehaviour
     void handleReconnected()
     {
         isMatchStart = true;
-    }
-
-    public void disconnectPeer()
-    {
-        P2PManager.instance.Disconnect();
     }
 }

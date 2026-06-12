@@ -2,11 +2,8 @@ using UnityEngine;
 
 public class MatchConnectingUiController : WindowUiController
 {
-    void Start()
+    public override void Initialize()
     {
-        if (window == null)
-            window = gameObject;
-
         MatchManager.instance.onHostGainFocus += CloseWindow;
         MatchManager.instance.onHostLostFocus += OpenWindow;
 

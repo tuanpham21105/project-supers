@@ -60,11 +60,11 @@ public class ClientPacketReceiver : MonoBehaviour
         }
         else if (packet.type.CompareTo("LOST_FOCUS") == 0)
         {
-            MatchManager.instance.emitHostLostFocus();
+            // MatchManager.instance.emitHostLostFocus();
         }
         else if (packet.type.CompareTo("GAIN_FOCUS") == 0)
         {
-            MatchManager.instance.emitHostGainFocus();
+            // MatchManager.instance.emitHostGainFocus();
         }
     } 
 

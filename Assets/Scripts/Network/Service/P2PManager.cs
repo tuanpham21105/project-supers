@@ -108,7 +108,7 @@ public class P2PManager : MonoBehaviour
     {
         if (_conn == null)
         {
-            Debug.LogWarning("[P2P] SendData: no connection");
+            // Debug.LogWarning("[P2P] SendData: no connection");
             return;
         }
         _conn.Send(data);
@@ -119,7 +119,7 @@ public class P2PManager : MonoBehaviour
     {
         if (_conn == null)
         {
-            Debug.LogWarning("[P2P] SendDataUnreliable: no connection");
+            // Debug.LogWarning("[P2P] SendDataUnreliable: no connection");
             return;
         }
         _conn.SendUnreliable(data);
