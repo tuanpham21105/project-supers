@@ -53,6 +53,10 @@ public class MatchManager : MonoBehaviour
             return;
         }
 
+        MatchFinishManager.instance.onMatchFinish += handleMatchFinish;
+        MatchConnectionManager.instance.onReconnecting += handleReconnecting;
+        MatchConnectionManager.instance.onReconnected += handleReconnected;
+
         // Only the host sends LOAD_MATCH to tell the client to load the scene
         if (IsPlayerHost())
         {
@@ -124,6 +128,15 @@ public class MatchManager : MonoBehaviour
             TabVisibilityService.instance.OnTabVisible -= handleGainFocus;
             TabVisibilityService.instance.OnTabHidden -= handleLostFocus;
         }
+
+        if (MatchFinishManager.instance != null)
+            MatchFinishManager.instance.onMatchFinish -= handleMatchFinish;
+
+        if (MatchConnectionManager.instance != null)
+        {
+            MatchConnectionManager.instance.onReconnecting -= handleReconnecting;
+            MatchConnectionManager.instance.onReconnected -= handleReconnected;
+        }
     }
 
     public String GetHostPlayer() => hostPlayer;
@@ -183,5 +196,25 @@ public class MatchManager : MonoBehaviour
     public void emitHostLostFocus()
     {
         onHostLostFocus?.Invoke();
+    }
+
+    void handleMatchFinish(int status)
+    {
+        isMatchStart = false;
+    }
+
+    void handleReconnecting()
+    {
+        isMatchStart = false;
+    }
+
+    void handleReconnected()
+    {
+        isMatchStart = true;
+    }
+
+    public void disconnectPeer()
+    {
+        P2PManager.instance.Disconnect();
     }
 }

@@ -43,6 +43,8 @@ public class MatchMakingController : MonoBehaviour
         MatchData.matchId = "";
         MatchData.players.Clear();
 
+        P2PManager.instance.Disconnect();
+
         if (isMatchMaking) return;
 
         Debug.Log("[MatchMaking] Starting...");
@@ -119,7 +121,7 @@ public class MatchMakingController : MonoBehaviour
                 }
                 else
                 {
-                    P2PManager.instance.Init(PlayerData.instance.username + MatchData.matchId);
+                    P2PManager.instance.Init("Client " + MatchData.matchId);
                 }
 
                 onStartMatchMakingSuccess?.Invoke();
@@ -259,6 +261,7 @@ public class MatchMakingController : MonoBehaviour
 
     private void loadMatch()
     {
+        isMatchMaking = false;
         P2PManager.instance.OnReliableData -= handlePacketReceived;
         SceneService.instance.LoadScene("BattleScene");
     }

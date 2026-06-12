@@ -65,6 +65,11 @@ public class PlayerTestInputController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            MatchManager.instance.disconnectPeer();
+        }
+
         if (defenseController != null)
         {
             defenseController.Block(blockInput);

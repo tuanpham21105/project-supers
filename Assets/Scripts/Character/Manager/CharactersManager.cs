@@ -57,6 +57,8 @@ public class CharactersManager : MonoBehaviour
         flyingHandlers = new List<Action>();
         animationHandlers = new List<Action<String, String>>();
 
+        onCharacterHealthChange += handleCharacterHealthChange;
+
         InitCharacters();
     }
 
@@ -100,6 +102,8 @@ public class CharactersManager : MonoBehaviour
                 characters[i].GetComponent<CharacterMovementController>().endFlying -= flyingHandlers[i];
                 characters[i].GetComponent<CharacterAnimationService>().onPlayAnimation -= animationHandlers[i];
         }
+        
+        onCharacterHealthChange -= handleCharacterHealthChange;
     }
 
     Action HandleCharacterFlyingInterrupted(String player)
@@ -305,6 +309,20 @@ public class CharactersManager : MonoBehaviour
             character.GetComponent<CharacterTakeDamageController>().enabled = isHost;
             character.GetComponent<CharacterActionController>().enabled = isHost;
             character.GetComponent<CharacterObjectsData>().characterHurtBox.SetActive(isHost);
+        }
+    }
+
+    void handleCharacterHealthChange(String player, float healthPercent)
+    {
+        if (healthPercent <= 0)
+        {
+            foreach (String p in MatchManager.instance.GetPlayers())
+            {
+                if (!player.Equals(p))
+                {
+                    MatchFinishManager.instance.Finish(p);
+                }
+            }
         }
     }
 }
