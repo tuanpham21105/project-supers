@@ -6,6 +6,8 @@ public abstract class PlayerInputController : MonoBehaviour
 {
     public static PlayerInputController instance;
 
+    public abstract void OpenSettingInput();
+    public abstract void HandleCloseSetting();
     public abstract void HandleFlyingInterrupted();
     public abstract void MoveDirectionInput();
     public abstract void SprintInput();

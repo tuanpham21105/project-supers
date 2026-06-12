@@ -9,6 +9,8 @@ public class MatchConnectingUiController : WindowUiController
 
         MatchConnectionManager.instance.onReconnecting += OpenWindow;
         MatchConnectionManager.instance.onReconnected += CloseWindow;
+
+        CloseWindow();
     }
 
     void OnDestroy()

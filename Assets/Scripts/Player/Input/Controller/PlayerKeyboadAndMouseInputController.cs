@@ -50,6 +50,8 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     [SerializeField] private float holdThreshold = 0.2f;
     private Dictionary<String, float> holdStartTime = new Dictionary<String, float>();
 
+    private bool canGetInput = true;
+
     private void Awake()
     {
         instance = this;
@@ -76,6 +78,9 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
     private void Update()
     {
+        if (!canGetInput) return;
+        
+        OpenSettingInput();
         MoveDirectionInput();
         SprintInput();
         DashInput();
@@ -251,6 +256,27 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
 
         if (cameraController != null) cameraController.Rotate(smoothLookInput);
         playerInputHandler.ControlCharacterRotation(cameraController.GetCameraDirection());
+    }
+
+    public override void OpenSettingInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {   
+            canGetInput = false;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            playerInputHandler.OpenSetting();
+        }
+    }
+
+    public override void HandleCloseSetting()
+    {
+        canGetInput = true;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private bool ProcessInput(Keybind keybind, bool currentState)

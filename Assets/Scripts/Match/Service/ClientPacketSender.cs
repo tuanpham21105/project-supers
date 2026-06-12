@@ -64,4 +64,18 @@ public class ClientPacketSender : MonoBehaviour
 
         P2PManager.instance.SendJsonUnreliable(packet);
     }
+
+    public void sendSurrenderAcknowledge()
+    {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[ClientPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        Packet packet = new Packet();
+        packet.type = "SURRENDER_ACKNOWLEDGE";
+
+        P2PManager.instance.SendJson(packet);
+    }
 }

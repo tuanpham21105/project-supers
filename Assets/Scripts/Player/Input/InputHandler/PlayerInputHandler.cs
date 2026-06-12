@@ -8,6 +8,7 @@ public class PlayerInputHandler : MonoBehaviour
 {
     public static PlayerInputHandler instance;
     public PlayerInputController playerInputController;
+    
     void Awake()
     {
         instance = this;
@@ -19,6 +20,8 @@ public class PlayerInputHandler : MonoBehaviour
         CharactersManager.instance.onCharacterFlyingInterrupted += HandleFlyingInterrupted;
 
         ClientPacketReceiver.instance.onFlyingInterrupted += HandleFlyingInterrupted;
+
+        MatchSettingWindowUiController.instance.onCloseWindow += HandleCloseSetting;
     }
 
     void OnDestroy()
@@ -26,6 +29,8 @@ public class PlayerInputHandler : MonoBehaviour
         CharactersManager.instance.onCharacterFlyingInterrupted -= HandleFlyingInterrupted;
 
         ClientPacketReceiver.instance.onFlyingInterrupted -= HandleFlyingInterrupted;
+
+        MatchSettingWindowUiController.instance.onCloseWindow -= HandleCloseSetting;
     }
 
     public void HandleFlyingInterrupted(string player)
@@ -48,5 +53,15 @@ public class PlayerInputHandler : MonoBehaviour
         else
             if (ClientPacketSender.instance != null) 
                 ClientPacketSender.instance.sendControlRotation(direction);
+    }
+
+    public void OpenSetting()
+    {
+        MatchSettingWindowUiController.instance.OpenWindow();
+    }
+
+    public void HandleCloseSetting()
+    {
+        playerInputController.HandleCloseSetting();
     }
 }

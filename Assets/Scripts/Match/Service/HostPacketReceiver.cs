@@ -68,6 +68,12 @@ public class HostPacketReceiver : MonoBehaviour
             {
                 MatchManager.instance.ClientReady();
             }
+            else if (packet.type.CompareTo("SURRENDER_ACKNOWLEDGE") == 0)
+            {
+                Debug.Log($"[HostPacketReceiver] {player} surrender have been acknowledge.");
+
+                MatchManager.instance.Surrender();
+            }
         };
     }
 }

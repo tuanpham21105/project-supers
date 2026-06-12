@@ -125,4 +125,18 @@ public class HostPacketSender : MonoBehaviour
 
         P2PManager.instance.SendJson(packet);
     }
+
+    public void sendSurrender()
+    {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        Packet packet = new Packet();
+        packet.type = "SURRENDER";
+
+        P2PManager.instance.SendJson(packet);
+    }
 }

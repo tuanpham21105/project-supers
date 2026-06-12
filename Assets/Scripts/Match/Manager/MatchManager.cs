@@ -10,6 +10,8 @@ public class MatchManager : MonoBehaviour
 
     private bool isMatchStart = false;
     public bool IsMatchStart() => isMatchStart;
+    private bool isSurrender = false;
+    public bool IsSurrender() => isSurrender;
     public event Action onMatchStarting;
 
     [Header("Dependencies")]
@@ -199,5 +201,27 @@ public class MatchManager : MonoBehaviour
     void handleReconnected()
     {
         isMatchStart = true;
+    }
+
+    public void StartSurrender()
+    {
+        if (HostPacketSender.instance != null)
+            HostPacketSender.instance.sendSurrender();
+
+        isSurrender = true;
+    }
+
+    public void Surrender()
+    {
+        if (IsSurrender())
+        {
+            foreach (String p in players)
+            {
+                if (!p.Equals(PlayerData.instance.username))
+                {
+                    MatchFinishManager.instance.Finish(p);
+                }
+            }
+        }
     }
 }

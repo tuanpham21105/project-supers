@@ -66,6 +66,14 @@ public class ClientPacketReceiver : MonoBehaviour
         {
             // MatchManager.instance.emitHostGainFocus();
         }
+        else if (packet.type.CompareTo("SURRENDER") == 0)
+        {
+            Debug.Log($"[HostPacketReceiver] {PlayerData.instance.username} surrender.");
+
+            ClientPacketSender.instance.sendSurrenderAcknowledge();
+
+            MatchFinishManager.instance.Finish(PlayerData.instance.username);
+        }
     } 
 
     void receivePlayerCharacterFlyingInterrupted(FlyingInterruptedEventPacket packet)
