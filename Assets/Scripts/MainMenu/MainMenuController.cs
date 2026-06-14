@@ -67,6 +67,18 @@ public class MainMenuController : MonoBehaviour
                 SceneService.instance.ReloadCurrentScene();
             }
         );
+
+        ConfigurationService.instance.GetKeyboardConfiguration(
+            (response) =>
+            {
+                PlayerKeyboardAndMouseKeybindsData.instance.setKeybindsConfig(response.configuration);
+                Debug.Log($"[MainMenuController] Player keyboard configuration loaded");
+            },
+            (code, message) =>
+            {
+                Debug.LogError($"[MainMenuController] Failed to fetch player keyboard configuration: {message}");
+            }
+        );
     }
 
     [SerializeField] private GameObject openedWindow;

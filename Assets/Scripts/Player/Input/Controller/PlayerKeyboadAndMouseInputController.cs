@@ -62,7 +62,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         playerInputHandler = PlayerInputHandler.instance;
         playerData = PlayerData.instance;
 
-        keybinds = PlayerKeyboardAndMouseKeybindsData.playerKeyboardAndMouseKeybindsData;
+        keybinds = PlayerKeyboardAndMouseKeybindsData.instance;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -113,10 +113,10 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         prevLeftInput = leftInput;
         prevRightInput = rightInput;
 
-        forwardInput = ProcessInput(keybinds.forwardKey, forwardInput);
-        backwardInput = ProcessInput(keybinds.backwardKey, backwardInput);
-        leftInput = ProcessInput(keybinds.strafeLeftKey, leftInput);
-        rightInput = ProcessInput(keybinds.strafeRightKey, rightInput);
+        forwardInput = ProcessInput("Move Forward", keybinds.keybinds["Move Forward"], forwardInput);
+        backwardInput = ProcessInput("Move Backward", keybinds.keybinds["Move Backward"], backwardInput);
+        leftInput = ProcessInput("Strafe Left", keybinds.keybinds["Strafe Left"], leftInput);
+        rightInput = ProcessInput("Strafe Right", keybinds.keybinds["Strafe Right"], rightInput);
 
         if (forwardInput != prevForwardInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.MoveForward, forwardInput);
@@ -136,7 +136,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void SprintInput()
     {
         prevSprintInput = sprintInput;
-        bool currentSprintInput = ProcessInput(keybinds.sprintKey, sprintInput);
+        bool currentSprintInput = ProcessInput("Sprint", keybinds.keybinds["Sprint"], sprintInput);
 
         sprintInput = currentSprintInput;
 
@@ -149,7 +149,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void DashInput()
     {
         prevDashInput = dashInput;
-        dashInput = ProcessInput(keybinds.dashKey, dashInput);
+        dashInput = ProcessInput("Dash", keybinds.keybinds["Dash"], dashInput);
 
         if (dashInput != prevDashInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.Dash, dashInput);
@@ -160,7 +160,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void ToggleFlyInput()
     {
         prevToggleFlyInput = toggleFlyInput;
-        toggleFlyInput = ProcessInput(keybinds.toggleFlyKey, toggleFlyInput);
+        toggleFlyInput = ProcessInput("Toggle Fly", keybinds.keybinds["Toggle Fly"], toggleFlyInput);
 
         if (toggleFlyInput != prevToggleFlyInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.ToggleFly, toggleFlyInput);
@@ -171,7 +171,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void JumpInput()
     {
         prevJumpInput = jumpInput;
-        jumpInput = ProcessInput(keybinds.jumpKey, jumpInput);
+        jumpInput = ProcessInput("Jump", keybinds.keybinds["Jump"], jumpInput);
 
         if (jumpInput != prevJumpInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.Jump, jumpInput);
@@ -182,7 +182,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void FlyUpInput()
     {
         prevFlyUpInput = flyUpInput;
-        flyUpInput = ProcessInput(keybinds.flyUpKey, flyUpInput);
+        flyUpInput = ProcessInput("Fly Up", keybinds.keybinds["Fly Up"], flyUpInput);
 
         if (flyUpInput != prevFlyUpInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.FlyUp, flyUpInput);
@@ -193,7 +193,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void FlyDownInput()
     {
         prevFlyDownInput = flyDownInput;
-        flyDownInput = ProcessInput(keybinds.flyDownKey, flyDownInput);
+        flyDownInput = ProcessInput("Fly Down", keybinds.keybinds["Fly Down"], flyDownInput);
 
         if (flyDownInput != prevFlyDownInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.FlyDown, flyDownInput);
@@ -204,7 +204,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void NormalAttackInput()
     {
         prevNormalAttackInput = normalAttackInput;
-        normalAttackInput = ProcessInput(keybinds.normalAttackKey, normalAttackInput);
+        normalAttackInput = ProcessInput("Normal Attack", keybinds.keybinds["Normal Attack"], normalAttackInput);
 
         if (normalAttackInput != prevNormalAttackInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.NormalAttack, normalAttackInput);
@@ -215,7 +215,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void StrikeAttackInput()
     {
         prevStrikeAttackInput = strikeAttackInput;
-        strikeAttackInput = ProcessInput(keybinds.strikeAttackKey, strikeAttackInput);
+        strikeAttackInput = ProcessInput("Strike Attack", keybinds.keybinds["Strike Attack"], strikeAttackInput);
 
         if (strikeAttackInput != prevStrikeAttackInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.StrikeAttack, strikeAttackInput);
@@ -226,7 +226,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void BlockInput()
     {
         prevBlockInput = blockInput;
-        blockInput = ProcessInput(keybinds.blockKey, blockInput);
+        blockInput = ProcessInput("Block", keybinds.keybinds["Block"], blockInput);
 
         if (blockInput != prevBlockInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.Block, blockInput);
@@ -237,7 +237,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public override void DeflectInput()
     {
         prevDeflectInput = deflectInput;
-        deflectInput = ProcessInput(keybinds.deflectKey, deflectInput);
+        deflectInput = ProcessInput("Deflect", keybinds.keybinds["Deflect"], deflectInput);
 
         if (deflectInput != prevDeflectInput)
             playerInputHandler.ControlCharacterAction(CharacterActions.Deflect, deflectInput);
@@ -279,10 +279,9 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         Cursor.visible = false;
     }
 
-    private bool ProcessInput(Keybind keybind, bool currentState)
+    private bool ProcessInput(string name, Keybind keybind, bool currentState)
     {
         KeyCode key = keybind.key;
-        String name = keybind.name;
         bool keyIsDown = Input.GetKey(key);
         bool keyJustDown = Input.GetKeyDown(key);
         bool keyJustUp = Input.GetKeyUp(key);
