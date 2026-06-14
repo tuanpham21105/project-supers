@@ -72,6 +72,7 @@ public class MainMenuController : MonoBehaviour
             (response) =>
             {
                 PlayerKeyboardAndMouseKeybindsData.instance.setKeybindsConfig(response.configuration);
+                PlayerKeyboardAndMouseKeybindsData.instance.mouseSensitivity = response.mouseSensitivity;
                 Debug.Log($"[MainMenuController] Player keyboard configuration loaded");
             },
             (code, message) =>

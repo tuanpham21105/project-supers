@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class KeybindsSectionUiController : MonoBehaviour
 {
+    [SerializeField] private MouseConfigUiController mouseConfigUiController;
+
     [SerializeField] private GameObject keybindConfigPrefab;
 
     private Dictionary<string, KeybindConfigUiController> keybindItemMap;
@@ -63,6 +65,8 @@ public class KeybindsSectionUiController : MonoBehaviour
         {
             SetKeybind(pair.Key, pair.Value);
         }
+
+        mouseConfigUiController.ApplySensitivityToUi(PlayerKeyboardAndMouseKeybindsData.instance.mouseSensitivity);
     }
 
     public void ApplyUiToData()
@@ -74,13 +78,17 @@ public class KeybindsSectionUiController : MonoBehaviour
         }
 
         string json = PlayerKeyboardAndMouseKeybindsData.convertKeybindsToString(uiKeybinds);
-        KeyboardConfigurationRequest request = new KeyboardConfigurationRequest { configuration = json };
+        KeyboardConfigurationRequest request = new KeyboardConfigurationRequest { 
+            configuration = json,
+            mouseSensitivity = mouseConfigUiController.GetSensitivityFromUi()
+        };
 
         ConfigurationService.instance.PutKeyboardConfiguration(
             request,
             onSuccess: response =>
             {
                 PlayerKeyboardAndMouseKeybindsData.instance.setKeybindsConfig(response.configuration);
+                PlayerKeyboardAndMouseKeybindsData.instance.mouseSensitivity = response.mouseSensitivity;
                 ApplyDataToUi();
             },
             onError: (code, message) =>
