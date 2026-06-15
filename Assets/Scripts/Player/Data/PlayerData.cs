@@ -11,6 +11,7 @@ public class PlayerData : MonoBehaviour
     public String username;
     public String createdDate;
     public bool isGuest;
+    public long points;
 
     void Awake()
     {

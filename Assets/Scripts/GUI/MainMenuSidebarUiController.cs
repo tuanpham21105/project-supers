@@ -18,6 +18,7 @@ public class MainMenuSidebarUiController : MonoBehaviour
 
     void Start()
     {
+        // SetupSidebarUi();
     }
 
     public void SetupSidebarUi()

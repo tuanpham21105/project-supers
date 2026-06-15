@@ -44,6 +44,7 @@ public class MainMenuController : MonoBehaviour
                 }
             );
         }
+
     }
 
     private void FetchAndAssignPlayerData()
@@ -57,8 +58,9 @@ public class MainMenuController : MonoBehaviour
                 PlayerData.instance.isGuest = response.isGuest;
                 Debug.Log($"[MainMenuController] Player data loaded: {response.username}");
 
+                MainMenuHeaderUiController.instance.SetHeaderUsername();
+
                 MainMenuSidebarUiController.instance.SetupSidebarUi();
-                MainMenuHeaderUiController.instance.SetupHeaderUi();
             },
             (code, message) =>
             {
@@ -78,6 +80,20 @@ public class MainMenuController : MonoBehaviour
             (code, message) =>
             {
                 Debug.LogError($"[MainMenuController] Failed to fetch player keyboard configuration: {message}");
+            }
+        );
+
+        PlayerInventoryService.instance.GetPlayerInventory(
+            (response) =>
+            {
+                PlayerData.instance.points = response.points;
+                Debug.Log($"[MainMenuController] Player inventory loaded");
+                
+                MainMenuHeaderUiController.instance.SetPoints();
+            },
+            (code, message) =>
+            {
+                Debug.LogError($"[MainMenuController] Failed to fetch player inventory: {message}");
             }
         );
     }
