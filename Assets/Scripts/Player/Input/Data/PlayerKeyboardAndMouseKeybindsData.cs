@@ -68,7 +68,7 @@ public class PlayerKeyboardAndMouseKeybindsData : MonoBehaviour
         { "Fly Down",      new Keybind(KeyCode.LeftControl,  KeyMode.Click,       ActivateAction.Hold) },
         { "Normal Attack", new Keybind(KeyCode.Mouse0,       KeyMode.Click,       ActivateAction.Any) },
         { "Strike Attack", new Keybind(KeyCode.E,            KeyMode.Click,       ActivateAction.Any) },
-        { "Block",         new Keybind(KeyCode.R,       KeyMode.Click,       ActivateAction.Hold) },
+        { "Block",         new Keybind(KeyCode.R,            KeyMode.Click,       ActivateAction.Hold) },
         { "Deflect",       new Keybind(KeyCode.Mouse1,       KeyMode.Click,       ActivateAction.Once) },
         { "Skill 1",       new Keybind(KeyCode.Alpha1,       KeyMode.Click,       ActivateAction.Once) },
         { "Skill 2",       new Keybind(KeyCode.Alpha2,       KeyMode.Click,       ActivateAction.Once) },

@@ -27,6 +27,7 @@ public class KeybindConfigUiController : MonoBehaviour
         options.Add("Mouse0");
         options.Add("Mouse1");
         options.Add("Mouse2");
+        options.Add("Space");
         options.Add("Tab");
         options.Add("CapsLock");
         options.Add("Shift");
