@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class CharacterAccessoriesData : MonoBehaviour
 {
-    public CharacterAccessoriesItem hatAccessories;
-    public CharacterAccessoriesItem maskAccessories;
-    public CharacterAccessoriesItem neckAccessories;
-    public CharacterAccessoriesItem chestAccessories;
-    public CharacterAccessoriesItem backAccessories;
-    public CharacterAccessoriesItem shouldersAccessories;
-    public CharacterAccessoriesItem glovesAccessories;
-    public CharacterAccessoriesItem hipAccessories;
-    public CharacterAccessoriesItem legAccessories;
-    public CharacterAccessoriesItem bootsAccessories;
+    public CharacterAccessoryItem hatAccessories;
+    public CharacterAccessoryItem maskAccessories;
+    public CharacterAccessoryItem neckAccessories;
+    public CharacterAccessoryItem chestAccessories;
+    public CharacterAccessoryItem backAccessories;
+    public CharacterAccessoryItem shouldersAccessories;
+    public CharacterAccessoryItem glovesAccessories;
+    public CharacterAccessoryItem hipAccessories;
+    public CharacterAccessoryItem legAccessories;
+    public CharacterAccessoryItem bootsAccessories;
 }

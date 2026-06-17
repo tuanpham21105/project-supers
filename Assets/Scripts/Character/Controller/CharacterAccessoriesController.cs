@@ -15,13 +15,13 @@ public class CharacterAccessoriesController : MonoBehaviour
     }
 
     [ProButton]
-    public void PutOnAccessories(CharacterAccessoriesItem item)
+    public void PutOnAccessories(CharacterAccessoryItem item)
     {
         if (item == null) return;
 
         AccessoriesPart part = item.part;
 
-        CharacterAccessoriesItem existingItem = GetAccessoriesSlot(part);
+        CharacterAccessoryItem existingItem = GetAccessoriesSlot(part);
         if (existingItem != null)
         {
             TakeOffAccessories(existingItem);
@@ -57,7 +57,7 @@ public class CharacterAccessoriesController : MonoBehaviour
     }
 
     [ProButton]
-    public void TakeOffAccessories(CharacterAccessoriesItem item)
+    public void TakeOffAccessories(CharacterAccessoryItem item)
     {
         if (item == null) return;
 
@@ -82,7 +82,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         Destroy(item.gameObject);
     }
 
-    private CharacterAccessoriesItem GetAccessoriesSlot(AccessoriesPart part)
+    private CharacterAccessoryItem GetAccessoriesSlot(AccessoriesPart part)
     {
         return part switch
         {
@@ -100,7 +100,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         };
     }
 
-    private void SetAccessoriesSlot(AccessoriesPart part, CharacterAccessoriesItem item)
+    private void SetAccessoriesSlot(AccessoriesPart part, CharacterAccessoryItem item)
     {
         switch (part)
         {
