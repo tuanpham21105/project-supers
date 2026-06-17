@@ -10,6 +10,58 @@ public class CharacterObjectsData : MonoBehaviour
     public Transform characterMesh;
     public GameObject characterHurtBox;
 
+    [Header("Head Accessories")]
+    public GameObject headMesh;
+    public GameObject faceAccessories;
+    public GameObject headAccessories;
+
+    [Header("Ears Accessories")]
+    public GameObject earsMesh;
+    public GameObject earsAccessories;
+
+    [Header("Chest Accessories")]
+    public GameObject neckAccessories;
+    public GameObject backAccessories;
+    public GameObject chestMesh;
+
+    [Header("Hip Accessories")]
+    public GameObject hipMesh;
+    public GameObject hipAccessories;
+
+    [Header("Right Forearm Accessories")]
+    public GameObject rightHandAccessories;
+    public GameObject rightForearmAccessories;
+    public GameObject rightForearmMesh;
+
+    [Header("Right Arm Accessories")]
+    public GameObject rightShoulderAccessories;
+    public GameObject rightArmMesh;
+
+    [Header("Left Forearm Accessories")]
+    public GameObject leftHandAccessories;
+    public GameObject leftForearmAccessories;
+    public GameObject leftForearmMesh;
+
+    [Header("Left Arm Accessories")]
+    public GameObject leftShoulderAccessories;
+    public GameObject leftArmMesh;
+
+    [Header("Right Shin Accessories")]
+    public GameObject rightShinAccessories;
+    public GameObject rightShinMesh;
+    
+    [Header("Right Thigh Accessories")]
+    public GameObject rightThighAccessories;
+    public GameObject rightThighMesh;
+
+    [Header("Left Shin Accessories")]
+    public GameObject leftShinAccessories;
+    public GameObject leftShinMesh;
+    
+    [Header("Left Thigh Accessories")]
+    public GameObject leftThighAccessories;
+    public GameObject leftThighMesh;
+
     void Start()
     {
         if (characterObject == null) characterObject = gameObject;
