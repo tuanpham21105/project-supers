@@ -7,6 +7,7 @@ public class MainWindowUiController : WindowUiController
     [SerializeField] private GameObject readyPanel;
     [SerializeField] private GameObject cancelButton;
     [SerializeField] private GameObject findingMatchDisplayText;
+    [SerializeField] private GameObject battleCostDisplayText;
 
     void OnDestroy()
     {
@@ -25,6 +26,7 @@ public class MainWindowUiController : WindowUiController
         readyPanel.SetActive(true);
         cancelButton.SetActive(false);
         findingMatchDisplayText.SetActive(false);
+        battleCostDisplayText.SetActive(false);
     }
 
     public void CancelButton()
@@ -37,6 +39,7 @@ public class MainWindowUiController : WindowUiController
         readyPanel.SetActive(false);
         cancelButton.SetActive(false);
         findingMatchDisplayText.SetActive(false);
+        battleCostDisplayText.SetActive(true);
     }
 
     void handleStartMatchMakingSuccess()
@@ -48,6 +51,7 @@ public class MainWindowUiController : WindowUiController
         readyPanel.SetActive(false);
         cancelButton.SetActive(true);
         findingMatchDisplayText.SetActive(true);
+        battleCostDisplayText.SetActive(false);
     }
 
     void handleStartMatchMakingFailed(string error)
@@ -59,6 +63,7 @@ public class MainWindowUiController : WindowUiController
         readyPanel.SetActive(false);
         cancelButton.SetActive(false);
         findingMatchDisplayText.SetActive(false);
+        battleCostDisplayText.SetActive(true);
     }
 
     public void GoToTrainingArea()

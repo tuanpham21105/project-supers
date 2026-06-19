@@ -60,7 +60,7 @@ public static class ColorPaletteGenerator
 
         GameObject root = new GameObject("ColorPalette");
         root.transform.SetParent(parent, false);
-        float cellSize = 48f;
+        float cellSize = 32f;
         float spacing = 4f;
 
         RectTransform rootRt = root.AddComponent<RectTransform>();
@@ -107,7 +107,7 @@ public static class ColorPaletteGenerator
         // Đậm nhất (shadeT=0): saturation cao, value thấp
         // Nhạt nhất (shadeT=1): saturation thấp, value cao
         float saturation = Mathf.Lerp(1.2f, 0.45f, shadeT); 
-        float value       = Mathf.Lerp(0.4f, 1f, shadeT);
+        float value       = Mathf.Lerp(0.5f, 1.2f, shadeT);
 
         return Color.HSVToRGB(hue, saturation, value);
     }
@@ -127,8 +127,8 @@ public static class ColorPaletteGenerator
     {
         // Brown: hue cam đất (~25°), saturation và value thấp hơn Orange
         float hue = 25f / 360f;
-        float saturation = Mathf.Lerp(0.55f, 0.12f, shadeT);
-        float value       = Mathf.Lerp(0.22f, 0.85f, shadeT);
+        float saturation = Mathf.Lerp(0.8f, 0.25f, shadeT); 
+        float value       = Mathf.Lerp(0.35f, 0.95f, shadeT);
         return Color.HSVToRGB(hue, saturation, value);
     }
 
