@@ -17,8 +17,6 @@ public class CharacterAccessoriesController : MonoBehaviour
     [ProButton]
     public void PutOnAccessories(CharacterAccessoryItem item)
     {
-        if (item == null) return;
-
         AccessoriesPart part = item.part;
 
         CharacterAccessoryItem existingItem = GetAccessoriesSlot(part);
@@ -26,6 +24,8 @@ public class CharacterAccessoriesController : MonoBehaviour
         {
             TakeOffAccessories(existingItem);
         }
+        
+        if (item == null) return;
 
         SetAccessoriesSlot(part, item);
 

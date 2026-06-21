@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,4 +6,15 @@ using UnityEngine;
 public class AccessoriesListSO : ScriptableObject
 {
     public List<AccessoryItemSO> items;
+
+    public AccessoryItemSO findByCode(String code)
+    {
+        foreach (AccessoryItemSO item in items) 
+        {
+            if (item.code.Equals(code)) 
+                return item;
+        }
+
+        return null;
+    }
 }

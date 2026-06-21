@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4257088922549781608}
   - component: {fileID: 3507834682539668689}
   - component: {fileID: 7900016665656312149}
+  - component: {fileID: 5254018081823678408}
   m_Layer: 0
   m_Name: ColorSlot
   m_TagString: Untagged
@@ -119,4 +120,28 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3507834682539668689}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5254018081823678408}
+        m_TargetAssemblyTypeName: ColorSlotUiController, Assembly-CSharp
+        m_MethodName: Press
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5254018081823678408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5273100145763117689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106f4209a0a465cd4bd6baa8327873b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
