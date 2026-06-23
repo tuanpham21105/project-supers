@@ -8,17 +8,6 @@ public class StoreUiController : WindowUiController
 {
     public static StoreUiController instance;
 
-    [SerializeField] private AccessoriesListSO localHatList;
-    [SerializeField] private AccessoriesListSO localMaskList;
-    [SerializeField] private AccessoriesListSO localNeckList;
-    [SerializeField] private AccessoriesListSO localChestList;
-    [SerializeField] private AccessoriesListSO localBackList;
-    [SerializeField] private AccessoriesListSO localShouldersList;
-    [SerializeField] private AccessoriesListSO localGlovesList;
-    [SerializeField] private AccessoriesListSO localHipList;
-    [SerializeField] private AccessoriesListSO localLegList;
-    [SerializeField] private AccessoriesListSO localBootsList;
-
     [SerializeField] private AccessoriesColorPalleteUiController accessoriesColorPalleteUiController;
 
     [SerializeField] private TextMeshProUGUI totalCostTextField;
@@ -31,7 +20,7 @@ public class StoreUiController : WindowUiController
     [SerializeField] private AccessoriesItemListUiController currentItemList;
     [SerializeField] private Dictionary<StoreItemsType, AccessoriesItemListUiController> itemListsDictionary = new Dictionary<StoreItemsType, AccessoriesItemListUiController>();
 
-    
+    [SerializeField] private CharacterAccessoriesSet storeAccessories; 
 
     void Awake()
     {
@@ -42,9 +31,20 @@ public class StoreUiController : WindowUiController
     {
         base.OnOpenWindow();
 
+        SetTotalCost(0);
+
+        storeAccessories = PlayerData.instance.characterAccessories.Clone();
+
         SelectType(StoreItemsType.Hat);
 
         accessoriesColorPalleteUiController.SelectColorLevel(0);
+    }
+
+    public override void OnCloseWindow()
+    {
+        base.OnCloseWindow();
+
+        MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
     }
 
     public void SelectType(StoreItemsType type)
@@ -56,10 +56,12 @@ public class StoreUiController : WindowUiController
             currentItemList = itemListsDictionary[type];
 
             currentItemList.OpenWindow();
+
+            currentItemList.SetSelectedItem(storeAccessories.TypeToAccessory(type).itemCode);
         }
         else
         {
-            AccessoriesListSO localList = GetLocalListByType(type);
+            AccessoriesListSO localList = StoreData.instance.GetLocalListByType(type);
             if (localList == null) return;
 
             StoreService.instance.GetStoreItemsByType(type,
@@ -67,13 +69,15 @@ public class StoreUiController : WindowUiController
                 {
                     GameObject newListObject = Instantiate(itemListPrefab, itemsListSlot);
                     AccessoriesItemListUiController newList = newListObject.GetComponent<AccessoriesItemListUiController>();
-                    newList.AddItemsIntoList(response, localList);
+                    newList.SetupItemsIntoList(type, response, localList);
 
                     itemListsDictionary[type] = newList;
 
                     currentItemList?.CloseWindow();
                     currentItemList = newList;
                     currentItemList.OpenWindow();
+
+                    currentItemList.SetSelectedItem(storeAccessories.TypeToAccessory(type).itemCode);
                 },
                 (long errorCode, string errorMessage) =>
                 {
@@ -81,33 +85,30 @@ public class StoreUiController : WindowUiController
                 }
             );
         }
+    
     }
 
-    private AccessoriesListSO GetLocalListByType(StoreItemsType type)
+    public void SelectItem(StoreItemsType type, String itemCode)
     {
-        return type switch
-        {
-            StoreItemsType.Hat => localHatList,
-            StoreItemsType.Mask => localMaskList,
-            StoreItemsType.Neck => localNeckList,
-            StoreItemsType.Chest => localChestList,
-            StoreItemsType.Back => localBackList,
-            StoreItemsType.Shoulders => localShouldersList,
-            StoreItemsType.Gloves => localGlovesList,
-            StoreItemsType.Hip => localHipList,
-            StoreItemsType.Leg => localLegList,
-            StoreItemsType.Boots => localBootsList,
-            _ => null
-        };
+        AccessoriesListSO localList = StoreData.instance.GetLocalListByType(type);
+        AccessoryItemSO accessoryItemSO = localList.findByCode(itemCode);
+
+        MainMenuCharacterModelController.instance.PutOnAccessory(accessoryItemSO);
+
+        storeAccessories.TypeToAccessory(type).itemCode = itemCode;
     }
 
-    public void SelectItem()
+    public void UpdateTotalCost(int amount)
     {
+        totalCost += amount;
         
+        totalCostTextField.text = totalCost.ToString();
     }
 
-    public void UpdateTotalCost()
+    public void SetTotalCost(int totalCost)
     {
+        this.totalCost = totalCost;
         
+        totalCostTextField.text = totalCost.ToString();
     }
 }

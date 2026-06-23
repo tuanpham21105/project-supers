@@ -28,4 +28,40 @@ public class PlayerInventoryService : MonoBehaviour
             onError
         ));
     }
+
+    public void GetPlayerAccessoriesSet(Action<PlayerAccessoriesSetResponse> onSuccess, Action<long, string> onError)
+    {
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<PlayerAccessoriesSetResponse>(
+            "GET",
+            "/api/player/inventory/accessories",
+            null,
+            null,
+            onSuccess,
+            onError
+        ));
+    }
+
+    public void GetPlayerAccessoriesSetByUsername(String username, Action<PlayerAccessoriesSetResponse> onSuccess, Action<long, string> onError)
+    {
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<PlayerAccessoriesSetResponse>(
+            "GET",
+            "/api/player/inventory/accessories/" + username,
+            null,
+            null,
+            onSuccess,
+            onError
+        ));
+    }
+
+    public void SavePlayerAccessoriesSet(PlayerAccessoriesSetResponse request, Action<PlayerAccessoriesSetResponse> onSuccess, Action<long, string> onError)
+    {
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<PlayerAccessoriesSetResponse>(
+            "PUT",
+            "/api/player/inventory/accessories",
+            request,
+            null,
+            onSuccess,
+            onError
+        ));
+    }
 }

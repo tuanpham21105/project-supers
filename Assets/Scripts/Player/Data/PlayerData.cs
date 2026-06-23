@@ -3,6 +3,86 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public class CharacterAccessoriesSet
+{
+    public CharacterAccessory hatItem = new CharacterAccessory();
+    public CharacterAccessory maskItem = new CharacterAccessory();
+    public CharacterAccessory neckItem = new CharacterAccessory();
+    public CharacterAccessory chestItem = new CharacterAccessory();
+    public CharacterAccessory backItem = new CharacterAccessory();
+    public CharacterAccessory shouldersItem = new CharacterAccessory();
+    public CharacterAccessory glovesItem = new CharacterAccessory();
+    public CharacterAccessory hipItem = new CharacterAccessory();
+    public CharacterAccessory legItem = new CharacterAccessory();
+    public CharacterAccessory bootsItem = new CharacterAccessory();
+
+    public CharacterAccessory TypeToAccessory(StoreItemsType type)
+    {
+        return type switch
+        {
+            StoreItemsType.Hat => hatItem,
+            StoreItemsType.Mask => maskItem,
+            StoreItemsType.Neck => neckItem,
+            StoreItemsType.Chest => chestItem,
+            StoreItemsType.Back => backItem,
+            StoreItemsType.Shoulders => shouldersItem,
+            StoreItemsType.Gloves => glovesItem,
+            StoreItemsType.Hip => hipItem,
+            StoreItemsType.Leg => legItem,
+            StoreItemsType.Boots => bootsItem,
+            _ => null
+        };
+    }
+
+    public CharacterAccessoriesSet Clone()
+    {
+        return new CharacterAccessoriesSet
+        {
+            hatItem = hatItem?.Clone(),
+            maskItem = maskItem?.Clone(),
+            neckItem = neckItem?.Clone(),
+            chestItem = chestItem?.Clone(),
+            backItem = backItem?.Clone(),
+            shouldersItem = shouldersItem?.Clone(),
+            glovesItem = glovesItem?.Clone(),
+            hipItem = hipItem?.Clone(),
+            legItem = legItem?.Clone(),
+            bootsItem = bootsItem?.Clone(),
+        };
+    }
+}
+
+[Serializable]
+public class CharacterAccessory
+{
+    public string itemCode;
+    public AccessoryProperties properties;
+
+    public CharacterAccessory Clone()
+    {
+        return new CharacterAccessory
+        {
+            itemCode = itemCode,
+            properties = properties?.Clone(),
+        };
+    }
+}
+
+[Serializable]
+public class AccessoryProperties
+{
+    public Color color;
+
+    public AccessoryProperties Clone()
+    {
+        return new AccessoryProperties
+        {
+            color = color,
+        };
+    }
+}
+
 public class PlayerData : MonoBehaviour
 {
     public static PlayerData instance;
@@ -10,8 +90,9 @@ public class PlayerData : MonoBehaviour
     public String email;
     public String username;
     public String createdDate;
-    public bool isGuest;
-    public long points;
+    public bool isGuest = false;
+    public long points = 0;
+    public CharacterAccessoriesSet characterAccessories = new CharacterAccessoriesSet();
 
     void Awake()
     {

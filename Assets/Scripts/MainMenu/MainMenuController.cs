@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using com.cyborgAssets.inspectorButtonPro;
+using Newtonsoft.Json;
 using UnityEngine;
 
 
@@ -61,6 +62,8 @@ public class MainMenuController : MonoBehaviour
                 MainMenuHeaderUiController.instance.SetHeaderUsername();
 
                 MainMenuSidebarUiController.instance.SetupSidebarUi();
+
+                AssignOtherPlayerData();
             },
             (code, message) =>
             {
@@ -69,7 +72,10 @@ public class MainMenuController : MonoBehaviour
                 SceneService.instance.ReloadCurrentScene();
             }
         );
+    }
 
+    void AssignOtherPlayerData()
+    {
         ConfigurationService.instance.GetKeyboardConfiguration(
             (response) =>
             {
@@ -96,6 +102,44 @@ public class MainMenuController : MonoBehaviour
                 Debug.LogError($"[MainMenuController] Failed to fetch player inventory: {message}");
             }
         );
+
+        PlayerInventoryService.instance.GetPlayerAccessoriesSet(
+            (response) =>
+            {
+                PlayerData.instance.characterAccessories = new CharacterAccessoriesSet
+                {
+                    hatItem = MapAccessory(response.hatItem),
+                    maskItem = MapAccessory(response.maskItem),
+                    neckItem = MapAccessory(response.neckItem),
+                    chestItem = MapAccessory(response.chestItem),
+                    backItem = MapAccessory(response.backItem),
+                    shouldersItem = MapAccessory(response.shouldersItem),
+                    glovesItem = MapAccessory(response.glovesItem),
+                    hipItem = MapAccessory(response.hipItem),
+                    legItem = MapAccessory(response.legItem),
+                    bootsItem = MapAccessory(response.bootsItem),
+                };
+
+                Debug.Log($"[MainMenuController] Player accessories set loaded.");
+            },
+            (code, message) =>
+            {
+                Debug.LogError($"[MainMenuController] Failed to fetch player accessories set: {message}");
+            }
+        );
+    }
+
+    private CharacterAccessory MapAccessory(PlayerAccessoryItemResponse item)
+    {
+        if (item == null) return null;
+
+        return new CharacterAccessory
+        {
+            itemCode = item.itemCode,
+            properties = string.IsNullOrEmpty(item.properties)
+                ? null
+                : JsonConvert.DeserializeObject<AccessoryProperties>(item.properties),
+        };
     }
 
     [SerializeField] private GameObject openedWindow;

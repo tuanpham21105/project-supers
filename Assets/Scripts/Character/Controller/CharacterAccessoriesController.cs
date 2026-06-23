@@ -8,24 +8,24 @@ public class CharacterAccessoriesController : MonoBehaviour
     private CharacterAccessoriesData characterAccessoriesData;
     private CharacterObjectsData characterObjectsData;
 
-    void Start()
+    void Awake()
     {
         if (characterAccessoriesData == null) characterAccessoriesData = GetComponent<CharacterAccessoriesData>();
         if (characterObjectsData == null) characterObjectsData = GetComponent<CharacterObjectsData>();
     }
 
     [ProButton]
-    public void PutOnAccessories(CharacterAccessoryItem item)
-    {
+    public void PutOnAccessories(CharacterAccessoryItemData item)
+    {        
+        if (item == null) return;
+        
         AccessoriesPart part = item.part;
 
-        CharacterAccessoryItem existingItem = GetAccessoriesSlot(part);
+        CharacterAccessoryItemData existingItem = GetAccessoriesSlot(part);
         if (existingItem != null)
         {
             TakeOffAccessories(existingItem);
         }
-        
-        if (item == null) return;
 
         SetAccessoriesSlot(part, item);
 
@@ -57,7 +57,7 @@ public class CharacterAccessoriesController : MonoBehaviour
     }
 
     [ProButton]
-    public void TakeOffAccessories(CharacterAccessoryItem item)
+    public void TakeOffAccessories(CharacterAccessoryItemData item)
     {
         if (item == null) return;
 
@@ -82,7 +82,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         Destroy(item.gameObject);
     }
 
-    private CharacterAccessoryItem GetAccessoriesSlot(AccessoriesPart part)
+    private CharacterAccessoryItemData GetAccessoriesSlot(AccessoriesPart part)
     {
         return part switch
         {
@@ -100,7 +100,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         };
     }
 
-    private void SetAccessoriesSlot(AccessoriesPart part, CharacterAccessoryItem item)
+    private void SetAccessoriesSlot(AccessoriesPart part, CharacterAccessoryItemData item)
     {
         switch (part)
         {

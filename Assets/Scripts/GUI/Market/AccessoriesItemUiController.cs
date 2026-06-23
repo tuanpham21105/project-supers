@@ -8,22 +8,46 @@ using UnityEngine.UI;
 public class AccessoriesItemUiController : MonoBehaviour
 {
     [SerializeField] private string code;
+    [SerializeField] private int price;
+    [SerializeField] private bool isOwned = false;
+    [SerializeField] private Image bgrImage;
     [SerializeField] private Image image;
+    [SerializeField] private GameObject valueTitleObject;
     [SerializeField] private TextMeshProUGUI valueTextField;
+    [SerializeField] private GameObject ownedTitleObject;
 
-    [SerializeField] private Image selectedBgrImage;
+    [SerializeField] private Sprite normalBgrTexture;
+    [SerializeField] private Sprite selectedBgrTexture;
 
-    public event Action<string> onPress;
+    public event Action<string> onSelected;
 
-    public void SetItem(string code, Image image, int value)
+    public void SetItem(string code, Sprite sprite, int value, bool isOwned)
     {
         this.code = code;
-        this.image = image;
+        this.image.sprite = sprite;
         valueTextField.text = value.ToString();
+        price = value;
+        this.isOwned = isOwned;
+        if (isOwned) 
+            SetOwned();
     }
 
     public void OnPress()
     {
-        onPress?.Invoke(code);
+        onSelected?.Invoke(code);
     }
+
+    public void SetSelected(bool state)
+    {
+        bgrImage.sprite = state ? selectedBgrTexture : normalBgrTexture;
+    }
+
+    public void SetOwned()
+    {
+        valueTitleObject.SetActive(false);
+        ownedTitleObject.SetActive(true);
+        isOwned = true;
+    }
+
+    public int GetPrice() => isOwned ? 0 : price;
 }

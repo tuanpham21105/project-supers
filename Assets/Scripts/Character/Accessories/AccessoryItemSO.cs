@@ -5,5 +5,6 @@ public class AccessoryItemSO : ScriptableObject
 {
     public string code;
     public string itemName;
+    public Sprite image;
     public GameObject itemPrefab;
 }

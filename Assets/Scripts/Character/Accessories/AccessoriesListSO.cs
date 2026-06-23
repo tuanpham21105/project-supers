@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AccessoriesList", menuName = "Game/Accessories List")]
 public class AccessoriesListSO : ScriptableObject
 {
-    public List<AccessoryItemSO> items;
+    public List<AccessoryItemSO> items = new List<AccessoryItemSO>();
 
     public AccessoryItemSO findByCode(String code)
     {

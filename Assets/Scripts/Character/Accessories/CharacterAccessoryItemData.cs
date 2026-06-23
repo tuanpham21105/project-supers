@@ -52,7 +52,7 @@ public class AccessoryPiece
 
 }
 
-public class CharacterAccessoryItem : MonoBehaviour
+public class CharacterAccessoryItemData : MonoBehaviour
 {
     public AccessoriesPart part;
     public List<AccessoryPiece> pieces;
