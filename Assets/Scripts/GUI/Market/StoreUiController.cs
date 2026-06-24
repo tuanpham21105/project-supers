@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoreUiController : WindowUiController
 {
@@ -31,13 +32,13 @@ public class StoreUiController : WindowUiController
     {
         base.OnOpenWindow();
 
-        SetTotalCost(0);
-
         storeAccessories = PlayerData.instance.characterAccessories.Clone();
 
         SelectType(StoreItemsType.Hat);
 
         accessoriesColorPalleteUiController.SelectColorLevel(0);
+
+        RecalculateTotalCost();
     }
 
     public override void OnCloseWindow()
@@ -81,6 +82,8 @@ public class StoreUiController : WindowUiController
                     string itemCode = accessory.itemCode;
 
                     currentItemList.SetSelectedItem(itemCode);
+
+                    RecalculateTotalCost();
                 },
                 (long errorCode, string errorMessage) =>
                 {
@@ -99,19 +102,30 @@ public class StoreUiController : WindowUiController
         MainMenuCharacterModelController.instance.PutOnAccessory(accessoryItemSO);
 
         storeAccessories.TypeToAccessory(type).itemCode = itemCode;
+
+        RecalculateTotalCost();
     }
 
-    public void UpdateTotalCost(int amount)
+    void RecalculateTotalCost()
     {
-        totalCost += amount;
-        
-        totalCostTextField.text = totalCost.ToString();
-    }
+        totalCost = 0;
 
-    public void SetTotalCost(int totalCost)
-    {
-        this.totalCost = totalCost;
-        
+        foreach (StoreItemsType type in Enum.GetValues(typeof(StoreItemsType)))
+        {
+            if (type == StoreItemsType.Skills) continue;
+
+            string itemCode = storeAccessories.TypeToAccessory(type).itemCode;
+            if (string.IsNullOrEmpty(itemCode)) continue;
+
+            if (itemListsDictionary.TryGetValue(type, out AccessoriesItemListUiController list))
+            {
+                totalCost += list.GetItemPrice(itemCode);
+            }
+        }
+
         totalCostTextField.text = totalCost.ToString();
+        bool canAfford = totalCost <= PlayerData.instance.points;
+        totalCostTextField.color = canAfford ? Color.white : Color.red;
+        saveButtonObject.GetComponent<Button>().interactable = canAfford;
     }
 }

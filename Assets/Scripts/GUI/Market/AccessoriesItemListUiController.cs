@@ -52,27 +52,23 @@ public class AccessoriesItemListUiController : WindowUiController
     void handleItemSelect(String itemCode)
     {
         SetSelectedItem(itemCode);
+        StoreUiController.instance.SelectItem(type, itemCode);
     }
 
     public void SetSelectedItem(String itemCode)
     {
-        StoreUiController.instance.SelectItem(type, itemCode);
-        if (selectedItemCode != "")
-        {
-            itemUis[selectedItemCode].SetSelected(false);
-            StoreUiController.instance.UpdateTotalCost(itemUis[selectedItemCode].GetPrice() * -1);
-        }
-
         selectedItemCode = itemCode;
-        if (itemCode == null || itemCode.Trim() == "")
-        {
-            selectedItemCode = "";
-        }
 
-        if (selectedItemCode != "")
+        foreach (var kvp in itemUis)
         {
-            itemUis[selectedItemCode].SetSelected(true);
-            StoreUiController.instance.UpdateTotalCost(itemUis[selectedItemCode].GetPrice());
+            kvp.Value.SetSelected(kvp.Key == itemCode);
         }
+    }
+
+    public int GetItemPrice(string itemCode)
+    {
+        if (itemUis.TryGetValue(itemCode, out AccessoriesItemUiController item))
+            return item.GetPrice();
+        return 0;
     }
 }
