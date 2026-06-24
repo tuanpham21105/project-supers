@@ -129,9 +129,24 @@ public class PlayerData : MonoBehaviour
     public String username;
     public String createdDate;
     public bool isGuest = false;
-    public long points {get; set;}
+
+    private long points = 0;
+    public long Points
+    {
+        get
+        {
+            return points;
+        }
+        set
+        {
+            points = value;
+            onPointsChange?.Invoke();
+        }
+    }
     public CharacterAccessoriesSet characterAccessories = new CharacterAccessoriesSet();
 
+    public event Action onPointsChange;
+    
     void Awake()
     {
         if (instance != null && instance != this)

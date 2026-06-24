@@ -14,7 +14,7 @@ public class StoreUiController : WindowUiController
     [SerializeField] private TextMeshProUGUI totalCostTextField;
     [SerializeField] private GameObject saveButtonObject;
 
-    [SerializeField] private int totalCost;
+    [SerializeField] private long totalCost;
 
     [SerializeField] private GameObject itemListPrefab;
     [SerializeField] private Transform itemsListSlot;
@@ -123,15 +123,15 @@ public class StoreUiController : WindowUiController
             }
         }
 
-        totalCostTextField.text = totalCost.ToString();
-        bool canAfford = totalCost <= PlayerData.instance.points;
+        SetTotalCostText();
+        bool canAfford = totalCost <= PlayerData.instance.Points;
         totalCostTextField.color = canAfford ? Color.white : Color.red;
         saveButtonObject.GetComponent<Button>().interactable = canAfford;
     }
 
     public void SaveAccessories()
     {
-        if (PlayerData.instance.points < totalCost)
+        if (PlayerData.instance.Points < totalCost)
         {
             Debug.LogError("Point insufficient");
             return;
@@ -143,9 +143,9 @@ public class StoreUiController : WindowUiController
             request,
             (PlayerAccessoriesSetResponse response) =>
             {
-                PlayerData.instance.points -= totalCost;
+                PlayerData.instance.Points -= totalCost;
                 totalCost = 0;
-                totalCostTextField.text = "0";
+                SetTotalCostText();
 
                 SetItemsOwnedFromResponse(response);
 
@@ -208,5 +208,10 @@ public class StoreUiController : WindowUiController
         {
             list.SetItemOwned(itemCode);
         }
+    }
+
+    public void SetTotalCostText()
+    {
+        totalCostTextField.text = BigNumberStringify.decorate(totalCost);
     }
 }

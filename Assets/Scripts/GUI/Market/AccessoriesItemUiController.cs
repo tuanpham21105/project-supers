@@ -25,8 +25,8 @@ public class AccessoriesItemUiController : MonoBehaviour
     {
         this.code = code;
         this.image.sprite = sprite;
-        valueTextField.text = value.ToString();
         price = value;
+        valueTextField.text = BigNumberStringify.decorate(price);
         this.isOwned = isOwned;
         if (isOwned) 
             SetOwned();

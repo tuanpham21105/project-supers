@@ -19,6 +19,8 @@ public class MainMenuHeaderUiController : MonoBehaviour
     {
         // SetHeaderUsername();
         // SetPoints();
+
+        PlayerData.instance.onPointsChange += SetPoints;
     }
 
     public void SetHeaderUsername()
@@ -28,17 +30,8 @@ public class MainMenuHeaderUiController : MonoBehaviour
 
     public void SetPoints()
     {
-        long points = PlayerData.instance.points;
-
-        if (points < 1_000)
-            pointsTextField.text = points.ToString();
-        else if (points < 1_000_000)
-            pointsTextField.text = (points / 1_000.0).ToString("0.0") + "K";
-        else if (points < 1_000_000_000)
-            pointsTextField.text = (points / 1_000_000.0).ToString("0.0") + "M";
-        else if (points < 1_000_000_000_000)
-            pointsTextField.text = (points / 1_000_000_000.0).ToString("0.0") + "B";
-        else
-            pointsTextField.text = (points / 1_000_000_000_000.0).ToString("0.0") + "T";
+        long points = PlayerData.instance.Points;
+        pointsTextField.text = BigNumberStringify.decorate(points);
     }
+
 }

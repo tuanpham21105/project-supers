@@ -91,7 +91,7 @@ public class MainMenuController : MonoBehaviour
         PlayerInventoryService.instance.GetPlayerInventory(
             (response) =>
             {
-                PlayerData.instance.points = response.points;
+                PlayerData.instance.Points = response.points;
                 Debug.Log($"[MainMenuController] Player inventory loaded");
                 
                 MainMenuHeaderUiController.instance.SetPoints();
