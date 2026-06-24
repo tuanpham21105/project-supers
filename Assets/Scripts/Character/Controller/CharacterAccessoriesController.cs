@@ -15,27 +15,29 @@ public class CharacterAccessoriesController : MonoBehaviour
     }
 
     [ProButton]
-    public void PutOnAccessories(CharacterAccessoryItemData item)
-    {        
+    public void PutOn(AccessoryItemSO item)
+    {
         if (item == null) return;
-        
+
         AccessoriesPart part = item.part;
 
-        CharacterAccessoryItemData existingItem = GetAccessoriesSlot(part);
-        if (existingItem != null)
-        {
-            TakeOffAccessories(existingItem);
-        }
+        TakeOff(part);
 
-        SetAccessoriesSlot(part, item);
+        if (item.itemPrefab == null) return;
+
+        GameObject newItem = Instantiate(item.itemPrefab, transform);
+        CharacterAccessoryItemData newItemData = newItem.GetComponent<CharacterAccessoryItemData>();
+        if (newItemData == null) return;
+
+        SetAccessoriesSlot(part, newItemData);
 
         GameObject slotObject = GetAccessoriesSlotObject(part);
         if (slotObject != null)
         {
-            item.transform.SetParent(slotObject.transform, false);
+            newItemData.transform.SetParent(slotObject.transform, false);
         }
 
-        foreach (AccessoryPiece piece in item.pieces)
+        foreach (AccessoryPiece piece in newItemData.pieces)
         {
             if (piece.gameObject == null) continue;
 
@@ -57,11 +59,12 @@ public class CharacterAccessoriesController : MonoBehaviour
     }
 
     [ProButton]
-    public void TakeOffAccessories(CharacterAccessoryItemData item)
+    public void TakeOff(AccessoriesPart part)
     {
-        if (item == null) return;
+        CharacterAccessoryItemData existingItem = GetAccessoriesSlot(part);
+        if (existingItem == null) return;
 
-        foreach (AccessoryPiece piece in item.pieces)
+        foreach (AccessoryPiece piece in existingItem.pieces)
         {
             if (piece.gameObject == null) continue;
 
@@ -77,9 +80,9 @@ public class CharacterAccessoriesController : MonoBehaviour
             Destroy(piece.gameObject);
         }
 
-        SetAccessoriesSlot(item.part, null);
+        SetAccessoriesSlot(part, null);
 
-        Destroy(item.gameObject);
+        Destroy(existingItem.gameObject);
     }
 
     private CharacterAccessoryItemData GetAccessoriesSlot(AccessoriesPart part)

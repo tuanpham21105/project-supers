@@ -15,6 +15,6 @@ public class AccessoriesListSO : ScriptableObject
                 return item;
         }
 
-        return null;
+        return items[0];
     }
 }

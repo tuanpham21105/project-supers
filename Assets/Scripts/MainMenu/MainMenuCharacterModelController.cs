@@ -15,12 +15,7 @@ public class MainMenuCharacterModelController : MonoBehaviour
 
     public void PutOnAccessory(AccessoryItemSO itemSo)
     {
-        if (itemSo == null)
-            return;
-        
-        GameObject item = Instantiate(itemSo.itemPrefab);
-
-        characterAccessoriesController.PutOnAccessories(item.GetComponent<CharacterAccessoryItemData>());
+        characterAccessoriesController.PutOn(itemSo);
     }
 
     public void SetPlayerCharacterAccessoriesFromPlayerData()

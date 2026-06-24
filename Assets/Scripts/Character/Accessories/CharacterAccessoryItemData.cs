@@ -54,6 +54,5 @@ public class AccessoryPiece
 
 public class CharacterAccessoryItemData : MonoBehaviour
 {
-    public AccessoriesPart part;
     public List<AccessoryPiece> pieces;
 }
