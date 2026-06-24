@@ -56,8 +56,8 @@ public class CharacterAccessoriesSet
 [Serializable]
 public class CharacterAccessory
 {
-    public string itemCode;
-    public AccessoryProperties properties;
+    public string itemCode = "";
+    public AccessoryProperties properties = new AccessoryProperties();
 
     public CharacterAccessory Clone()
     {
@@ -72,7 +72,7 @@ public class CharacterAccessory
 [Serializable]
 public class AccessoryProperties
 {
-    public Color color;
+    public Color color = new Color();
 
     public AccessoryProperties Clone()
     {

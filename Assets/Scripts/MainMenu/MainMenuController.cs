@@ -131,7 +131,7 @@ public class MainMenuController : MonoBehaviour
 
     private CharacterAccessory MapAccessory(PlayerAccessoryItemResponse item)
     {
-        if (item == null) return null;
+        if (item == null) return new CharacterAccessory();
 
         return new CharacterAccessory
         {

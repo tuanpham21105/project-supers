@@ -77,7 +77,10 @@ public class StoreUiController : WindowUiController
                     currentItemList = newList;
                     currentItemList.OpenWindow();
 
-                    currentItemList.SetSelectedItem(storeAccessories.TypeToAccessory(type).itemCode);
+                    CharacterAccessory accessory = storeAccessories.TypeToAccessory(type);
+                    string itemCode = accessory.itemCode;
+
+                    currentItemList.SetSelectedItem(itemCode);
                 },
                 (long errorCode, string errorMessage) =>
                 {
