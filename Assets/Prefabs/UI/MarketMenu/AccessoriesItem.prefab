@@ -120,9 +120,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   code: 
+  price: 0
+  isOwned: 0
   bgrImage: {fileID: 7949412435387278697}
   image: {fileID: 8699477691209988618}
-  valueTitleObject: {fileID: 0}
+  valueTitleObject: {fileID: 6100634608451841967}
   valueTextField: {fileID: 3715693988767308837}
   ownedTitleObject: {fileID: 6712249278956943508}
   normalBgrTexture: {fileID: 21300000, guid: 584d31df5d3446035ba5685c1ecee683, type: 3}

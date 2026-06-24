@@ -53,7 +53,7 @@ public class PlayerInventoryService : MonoBehaviour
         ));
     }
 
-    public void SavePlayerAccessoriesSet(PlayerAccessoriesSetResponse request, Action<PlayerAccessoriesSetResponse> onSuccess, Action<long, string> onError)
+    public void SavePlayerAccessoriesSet(PlayerAccessoriesSetRequest request, Action<PlayerAccessoriesSetResponse> onSuccess, Action<long, string> onError)
     {
         StartCoroutine(RestApiService.instance.SendRequestWithJwt<PlayerAccessoriesSetResponse>(
             "PUT",

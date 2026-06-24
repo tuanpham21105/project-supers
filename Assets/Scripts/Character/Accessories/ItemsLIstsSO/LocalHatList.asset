@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: LocalHatList
   m_EditorClassIdentifier: 
   items:
+  - {fileID: 11400000, guid: 61329c76d445ad3c8851333857782b17, type: 2}
   - {fileID: 11400000, guid: 8299bf54f650e27f0b85902112f159ec, type: 2}
   - {fileID: 11400000, guid: 96de486f426eef159a0a2a0e7c80d91b, type: 2}

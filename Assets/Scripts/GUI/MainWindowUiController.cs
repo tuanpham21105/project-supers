@@ -74,11 +74,4 @@ public class MainWindowUiController : WindowUiController
 
         SceneService.instance.LoadScene("TrainingAreaScene");
     }
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
-    }
 }

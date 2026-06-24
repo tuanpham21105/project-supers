@@ -72,14 +72,52 @@ public class CharacterAccessory
 [Serializable]
 public class AccessoryProperties
 {
-    public Color color = new Color();
+    public Color primaryColor = new Color();
+    public Color secondaryColor = new Color();
+    public Color tertiaryColor = new Color();
 
     public AccessoryProperties Clone()
     {
         return new AccessoryProperties
         {
-            color = color,
+            primaryColor = primaryColor,
+            secondaryColor = secondaryColor,
+            tertiaryColor = tertiaryColor,
         };
+    }
+
+    public string ToJson()
+    {
+        return "{\"primaryColor\":\"#" + ColorUtility.ToHtmlStringRGBA(primaryColor)
+             + "\",\"secondaryColor\":\"#" + ColorUtility.ToHtmlStringRGBA(secondaryColor)
+             + "\",\"tertiaryColor\":\"#" + ColorUtility.ToHtmlStringRGBA(tertiaryColor) + "\"}";
+    }
+
+    public static AccessoryProperties FromJson(string json)
+    {
+        AccessoryProperties properties = new AccessoryProperties();
+        if (string.IsNullOrEmpty(json)) return properties;
+
+        properties.primaryColor = ParseColor(json, "primaryColor");
+        properties.secondaryColor = ParseColor(json, "secondaryColor");
+        properties.tertiaryColor = ParseColor(json, "tertiaryColor");
+
+        return properties;
+    }
+
+    private static Color ParseColor(string json, string key)
+    {
+        string hexKey = "\"" + key + "\":\"#";
+        int startIndex = json.IndexOf(hexKey);
+        if (startIndex < 0) return new Color();
+
+        startIndex += hexKey.Length;
+        int endIndex = json.IndexOf("\"", startIndex);
+        if (endIndex < 0) return new Color();
+
+        string hex = json.Substring(startIndex, endIndex - startIndex);
+        ColorUtility.TryParseHtmlString("#" + hex, out Color parsedColor);
+        return parsedColor;
     }
 }
 
@@ -91,7 +129,7 @@ public class PlayerData : MonoBehaviour
     public String username;
     public String createdDate;
     public bool isGuest = false;
-    public long points = 0;
+    public long points {get; set;}
     public CharacterAccessoriesSet characterAccessories = new CharacterAccessoriesSet();
 
     void Awake()

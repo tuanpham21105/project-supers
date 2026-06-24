@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345b207495dbaf885b2bc5110f0056dc, type: 3}
   m_Name: LocalNeckList
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - {fileID: 11400000, guid: b24dc075d1c39befb9afb84507816f38, type: 2}

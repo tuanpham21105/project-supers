@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345b207495dbaf885b2bc5110f0056dc, type: 3}
   m_Name: LocalMaskList
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - {fileID: 11400000, guid: c7c9b1a5f8d1e131a9e613c9397d6596, type: 2}

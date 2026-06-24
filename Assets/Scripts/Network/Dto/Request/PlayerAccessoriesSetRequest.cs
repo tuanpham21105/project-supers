@@ -1,13 +1,13 @@
 public class PlayerAccessoriesSetRequest
 {
-    public PlayerAccessoryItemResponse hatItem { get; set; }
-    public PlayerAccessoryItemResponse maskItem { get; set; }
-    public PlayerAccessoryItemResponse neckItem { get; set; }
-    public PlayerAccessoryItemResponse chestItem { get; set; }
-    public PlayerAccessoryItemResponse backItem { get; set; }
-    public PlayerAccessoryItemResponse shouldersItem { get; set; }
-    public PlayerAccessoryItemResponse glovesItem { get; set; }
-    public PlayerAccessoryItemResponse hipItem { get; set; }
-    public PlayerAccessoryItemResponse legItem { get; set; }
-    public PlayerAccessoryItemResponse bootsItem { get; set; }
+    public PlayerAccessoryItemRequest hatItem { get; set; }
+    public PlayerAccessoryItemRequest maskItem { get; set; }
+    public PlayerAccessoryItemRequest neckItem { get; set; }
+    public PlayerAccessoryItemRequest chestItem { get; set; }
+    public PlayerAccessoryItemRequest backItem { get; set; }
+    public PlayerAccessoryItemRequest shouldersItem { get; set; }
+    public PlayerAccessoryItemRequest glovesItem { get; set; }
+    public PlayerAccessoryItemRequest hipItem { get; set; }
+    public PlayerAccessoryItemRequest legItem { get; set; }
+    public PlayerAccessoryItemRequest bootsItem { get; set; }
 }

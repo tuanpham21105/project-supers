@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345b207495dbaf885b2bc5110f0056dc, type: 3}
   m_Name: LocalChestList
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - {fileID: 11400000, guid: ab8f8d3d85365a82885e4771b24c9055, type: 2}

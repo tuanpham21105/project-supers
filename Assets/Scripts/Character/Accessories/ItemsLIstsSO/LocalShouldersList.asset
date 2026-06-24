@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345b207495dbaf885b2bc5110f0056dc, type: 3}
   m_Name: LocalShouldersList
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - {fileID: 11400000, guid: 5f31a0cd8afd885a399baffcebb71f21, type: 2}

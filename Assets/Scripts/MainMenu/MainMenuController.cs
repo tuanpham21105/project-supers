@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using com.cyborgAssets.inspectorButtonPro;
-using Newtonsoft.Json;
 using UnityEngine;
 
 
@@ -121,6 +120,8 @@ public class MainMenuController : MonoBehaviour
                 };
 
                 Debug.Log($"[MainMenuController] Player accessories set loaded.");
+
+                MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
             },
             (code, message) =>
             {
@@ -136,9 +137,7 @@ public class MainMenuController : MonoBehaviour
         return new CharacterAccessory
         {
             itemCode = item.itemCode,
-            properties = string.IsNullOrEmpty(item.properties)
-                ? null
-                : JsonConvert.DeserializeObject<AccessoryProperties>(item.properties),
+            properties = AccessoryProperties.FromJson(item.properties),
         };
     }
 

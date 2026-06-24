@@ -71,4 +71,12 @@ public class AccessoriesItemListUiController : WindowUiController
             return item.GetPrice();
         return 0;
     }
+
+    public void SetItemOwned(string itemCode)
+    {
+        if (itemUis.TryGetValue(itemCode, out AccessoriesItemUiController item))
+        {
+            item.SetOwned();
+        }
+    }
 }
