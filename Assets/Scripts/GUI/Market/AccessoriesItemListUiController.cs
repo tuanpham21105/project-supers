@@ -42,17 +42,17 @@ public class AccessoriesItemListUiController : WindowUiController
 
             GameObject itemObject = Instantiate(itemPrefab, itemListObject);
             AccessoriesItemUiController itemController = itemObject.GetComponent<AccessoriesItemUiController>();
-            itemController.SetItem(localItem.code, localItem.image, remoteItem.price, remoteItem.owned);
+            itemController.SetItem(localItem.code, localItem.image, remoteItem.price, remoteItem.owned, remoteItem.properties);
             itemController.onSelected += handleItemSelect;
 
             itemUis.Add(localItem.code, itemController);
         }
     }
 
-    void handleItemSelect(String itemCode)
+    void handleItemSelect(String itemCode, AccessoryProperties properties)
     {
         SetSelectedItem(itemCode);
-        StoreUiController.instance.SelectItem(type, itemCode);
+        StoreUiController.instance.SelectItem(type, itemCode, properties);
     }
 
     public void SetSelectedItem(String itemCode)

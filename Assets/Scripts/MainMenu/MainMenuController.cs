@@ -119,9 +119,9 @@ public class MainMenuController : MonoBehaviour
                     bootsItem = MapAccessory(response.bootsItem),
                 };
 
-                Debug.Log($"[MainMenuController] Player accessories set loaded.");
-
                 MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
+
+                Debug.Log($"[MainMenuController] Player accessories set loaded.");
             },
             (code, message) =>
             {

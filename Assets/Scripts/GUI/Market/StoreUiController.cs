@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,18 @@ public class StoreUiController : WindowUiController
     void Awake()
     {
         instance = this;
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        accessoriesColorPalleteUiController.onColorsChange += handleColorsChange;
+    }
+
+    public void OnDestroy()
+    {
+        accessoriesColorPalleteUiController.onColorsChange -= handleColorsChange;
     }
 
     public override void OnOpenWindow()
@@ -59,6 +72,8 @@ public class StoreUiController : WindowUiController
             currentItemList.OpenWindow();
 
             currentItemList.SetSelectedItem(storeAccessories.TypeToAccessory(type).itemCode);
+
+            SetColorsPalleteByProperties(storeAccessories.TypeToAccessory(type).properties);
         }
         else
         {
@@ -83,6 +98,8 @@ public class StoreUiController : WindowUiController
 
                     currentItemList.SetSelectedItem(itemCode);
 
+                    SetColorsPalleteByProperties(accessory.properties);
+
                     RecalculateTotalCost();
                 },
                 (long errorCode, string errorMessage) =>
@@ -94,14 +111,21 @@ public class StoreUiController : WindowUiController
     
     }
 
-    public void SelectItem(StoreItemsType type, String itemCode)
+    public void SelectItem(StoreItemsType type, String itemCode, AccessoryProperties properties)
     {
+
         AccessoriesListSO localList = StoreData.instance.GetLocalListByType(type);
         AccessoryItemSO accessoryItemSO = localList.findByCode(itemCode);
 
-        MainMenuCharacterModelController.instance.PutOnAccessory(accessoryItemSO);
+        if (properties == null)
+            properties = accessoryItemSO.defaultProperties.Clone();
+
+        SetColorsPalleteByProperties(properties);
+
+        MainMenuCharacterModelController.instance.PutOnAccessory(accessoryItemSO, properties);
 
         storeAccessories.TypeToAccessory(type).itemCode = itemCode;
+        storeAccessories.TypeToAccessory(type).properties = properties;
 
         RecalculateTotalCost();
     }
@@ -213,5 +237,26 @@ public class StoreUiController : WindowUiController
     public void SetTotalCostText()
     {
         totalCostTextField.text = BigNumberStringify.decorate(totalCost);
+    }
+
+    public void SetColorsPalleteByProperties(AccessoryProperties properties)
+    {
+        accessoriesColorPalleteUiController.SetColors(properties.primaryColor, properties.secondaryColor, properties.tertiaryColor);
+    }
+
+    void handleColorsChange(Color primary, Color secondary, Color tertiary)
+    {
+        AccessoryProperties properties = new AccessoryProperties()
+        {
+            primaryColor = primary,
+            secondaryColor = secondary,
+            tertiaryColor = tertiary
+        };
+
+        StoreItemsType type = currentItemList.GetListType();
+
+        storeAccessories.TypeToAccessory(type).properties = properties;
+
+        MainMenuCharacterModelController.instance.ChangeAccessoryColors(type, properties);
     }
 }

@@ -72,9 +72,9 @@ public class CharacterAccessory
 [Serializable]
 public class AccessoryProperties
 {
-    public Color primaryColor = new Color();
-    public Color secondaryColor = new Color();
-    public Color tertiaryColor = new Color();
+    public Color primaryColor = Color.white;
+    public Color secondaryColor = Color.white;
+    public Color tertiaryColor = Color.white;
 
     public AccessoryProperties Clone()
     {
@@ -95,8 +95,9 @@ public class AccessoryProperties
 
     public static AccessoryProperties FromJson(string json)
     {
+        if (string.IsNullOrEmpty(json)) return null;
+
         AccessoryProperties properties = new AccessoryProperties();
-        if (string.IsNullOrEmpty(json)) return properties;
 
         properties.primaryColor = ParseColor(json, "primaryColor");
         properties.secondaryColor = ParseColor(json, "secondaryColor");

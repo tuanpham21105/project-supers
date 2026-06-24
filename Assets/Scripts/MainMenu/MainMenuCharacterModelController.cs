@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,28 +14,34 @@ public class MainMenuCharacterModelController : MonoBehaviour
         instance = this;
     }
 
-    public void PutOnAccessory(AccessoryItemSO itemSo)
+    public void PutOnAccessory(AccessoryItemSO itemSo, AccessoryProperties properties)
     {
-        characterAccessoriesController.PutOn(itemSo);
+        characterAccessoriesController.PutOn(itemSo, properties);
+    }
+
+    public void ChangeAccessoryColors(StoreItemsType type, AccessoryProperties properties)
+    {
+        characterAccessoriesController.SetAccessoryColorsByPart(properties, Enum.Parse<AccessoriesPart>(type.ToString()));
     }
 
     public void SetPlayerCharacterAccessoriesFromPlayerData()
     {
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Hat));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Mask));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Neck));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Chest));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Back));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Shoulders));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Gloves));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Hip));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Leg));
-        PutOnAccessory(GetAccessorySO(StoreItemsType.Boots));
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Hat);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Mask);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Neck);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Chest);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Back);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Shoulders);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Gloves);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Hip);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Leg);
+        PutOnAccessoryFromPlayerDataByType(StoreItemsType.Boots);
     }
 
-    AccessoryItemSO GetAccessorySO(StoreItemsType type)
+    void PutOnAccessoryFromPlayerDataByType(StoreItemsType type)
     {
         CharacterAccessory accessory = PlayerData.instance.characterAccessories.TypeToAccessory(type);
-        return StoreData.instance.GetLocalListByType(type).findByCode(accessory.itemCode);
+        
+        PutOnAccessory(StoreData.instance.GetLocalListByType(type).findByCode(accessory.itemCode), accessory.properties);
     }
 }

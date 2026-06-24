@@ -8,4 +8,5 @@ public class AccessoryItemSO : ScriptableObject
     public AccessoriesPart part;
     public Sprite image;
     public GameObject itemPrefab;
+    public AccessoryProperties defaultProperties = new AccessoryProperties();
 }

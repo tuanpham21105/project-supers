@@ -19,22 +19,25 @@ public class AccessoriesItemUiController : MonoBehaviour
     [SerializeField] private Sprite normalBgrTexture;
     [SerializeField] private Sprite selectedBgrTexture;
 
-    public event Action<string> onSelected;
+    private AccessoryProperties accessoryProperties = null;
 
-    public void SetItem(string code, Sprite sprite, int value, bool isOwned)
+    public event Action<string, AccessoryProperties> onSelected;
+
+    public void SetItem(string code, Sprite sprite, int value, bool isOwned, string properties)
     {
         this.code = code;
         this.image.sprite = sprite;
         price = value;
         valueTextField.text = BigNumberStringify.decorate(price);
         this.isOwned = isOwned;
+        accessoryProperties = AccessoryProperties.FromJson(properties);
         if (isOwned) 
             SetOwned();
     }
 
     public void OnPress()
     {
-        onSelected?.Invoke(code);
+        onSelected?.Invoke(code, accessoryProperties);
     }
 
     public void SetSelected(bool state)
@@ -50,4 +53,6 @@ public class AccessoriesItemUiController : MonoBehaviour
     }
 
     public int GetPrice() => isOwned ? 0 : price;
+
+    public AccessoryProperties GetAccessoryProperties() => accessoryProperties;
 }

@@ -10,12 +10,14 @@ public class CharacterAccessoriesController : MonoBehaviour
 
     void Awake()
     {
+        block = new MaterialPropertyBlock();
+
         if (characterAccessoriesData == null) characterAccessoriesData = GetComponent<CharacterAccessoriesData>();
         if (characterObjectsData == null) characterObjectsData = GetComponent<CharacterObjectsData>();
     }
 
     [ProButton]
-    public void PutOn(AccessoryItemSO item)
+    public void PutOn(AccessoryItemSO item, AccessoryProperties properties)
     {
         if (item == null) return;
 
@@ -54,6 +56,17 @@ public class CharacterAccessoriesController : MonoBehaviour
                 {
                     partMesh.SetActive(false);
                 }
+            }
+
+            Renderer renderer = piece.gameObject.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                if (renderer.sharedMaterials.Length > 0)
+                    SetColor(renderer, 0, properties.primaryColor);
+                if (renderer.sharedMaterials.Length > 1)
+                    SetColor(renderer, 1, properties.secondaryColor);
+                if (renderer.sharedMaterials.Length > 2)
+                    SetColor(renderer, 2, properties.tertiaryColor);
             }
         }
     }
@@ -181,5 +194,49 @@ public class CharacterAccessoriesController : MonoBehaviour
             AccessoriesPiecePart.LeftShin => characterObjectsData.leftShinMesh,
             _ => null
         };
+    }
+
+    private MaterialPropertyBlock block;
+    [ProButton]
+    public void SetColor(
+        Renderer targetRenderer,
+        int materialIndex,
+        Color color
+    )
+    {
+        Debug.Log(1);
+
+        targetRenderer.GetPropertyBlock(
+            block,
+            materialIndex);
+
+        block.SetColor(
+            "_Color",
+            color);
+
+        targetRenderer.SetPropertyBlock(
+            block,
+            materialIndex);
+    }
+
+    public void SetAccessoryColorsByPart(AccessoryProperties properties, AccessoriesPart part)
+    {
+        CharacterAccessoryItemData slot = GetAccessoriesSlot(part);
+        if (slot == null) return;
+
+        foreach (AccessoryPiece piece in slot.pieces)
+        {
+            if (piece.gameObject == null) continue;
+
+            Renderer renderer = piece.gameObject.GetComponent<Renderer>();
+            if (renderer == null) continue;
+
+            if (renderer.sharedMaterials.Length > 0)
+                SetColor(renderer, 0, properties.primaryColor);
+            if (renderer.sharedMaterials.Length > 1)
+                SetColor(renderer, 1, properties.secondaryColor);
+            if (renderer.sharedMaterials.Length > 2)
+                SetColor(renderer, 2, properties.tertiaryColor);
+        }
     }
 }
