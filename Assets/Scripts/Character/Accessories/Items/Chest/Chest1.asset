@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b589ad396738b8cbf8452cfd2b36b81f, type: 3}
-  m_Name: Hat1
+  m_Name: Chest1
   m_EditorClassIdentifier: 
-  code: HAT1
-  itemName: Hat 1
-  part: 0
-  image: {fileID: 21300000, guid: a70e3fe6251b27ddfab2129fdc52521e, type: 3}
-  itemPrefab: {fileID: 4875807510146416011, guid: 7aaed8b117de2cfc5b78f48d16efe869, type: 3}
+  code: CHEST1
+  itemName: Chest1
+  part: 3
+  image: {fileID: 21300000, guid: 8984c8f057820c577be61701513a9635, type: 3}
+  itemPrefab: {fileID: 8610411084923579056, guid: e56ed877687e0245cbf98e2ce3d23400, type: 3}
   defaultProperties:
-    primaryColor: {r: 1, g: 1, b: 1, a: 1}
-    secondaryColor: {r: 1, g: 0, b: 0, a: 1}
-    tertiaryColor: {r: 1, g: 0.99777603, b: 0, a: 1}
+    primaryColor: {r: 1, g: 0, b: 0, a: 1}
+    secondaryColor: {r: 0.1462264, g: 0.23587, b: 1, a: 1}
+    tertiaryColor: {r: 1, g: 0.9372188, b: 0, a: 1}
