@@ -49,6 +49,9 @@ MonoBehaviour:
   - gameObject: {fileID: 9198422477416156057}
     piece: 0
     type: 1
+  - gameObject: {fileID: 0}
+    piece: 2
+    type: 0
 --- !u!1 &9198422477416156057
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,8 +10,6 @@ public class CharacterAccessoriesController : MonoBehaviour
 
     void Awake()
     {
-        block = new MaterialPropertyBlock();
-
         if (characterAccessoriesData == null) characterAccessoriesData = GetComponent<CharacterAccessoriesData>();
         if (characterObjectsData == null) characterObjectsData = GetComponent<CharacterObjectsData>();
     }
@@ -41,12 +39,16 @@ public class CharacterAccessoriesController : MonoBehaviour
 
         foreach (AccessoryPiece piece in newItemData.pieces)
         {
-            if (piece.gameObject == null) continue;
+            if (piece == null) continue;
 
-            GameObject pieceSlot = GetPieceSlotObject(piece.piece);
-            if (pieceSlot != null)
+            if (piece.gameObject != null)
             {
-                piece.gameObject.transform.SetParent(pieceSlot.transform, false);
+                GameObject pieceSlot = GetPieceSlotObject(piece.piece);
+                if (pieceSlot != null)
+                {
+                    piece.gameObject.transform.SetParent(pieceSlot.transform, false);
+                    piece.gameObject.transform.localPosition = Vector3.zero;
+                }
             }
 
             if (piece.type == AccessoriesType.Override)
@@ -57,18 +59,9 @@ public class CharacterAccessoriesController : MonoBehaviour
                     partMesh.SetActive(false);
                 }
             }
-
-            Renderer renderer = piece.gameObject.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                if (renderer.sharedMaterials.Length > 0)
-                    SetColor(renderer, 0, properties.primaryColor);
-                if (renderer.sharedMaterials.Length > 1)
-                    SetColor(renderer, 1, properties.secondaryColor);
-                if (renderer.sharedMaterials.Length > 2)
-                    SetColor(renderer, 2, properties.tertiaryColor);
-            }
         }
+
+        newItemData.SetColors(properties);
     }
 
     [ProButton]
@@ -79,7 +72,7 @@ public class CharacterAccessoriesController : MonoBehaviour
 
         foreach (AccessoryPiece piece in existingItem.pieces)
         {
-            if (piece.gameObject == null) continue;
+            if (piece == null) continue;
 
             if (piece.type == AccessoriesType.Override)
             {
@@ -90,7 +83,10 @@ public class CharacterAccessoriesController : MonoBehaviour
                 }
             }
 
-            Destroy(piece.gameObject);
+            if (piece.gameObject != null)
+            {
+                Destroy(piece.gameObject);
+            }
         }
 
         SetAccessoriesSlot(part, null);
@@ -196,47 +192,11 @@ public class CharacterAccessoriesController : MonoBehaviour
         };
     }
 
-    private MaterialPropertyBlock block;
-    [ProButton]
-    public void SetColor(
-        Renderer targetRenderer,
-        int materialIndex,
-        Color color
-    )
-    {
-        Debug.Log(1);
-
-        targetRenderer.GetPropertyBlock(
-            block,
-            materialIndex);
-
-        block.SetColor(
-            "_Color",
-            color);
-
-        targetRenderer.SetPropertyBlock(
-            block,
-            materialIndex);
-    }
-
     public void SetAccessoryColorsByPart(AccessoryProperties properties, AccessoriesPart part)
     {
         CharacterAccessoryItemData slot = GetAccessoriesSlot(part);
         if (slot == null) return;
 
-        foreach (AccessoryPiece piece in slot.pieces)
-        {
-            if (piece.gameObject == null) continue;
-
-            Renderer renderer = piece.gameObject.GetComponent<Renderer>();
-            if (renderer == null) continue;
-
-            if (renderer.sharedMaterials.Length > 0)
-                SetColor(renderer, 0, properties.primaryColor);
-            if (renderer.sharedMaterials.Length > 1)
-                SetColor(renderer, 1, properties.secondaryColor);
-            if (renderer.sharedMaterials.Length > 2)
-                SetColor(renderer, 2, properties.tertiaryColor);
-        }
+        slot.SetColors(properties);
     }
 }

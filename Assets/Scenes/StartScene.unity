@@ -6550,48 +6550,67 @@ MonoBehaviour:
   username: 
   createdDate: 
   isGuest: 1
-  points: 0
   characterAccessories:
     hatItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     maskItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     neckItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     chestItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     backItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     shouldersItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     glovesItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     hipItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     legItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     bootsItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &571047923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12537,43 +12556,63 @@ MonoBehaviour:
     hatItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     maskItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     neckItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     chestItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     backItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     shouldersItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     glovesItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     hipItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     legItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
     bootsItem:
       itemCode: 
       properties:
-        color: {r: 0, g: 0, b: 0, a: 0}
+        primaryColor: {r: 1, g: 1, b: 1, a: 1}
+        secondaryColor: {r: 1, g: 1, b: 1, a: 1}
+        tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1189466359
 GameObject:
   m_ObjectHideFlags: 0
