@@ -51,6 +51,25 @@ public class CharacterAccessoriesSet
             bootsItem = bootsItem?.Clone(),
         };
     }
+
+    public static CharacterAccessoriesSet MapFromResponse(PlayerAccessoriesSetResponse response)
+    {
+        if (response == null) return new CharacterAccessoriesSet();
+
+        return new CharacterAccessoriesSet
+        {
+            hatItem = CharacterAccessory.MapAccessoryFromResponse(response.hatItem),
+            maskItem = CharacterAccessory.MapAccessoryFromResponse(response.maskItem),
+            neckItem = CharacterAccessory.MapAccessoryFromResponse(response.neckItem),
+            chestItem = CharacterAccessory.MapAccessoryFromResponse(response.chestItem),
+            backItem = CharacterAccessory.MapAccessoryFromResponse(response.backItem),
+            shouldersItem = CharacterAccessory.MapAccessoryFromResponse(response.shouldersItem),
+            glovesItem = CharacterAccessory.MapAccessoryFromResponse(response.glovesItem),
+            hipItem = CharacterAccessory.MapAccessoryFromResponse(response.hipItem),
+            legItem = CharacterAccessory.MapAccessoryFromResponse(response.legItem),
+            bootsItem = CharacterAccessory.MapAccessoryFromResponse(response.bootsItem),
+        };
+    }
 }
 
 [Serializable]
@@ -65,6 +84,17 @@ public class CharacterAccessory
         {
             itemCode = itemCode,
             properties = properties?.Clone(),
+        };
+    }
+
+    public static CharacterAccessory MapAccessoryFromResponse(PlayerAccessoryItemResponse response)
+    {
+        if (response == null) return new CharacterAccessory();
+
+        return new CharacterAccessory
+        {
+            itemCode = response.itemCode,
+            properties = AccessoryProperties.FromJson(response.properties),
         };
     }
 }

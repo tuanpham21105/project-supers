@@ -82,12 +82,35 @@ public class CharactersManager : MonoBehaviour
 
             characters.Add(character);
 
-            if (playerData.username.CompareTo(player) == 0) 
+            CharacterAccessoriesController characterAccessoriesController = character.GetComponent<CharacterAccessoriesController>();
+
+            if (playerData.username.CompareTo(player) == 0)
+            {
                 CameraController.instance.SetCharacter(character.transform);
+                ApplyCharacterAccessories(player, playerData.characterAccessories);
+            }
+            else
+            {
+                String capturedPlayer = player;
+                PlayerInventoryService.instance.GetPlayerAccessoriesSetByUsername(
+                    player,
+                    (response) =>
+                    {
+                        CharacterAccessoriesSet set = CharacterAccessoriesSet.MapFromResponse(response);
+                        ApplyCharacterAccessories(capturedPlayer, set);
+                    },
+                    (code, message) =>
+                    {
+                        Debug.LogError($"Failed to load accessories for {capturedPlayer}: {code} {message}");
+                    }
+                );
+            }
         }
 
         switchCharacterMode(MatchManager.instance.IsPlayerHost());
     }
+
+    
 
     void FixedUpdate()
     {
@@ -310,6 +333,54 @@ public class CharactersManager : MonoBehaviour
             character.GetComponent<CharacterActionController>().enabled = isHost;
             character.GetComponent<CharacterObjectsData>().characterHurtBox.SetActive(isHost);
         }
+    }
+
+    public void ApplyCharacterAccessories(String playerUsername, CharacterAccessoriesSet accessoriesSet)
+    {
+        int index = matchData.GetPlayerIndex(playerUsername);
+        GameObject character = characters[index];
+        CharacterAccessoriesController controller = character.GetComponent<CharacterAccessoriesController>();
+
+        foreach (StoreItemsType type in Enum.GetValues(typeof(StoreItemsType)))
+        {
+            if (type == StoreItemsType.Skills) continue;
+
+            CharacterAccessory accessory = accessoriesSet.TypeToAccessory(type);
+            if (accessory == null) continue;
+
+            if (string.IsNullOrEmpty(accessory.itemCode))
+            {
+                controller.TakeOff(StoreItemsTypeToAccessoriesPart(type));
+            }
+            else
+            {
+                AccessoriesListSO list = StoreData.instance.GetLocalListByType(type);
+                if (list == null) continue;
+
+                AccessoryItemSO itemSO = list.findByCode(accessory.itemCode);
+                if (itemSO == null) continue;
+
+                controller.PutOn(itemSO, accessory.properties);
+            }
+        }
+    }
+
+    private AccessoriesPart StoreItemsTypeToAccessoriesPart(StoreItemsType type)
+    {
+        return type switch
+        {
+            StoreItemsType.Hat => AccessoriesPart.Hat,
+            StoreItemsType.Mask => AccessoriesPart.Mask,
+            StoreItemsType.Neck => AccessoriesPart.Neck,
+            StoreItemsType.Chest => AccessoriesPart.Chest,
+            StoreItemsType.Back => AccessoriesPart.Back,
+            StoreItemsType.Shoulders => AccessoriesPart.Shoulders,
+            StoreItemsType.Gloves => AccessoriesPart.Gloves,
+            StoreItemsType.Hip => AccessoriesPart.Hip,
+            StoreItemsType.Leg => AccessoriesPart.Leg,
+            StoreItemsType.Boots => AccessoriesPart.Boots,
+            _ => AccessoriesPart.Hat
+        };
     }
 
     void handleCharacterHealthChange(String player, float healthPercent)

@@ -52,7 +52,7 @@ public static class ColorPaletteGenerator
     /// Tạo UI bảng màu vào parent transform cho sẵn.
     /// Parent nên có GridLayoutGroup hoặc sẽ tự thêm vào.
     /// </summary>
-    [MenuItem("Tools/UI/Create RGBA Color Picker")]
+    // [MenuItem("Tools/UI/Create RGBA Color Picker")]
     public static GameObject Generate()
     {
         Canvas canvas = Object.FindFirstObjectByType<Canvas>();

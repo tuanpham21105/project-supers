@@ -62,7 +62,7 @@ public class MainMenuController : MonoBehaviour
 
                 MainMenuSidebarUiController.instance.SetupSidebarUi();
 
-                AssignOtherPlayerData();
+                FetchAndAssignPlayerInventoryAndConfigsData();
             },
             (code, message) =>
             {
@@ -73,7 +73,7 @@ public class MainMenuController : MonoBehaviour
         );
     }
 
-    void AssignOtherPlayerData()
+    void FetchAndAssignPlayerInventoryAndConfigsData()
     {
         ConfigurationService.instance.GetKeyboardConfiguration(
             (response) =>
@@ -107,16 +107,16 @@ public class MainMenuController : MonoBehaviour
             {
                 PlayerData.instance.characterAccessories = new CharacterAccessoriesSet
                 {
-                    hatItem = MapAccessory(response.hatItem),
-                    maskItem = MapAccessory(response.maskItem),
-                    neckItem = MapAccessory(response.neckItem),
-                    chestItem = MapAccessory(response.chestItem),
-                    backItem = MapAccessory(response.backItem),
-                    shouldersItem = MapAccessory(response.shouldersItem),
-                    glovesItem = MapAccessory(response.glovesItem),
-                    hipItem = MapAccessory(response.hipItem),
-                    legItem = MapAccessory(response.legItem),
-                    bootsItem = MapAccessory(response.bootsItem),
+                    hatItem = CharacterAccessory.MapAccessoryFromResponse(response.hatItem),
+                    maskItem = CharacterAccessory.MapAccessoryFromResponse(response.maskItem),
+                    neckItem = CharacterAccessory.MapAccessoryFromResponse(response.neckItem),
+                    chestItem = CharacterAccessory.MapAccessoryFromResponse(response.chestItem),
+                    backItem = CharacterAccessory.MapAccessoryFromResponse(response.backItem),
+                    shouldersItem = CharacterAccessory.MapAccessoryFromResponse(response.shouldersItem),
+                    glovesItem = CharacterAccessory.MapAccessoryFromResponse(response.glovesItem),
+                    hipItem = CharacterAccessory.MapAccessoryFromResponse(response.hipItem),
+                    legItem = CharacterAccessory.MapAccessoryFromResponse(response.legItem),
+                    bootsItem = CharacterAccessory.MapAccessoryFromResponse(response.bootsItem),
                 };
 
                 MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
@@ -128,17 +128,6 @@ public class MainMenuController : MonoBehaviour
                 Debug.LogError($"[MainMenuController] Failed to fetch player accessories set: {message}");
             }
         );
-    }
-
-    private CharacterAccessory MapAccessory(PlayerAccessoryItemResponse item)
-    {
-        if (item == null) return new CharacterAccessory();
-
-        return new CharacterAccessory
-        {
-            itemCode = item.itemCode,
-            properties = AccessoryProperties.FromJson(item.properties),
-        };
     }
 
     [SerializeField] private GameObject openedWindow;
