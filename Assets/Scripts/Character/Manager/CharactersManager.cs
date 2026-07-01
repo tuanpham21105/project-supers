@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using com.cyborgAssets.inspectorButtonPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -109,8 +110,6 @@ public class CharactersManager : MonoBehaviour
 
         switchCharacterMode(MatchManager.instance.IsPlayerHost());
     }
-
-    
 
     void FixedUpdate()
     {
@@ -319,6 +318,7 @@ public class CharactersManager : MonoBehaviour
     }
 
     // Switch Character mode
+    [ProButton]
     public void switchCharacterMode(bool isHost)
     {
         foreach (GameObject character in characters)

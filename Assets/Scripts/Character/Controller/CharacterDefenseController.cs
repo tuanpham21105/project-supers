@@ -91,9 +91,14 @@ public class CharacterDefenseController : MonoBehaviour
     // [Control methods]
     public void Block(bool active)
     {
+        if (characterStatesData.blockFlag == active) return;
+
         // Only start blocking when not doing other upper actions OR any body actions
         if (characterStatesData.upperActionFlag || characterStatesData.bodyActionFlag)
         {
+            if (characterStatesData.blockFlag && animationController != null)
+                animationController.EndUpperAnimation();
+                
             characterStatesData.blockFlag = false;
             return;
         }

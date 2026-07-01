@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using com.cyborgAssets.inspectorButtonPro;
 using Unity.Collections;
 using UnityEngine;
 
+[Serializable]
 public enum CharacterAnimationTypes
 {
     upper,
@@ -21,6 +23,7 @@ public class CharacterSyncController : MonoBehaviour
         characterAnimationController = GetComponent<CharacterAnimationService>();
     }
 
+    [ProButton]
     public void PlayAnimation(CharacterAnimationTypes animationType, String animationName)
     {
         switch (animationType)
@@ -40,12 +43,13 @@ public class CharacterSyncController : MonoBehaviour
                 if (string.IsNullOrEmpty(animationName))
                 {
                     animationName = "none";
-                    characterAnimationController.EndUpperAnimation();
                 }
+                
                 if (Enum.TryParse(animationName, true, out CharacterUpperAnimation upperAnim))
                 {
-                    if (upperAnim == CharacterUpperAnimation.none)
-                        characterAnimationController.EndUpperAnimation();
+                if (upperAnim == CharacterUpperAnimation.none)
+                    characterAnimationController.EndUpperAnimation();
+                else
                     characterAnimationController.PlayUpperAnimation(upperAnim);
                 }
                 break;

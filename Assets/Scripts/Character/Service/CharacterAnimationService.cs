@@ -92,11 +92,17 @@ public class CharacterAnimationService : MonoBehaviour
         animator = characterObjectsData.characterMesh.GetComponent<Animator>();
     }
 
+    void FixedUpdate()
+    {
+        // Debug.Log(animator.GetLayerWeight(1));
+    }
+
     // 
     public void PlayBodyAnimation(CharacterBodyAnimation animation)
     {
         if (animator != null)
         {
+            // Debug.Log("Body - " + animation.ToString() + " - " + animator.GetLayerWeight(1));
             animator.CrossFade(animation.ToString(), transitionDuration, 0);
             onPlayAnimation?.Invoke("body", animation.ToString());
         }
@@ -106,6 +112,7 @@ public class CharacterAnimationService : MonoBehaviour
     {
         if (animator != null)
         {
+            // Debug.Log("Upper - " + animation.ToString() + " - " + animator.GetLayerWeight(1));
             StartFadeUpperLayer(1f, transitionDuration);
             animator.CrossFade(animation.ToString(), transitionDuration, 1, 0f);
             onPlayAnimation?.Invoke("upper", animation.ToString());
@@ -116,6 +123,7 @@ public class CharacterAnimationService : MonoBehaviour
     {
         if (animator != null)
         {
+            // Debug.Log("Additional - " + animation.ToString() + " - " + animator.GetLayerWeight(1));
             animator.SetLayerWeight(2, 0.5f);
             animator.CrossFade(animation.ToString(), transitionDuration, 2, 0f);
             onPlayAnimation?.Invoke("additional", animation.ToString());
@@ -126,8 +134,9 @@ public class CharacterAnimationService : MonoBehaviour
     {
         if (animator != null)
         {
+            // Debug.Log("Upper - none - " + animator.GetLayerWeight(1));
             StartFadeUpperLayer(0f, transitionDuration);
-            onPlayAnimation?.Invoke("upper", null);
+            onPlayAnimation?.Invoke("upper", "none");
         }
     }
 
