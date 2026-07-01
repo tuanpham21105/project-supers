@@ -182,7 +182,7 @@ MonoBehaviour:
   readyPanel: {fileID: 260395609}
   cancelButton: {fileID: 371019484}
   findingMatchDisplayText: {fileID: 945066277}
-  battleCostDisplayText: {fileID: 0}
+  battleCostDisplayText: {fileID: 1275360170}
 --- !u!1 &20168338
 GameObject:
   m_ObjectHideFlags: 0
