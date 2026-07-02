@@ -60,7 +60,7 @@ public class CharacterAccessoryItemData : MonoBehaviour
     private MaterialPropertyBlock block;
 
     [ProButton]
-    public void setColors(Color p, Color s, Color t)
+    public void InspectorSetColors(Color p, Color s, Color t)
     {
         SetColors(new AccessoryProperties()
             {
@@ -96,6 +96,7 @@ public class CharacterAccessoryItemData : MonoBehaviour
     {
         renderer.GetPropertyBlock(block, materialIndex);
         block.SetColor("_Color", color);
+        block.SetColor("baseColorFactor", color);
         renderer.SetPropertyBlock(block, materialIndex);
     }
 }

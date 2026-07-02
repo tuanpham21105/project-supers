@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b589ad396738b8cbf8452cfd2b36b81f, type: 3}
+  m_Name: Cape02
+  m_EditorClassIdentifier: 
+  code: BACK1
+  itemName: Cape2
+  part: 4
+  image: {fileID: 21300000, guid: 1711f624a0038f6aba0d678404ca9c4b, type: 3}
+  itemPrefab: {fileID: 6486913095051103598, guid: 7d5ead473abd7f8199469357040920a6, type: 3}
+  defaultProperties:
+    primaryColor: {r: 1, g: 0, b: 0, a: 1}
+    secondaryColor: {r: 0.96098113, g: 1, b: 0, a: 1}
+    tertiaryColor: {r: 0, g: 0.39506817, b: 1, a: 1}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b589ad396738b8cbf8452cfd2b36b81f, type: 3}
+  m_Name: Mask 3
+  m_EditorClassIdentifier: 
+  code: MASK3
+  itemName: Mask3
+  part: 1
+  image: {fileID: 21300000, guid: 0600fce110e07b925978851d92a36a85, type: 3}
+  itemPrefab: {fileID: 6658649045394091333, guid: 662dacb65555d1b32ae4f0bc2e19f019, type: 3}
+  defaultProperties:
+    primaryColor: {r: 1, g: 0, b: 0, a: 1}
+    secondaryColor: {r: 0, g: 0.06844139, b: 1, a: 1}
+    tertiaryColor: {r: 0.091415524, g: 1, b: 0, a: 1}

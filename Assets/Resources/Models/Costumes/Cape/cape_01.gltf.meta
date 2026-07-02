@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9abe41f77bc6f9390b911e253656d290
+guid: b179ac747a1142d43819b990caf379cd
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -9,7 +9,7 @@ ScriptedImporter:
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 804e1ce4c496647cfa3f1a1134187c71, type: 3}
   _removeEmptyRootObjects: 1
-  _scaleFactor: 0.7
+  _scaleFactor: 1
   _deduplicateResources: 0
   _deduplicatedStatistics:
     meshCountBefore: 0
@@ -29,7 +29,7 @@ ScriptedImporter:
   _importNormals: 0
   _importTangents: 0
   _importCamera: 2
-  _importAnimations: 1
+  _importAnimations: 2
   _mecanimHumanoidFlip: 0
   _addAnimatorComponent: 0
   _animationLoopTime: 1
@@ -51,19 +51,18 @@ ScriptedImporter:
 '
   optimizeGameObjects: 0
   materials:
-  - {fileID: 4758309174586462558, guid: 9abe41f77bc6f9390b911e253656d290, type: 3}
-  textures: []
+  - {instanceID: 0}
+  textures:
+  - {instanceID: 0}
   hasSceneData: 1
-  hasAnimationData: 1
+  hasAnimationData: 0
   hasMaterialData: 1
-  hasTextureData: 0
-  animations:
-  - name: float_idle
-  - name: float_backward
-  - name: float_forward
-  - name: float_side
-  - name: float_down
+  hasTextureData: 1
+  animations: []
   _extensions: []
-  _textures: []
+  _textures:
+  - texture: {instanceID: 0}
+    shouldBeLinear: 0
+    shouldBeNormalMap: 0
   _mainAssetIdentifier: scenes/blockbench_export
   _importPlugins: []
