@@ -9,7 +9,7 @@ ScriptedImporter:
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 804e1ce4c496647cfa3f1a1134187c71, type: 3}
   _removeEmptyRootObjects: 1
-  _scaleFactor: 1
+  _scaleFactor: 0.7
   _deduplicateResources: 0
   _deduplicatedStatistics:
     meshCountBefore: 0
@@ -51,9 +51,9 @@ ScriptedImporter:
 '
   optimizeGameObjects: 0
   materials:
-  - {instanceID: 0}
+  - {fileID: 4758309174586462558, guid: b179ac747a1142d43819b990caf379cd, type: 3}
   textures:
-  - {instanceID: 0}
+  - {fileID: 6958621229552531629, guid: b179ac747a1142d43819b990caf379cd, type: 3}
   hasSceneData: 1
   hasAnimationData: 0
   hasMaterialData: 1
@@ -61,7 +61,7 @@ ScriptedImporter:
   animations: []
   _extensions: []
   _textures:
-  - texture: {instanceID: 0}
+  - texture: {fileID: 6958621229552531629, guid: b179ac747a1142d43819b990caf379cd, type: 3}
     shouldBeLinear: 0
     shouldBeNormalMap: 0
   _mainAssetIdentifier: scenes/blockbench_export
