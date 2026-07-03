@@ -115,11 +115,11 @@ public class CharacterSyncController : MonoBehaviour
         statesData.fallFlag = statesDto.fallFlag;
 
         statesData.currentEndurance = statesDto.currentEndurance;
-        statesData.moveSpeed = statesDto.moveSpeed;
+        statesData.controlledMoveSpeed = statesDto.moveSpeed;
 
         statesData.inputAxes = statesDto.inputAxes.ToVector2();
         statesData.lookInput = statesDto.lookInput.ToVector3();
-        statesData.direction = statesDto.direction.ToVector3();
+        statesData.controlledMoveDirection = statesDto.direction.ToVector3();
 
         if (Enum.TryParse(statesDto.currentBodyAnimation, out CharacterBodyAnimation bodyAnimation))
         {
@@ -142,8 +142,8 @@ public class CharacterSyncController : MonoBehaviour
         statesData.dashTimer = statesDto.dashTimer;
         statesData.horizontalMove = statesDto.horizontalMove.ToVector3();
         statesData.isImpactActive = statesDto.isImpactActive;
-        statesData.currentMoveDirection = statesDto.currentMoveDirection.ToVector3();
-        statesData.currentSqrMoveSpeed = statesDto.currentSqrMoveSpeed;
+        statesData.allMoveDirection = statesDto.currentMoveDirection.ToVector3();
+        statesData.currentPow2AllSpeed = statesDto.currentSqrMoveSpeed;
 
         statesData.isFront = statesDto.isFront;
     }

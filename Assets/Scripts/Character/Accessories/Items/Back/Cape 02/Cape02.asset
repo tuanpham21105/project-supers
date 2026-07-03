@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b589ad396738b8cbf8452cfd2b36b81f, type: 3}
   m_Name: Cape02
   m_EditorClassIdentifier: 
-  code: BACK1
+  code: BACK2
   itemName: Cape2
   part: 4
   image: {fileID: 21300000, guid: 1711f624a0038f6aba0d678404ca9c4b, type: 3}

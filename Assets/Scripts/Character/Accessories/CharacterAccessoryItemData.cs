@@ -59,6 +59,8 @@ public class CharacterAccessoryItemData : MonoBehaviour
 
     private MaterialPropertyBlock block;
 
+    public GameObject character {get; set;}
+
     [ProButton]
     public void InspectorSetColors(Color p, Color s, Color t)
     {

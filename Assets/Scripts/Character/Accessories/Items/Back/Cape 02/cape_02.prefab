@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 3671942455021192632}
   - component: {fileID: 6396456667344203309}
   - component: {fileID: 733804386271074608}
+  - component: {fileID: 6100123046999736738}
   m_Layer: 0
   m_Name: cape_02
   m_TagString: Untagged
@@ -399,6 +400,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6100123046999736738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6486913095051103598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b339c9bb5ce78aceb93dcf7d7368a2f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 0}
+  characterStatesData: {fileID: 0}
 --- !u!1 &7435408973146950602
 GameObject:
   m_ObjectHideFlags: 0

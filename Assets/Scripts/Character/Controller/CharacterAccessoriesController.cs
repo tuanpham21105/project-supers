@@ -62,6 +62,8 @@ public class CharacterAccessoriesController : MonoBehaviour
         }
 
         newItemData.SetColors(properties);
+
+        newItemData.character = gameObject;
     }
 
     [ProButton]

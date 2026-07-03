@@ -82,8 +82,8 @@ public class CharacterObjectService : MonoBehaviour
         // Apply everything in one call per tick
         characterController.Move(combinedMove * Time.fixedDeltaTime);
 
-        characterStatesData.currentMoveDirection = combinedMove.normalized;
-        characterStatesData.currentSqrMoveSpeed = combinedMove.sqrMagnitude;
+        characterStatesData.allMoveDirection = combinedMove.normalized;
+        characterStatesData.currentPow2AllSpeed = combinedMove.sqrMagnitude;
 
         if (impactAppliedThisFrame)
         {

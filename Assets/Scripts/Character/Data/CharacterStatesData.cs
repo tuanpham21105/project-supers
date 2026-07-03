@@ -121,33 +121,37 @@ public class CharacterStatesData : MonoBehaviour
     public bool deadFlag;
     public bool fallFlag;
 
+    [Header("Character states data")]
     public int currentEndurance;
-    public float moveSpeed;
+    public float controlledMoveSpeed;
 
+    [Header("Input states data")]
     public Vector2 inputAxes;
     public Vector3 lookInput;
-    public Vector3 direction;
+    public Vector3 controlledMoveDirection;
 
     public CharacterBodyAnimation currentBodyAnimation;
 
-    public float lastNormalAttackEndTime = -Mathf.Infinity;
-    public float lastStrikeAttackEndTime = -Mathf.Infinity;
-
+    [Header("Defense states data")]
     public float lastDeflectTime;
     public float currentDeflectSpeed = 1f;
 
+    [Header("Attack states data")]
     public int normalAttackComboIndex = 0;
     public int strikeAttackComboIndex = 0;
     public int hitAnimationIndex = 0;
+    public float lastNormalAttackEndTime = -Mathf.Infinity;
+    public float lastStrikeAttackEndTime = -Mathf.Infinity;
 
+    [Header("Movement states data")]
     public float verticalVelocity;
     public Vector3 impactForce;
     public Vector3 dashForce;
     public float dashTimer;
     public Vector3 horizontalMove;
     public bool isImpactActive;
-    public Vector3 currentMoveDirection;
-    public float currentSqrMoveSpeed;
+    public Vector3 allMoveDirection;
+    public float currentPow2AllSpeed;
 
     public bool isFront;
 }

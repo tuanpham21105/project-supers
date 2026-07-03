@@ -76,7 +76,7 @@ public class CharacterMovementController : MonoBehaviour
         if (characterStatesData.knockAwayFlag) return;
 
         Vector3 moveDirection = GetCurrentMoveDirection();
-        characterStatesData.direction = moveDirection;
+        characterStatesData.controlledMoveDirection = moveDirection;
 
         // Activate fast fly flag: Flying + Sprinting + Only Forward input + NOT Blocking
         characterStatesData.fastFlyFlag = characterStatesData.flyFlag &&
@@ -127,7 +127,7 @@ public class CharacterMovementController : MonoBehaviour
             characterObjectService.Move(moveDirection, currentSpeed);
         }
 
-        characterStatesData.moveSpeed = currentSpeed;
+        characterStatesData.controlledMoveSpeed = currentSpeed;
 
         characterObjectService.ToggleGravity(!characterStatesData.flyFlag);
     }
@@ -249,7 +249,7 @@ public class CharacterMovementController : MonoBehaviour
         // If not moving significantly, fall back to the input-based direction
         if (dashDirection.magnitude < 0.1f)
         {
-            dashDirection = characterStatesData.direction;
+            dashDirection = characterStatesData.controlledMoveDirection;
         }
 
         // If still no direction (no movement and no input), default to character's forward

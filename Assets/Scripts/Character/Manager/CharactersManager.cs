@@ -189,11 +189,11 @@ public class CharactersManager : MonoBehaviour
             states.fallFlag = statesData.fallFlag;
 
             states.currentEndurance = statesData.currentEndurance;
-            states.moveSpeed = statesData.moveSpeed;
+            states.moveSpeed = statesData.controlledMoveSpeed;
 
             states.inputAxes = Vec3.From(statesData.inputAxes);
             states.lookInput = Vec3.From(statesData.lookInput);
-            states.direction = Vec3.From(statesData.direction);
+            states.direction = Vec3.From(statesData.controlledMoveDirection);
 
             states.currentBodyAnimation = statesData.currentBodyAnimation.ToString();
 
@@ -213,8 +213,8 @@ public class CharactersManager : MonoBehaviour
             states.dashTimer = statesData.dashTimer;
             states.horizontalMove = Vec3.From(statesData.horizontalMove);
             states.isImpactActive = statesData.isImpactActive;
-            states.currentMoveDirection = Vec3.From(statesData.currentMoveDirection);
-            states.currentSqrMoveSpeed = statesData.currentSqrMoveSpeed;
+            states.currentMoveDirection = Vec3.From(statesData.allMoveDirection);
+            states.currentSqrMoveSpeed = statesData.currentPow2AllSpeed;
 
             states.isFront = statesData.isFront;
 

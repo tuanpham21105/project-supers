@@ -101,8 +101,8 @@ public class CharacterAttackController : MonoBehaviour
     // Pure damage calculation — no state, no presentation
     public int CalculateAttackDamage(int baseDamage, Vector3 attackDirection)
     {
-        Vector3 moveDirection = characterStatesData.currentMoveDirection;
-        float sqrMoveSpeed = characterStatesData.currentSqrMoveSpeed;
+        Vector3 moveDirection = characterStatesData.allMoveDirection;
+        float sqrMoveSpeed = characterStatesData.currentPow2AllSpeed;
         int combineDamage = baseDamage;
 
         float scale = 1 - (Vector3.Angle(moveDirection, attackDirection) / characterStatsData.maxCombineAttackAngleSize);
