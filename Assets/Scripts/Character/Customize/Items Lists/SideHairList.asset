@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 860baa8ff9c0bbe3682e36d6c13e2d59, type: 3}
   m_Name: SideHairList
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - {fileID: 11400000, guid: 52660d728f11f8adf81b5cc14ea2ddae, type: 2}
+  - {fileID: 11400000, guid: 5eaca7ada8a2db7fa8fc8d352a41f90d, type: 2}
+  - {fileID: 11400000, guid: 91a80e7a111bf9709a20b7ad72aa18ec, type: 2}

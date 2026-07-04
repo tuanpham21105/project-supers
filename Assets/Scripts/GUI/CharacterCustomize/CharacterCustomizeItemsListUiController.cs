@@ -29,7 +29,6 @@ public class CharacterCustomizeItemsListUiController : MonoBehaviour
         {
             foreach (CharacterCustomizeItemSO item in itemsListSO.items)
             {
-                Debug.Log(item.code);
 
                 GameObject newItem = Instantiate(itemPrefab, content);
 
@@ -73,6 +72,9 @@ public class CharacterCustomizeItemsListUiController : MonoBehaviour
 
     public void SetSelectedItemCode(string code)
     {
+        if (code == "")
+            code = itemsListSO.items[0].code;
+
         selectedItemCode = code;
     }
 }

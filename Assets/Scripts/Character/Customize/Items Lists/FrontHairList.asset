@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 860baa8ff9c0bbe3682e36d6c13e2d59, type: 3}
   m_Name: FrontHairList
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - {fileID: 11400000, guid: 91db96720a735cae3aa217860e80c526, type: 2}
+  - {fileID: 11400000, guid: c4d6ba35e30a59b76b3a77630150d58b, type: 2}
+  - {fileID: 11400000, guid: 0e6112b45b3b91356ac15e3cfafb4080, type: 2}

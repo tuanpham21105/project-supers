@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 860baa8ff9c0bbe3682e36d6c13e2d59, type: 3}
   m_Name: EyesList
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - {fileID: 11400000, guid: 9e78357ae788f7260bd81a79c5a3c06c, type: 2}
+  - {fileID: 11400000, guid: 37472047c9fe8ee67aba58b8c6697288, type: 2}

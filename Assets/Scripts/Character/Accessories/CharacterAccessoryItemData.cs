@@ -5,6 +5,9 @@ using UnityEngine;
 
 public enum AccessoriesPiecePart
 {
+    FrontHair,
+    TopHair,
+    SideHair,
     Head,
     Mask,
     Ears,

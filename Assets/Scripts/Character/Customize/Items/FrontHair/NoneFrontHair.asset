@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254b450ffd8968f75b8db4be4add965e, type: 3}
+  m_Name: NoneFrontHair
+  m_EditorClassIdentifier: 
+  code: NONEHAIR
+  itemName: None Hair
+  itemSprite: {fileID: 21300000, guid: aae762ad6dc4d5e32a2f430b7059486a, type: 3}
+  type: 3
+  hair: {fileID: 5507760748409398153, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  primaryMaterial: {fileID: 2100000, guid: 16495c04f4d7eb38181ecc028fd02b19, type: 2}
+  secondaryMaterial: {fileID: 2100000, guid: 16495c04f4d7eb38181ecc028fd02b19, type: 2}
+  tertiaryMaterial: {fileID: 2100000, guid: 16495c04f4d7eb38181ecc028fd02b19, type: 2}

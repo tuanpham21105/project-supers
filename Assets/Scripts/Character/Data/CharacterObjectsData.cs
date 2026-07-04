@@ -10,8 +10,15 @@ public class CharacterObjectsData : MonoBehaviour
     public Transform characterMesh;
     public GameObject characterHurtBox;
 
+    [Header("Hair Accessories")]
+    public GameObject frontHairMesh;
+    public GameObject topHairMesh;
+    public GameObject sideHairMesh;
+
     [Header("Head Accessories")]
     public GameObject headMesh;
+    public GameObject eyesMesh;
+    public GameObject mouthMesh;
     public GameObject faceAccessories;
     public GameObject headAccessories;
 

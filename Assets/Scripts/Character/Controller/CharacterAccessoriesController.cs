@@ -179,6 +179,9 @@ public class CharacterAccessoriesController : MonoBehaviour
     {
         return part switch
         {
+            AccessoriesPiecePart.FrontHair => characterObjectsData.frontHairMesh,
+            AccessoriesPiecePart.TopHair => characterObjectsData.topHairMesh,
+            AccessoriesPiecePart.SideHair => characterObjectsData.sideHairMesh,
             AccessoriesPiecePart.Head => characterObjectsData.headMesh,
             AccessoriesPiecePart.Ears => characterObjectsData.earsMesh,
             AccessoriesPiecePart.Chest => characterObjectsData.chestMesh,
@@ -209,25 +212,31 @@ public class CharacterAccessoriesController : MonoBehaviour
         switch (itemSO.type)
         {
             case CharacterCustomizeType.Races:
-                CharacterCustomizeRacesSO racesSO = itemSO as CharacterCustomizeRacesSO;
-                SetCharacterRaces(racesSO);
+                SetCharacterRaces(itemSO);
                 break;
             case CharacterCustomizeType.Eyes:
+                SetCharacterEyes(itemSO);
                 break;
             case CharacterCustomizeType.Mouth:
+                SetCharacterMouth(itemSO);
                 break;
             case CharacterCustomizeType.Front_Hair:
+                SetCharacterHair(AccessoriesPiecePart.FrontHair, itemSO);
                 break;
             case CharacterCustomizeType.Top_Hair:
+                SetCharacterHair(AccessoriesPiecePart.TopHair, itemSO);
                 break;
             case CharacterCustomizeType.Side_Hair:
+                SetCharacterHair(AccessoriesPiecePart.SideHair, itemSO);
                 break;
         }
     }
 
     [ProButton]
-    void SetCharacterRaces(CharacterCustomizeRacesSO racesSO)
+    void SetCharacterRaces(CharacterCustomizeItemSO itemSO)
     {
+        CharacterCustomizeRacesSO racesSO = itemSO as CharacterCustomizeRacesSO;
+
         SetMesh(racesSO.headMesh, characterObjectsData.headMesh);
         SetMesh(racesSO.earsMesh, characterObjectsData.earsMesh);
         SetMesh(racesSO.chestMesh, characterObjectsData.chestMesh);
@@ -244,8 +253,66 @@ public class CharacterAccessoriesController : MonoBehaviour
 
     void SetMesh(Mesh origin, GameObject target)
     {
-        target.GetComponent<MeshFilter>().mesh = origin;
+        target.GetComponent<MeshFilter>().sharedMesh = origin;
     }
 
+    void SetMaterial(Material original, GameObject target)
+    {
+        target.GetComponent<MeshRenderer>().sharedMaterial = original;
+    }
 
+    void SetCharacterEyes(CharacterCustomizeItemSO itemSO)
+    {
+        CharacterCustomizeEyesSO eyesSO = itemSO as CharacterCustomizeEyesSO;
+
+        MeshRenderer renderer = characterObjectsData.eyesMesh.GetComponent<MeshRenderer>();
+
+        Material[] materials = renderer.sharedMaterials;
+
+        materials[3] = eyesSO.eyelidMaterial;
+        materials[2] = eyesSO.scleraMaterial;
+        materials[1] = eyesSO.pupilMaterial;
+        materials[0] = eyesSO.irisMaterial;
+
+        renderer.sharedMaterials = materials;
+    }
+
+    void SetCharacterMouth(CharacterCustomizeItemSO itemSO)
+    {
+        CharacterCustomizeMouthSO mouthSO = itemSO as CharacterCustomizeMouthSO;
+
+        SetMaterial(mouthSO.mouthMaterial, characterObjectsData.mouthMesh);
+    }
+
+    void SetCharacterHair(AccessoriesPiecePart part, CharacterCustomizeItemSO itemSO)
+    {
+        CharacterCustomizeHairSO hairSO = itemSO as CharacterCustomizeHairSO;
+
+        GameObject hairMesh;
+
+        switch (part)
+        {
+            case AccessoriesPiecePart.FrontHair:
+                hairMesh = characterObjectsData.frontHairMesh;
+                break;
+            case AccessoriesPiecePart.TopHair:
+                hairMesh = characterObjectsData.topHairMesh;
+                break;
+            default:
+                hairMesh = characterObjectsData.sideHairMesh;
+                break;
+        }
+
+        MeshRenderer renderer = hairMesh.GetComponent<MeshRenderer>();
+
+        Material[] materials = renderer.sharedMaterials;
+
+        materials[0] = hairSO.primaryMaterial;
+        materials[1] = hairSO.secondaryMaterial;
+        materials[2] = hairSO.tertiaryMaterial;
+
+        renderer.sharedMaterials = materials;
+
+        SetMesh(hairSO.hair, hairMesh);
+    }
 }

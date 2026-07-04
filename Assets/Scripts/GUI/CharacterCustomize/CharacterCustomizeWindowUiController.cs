@@ -25,7 +25,7 @@ public class CharacterCustomizeWindowUiController : WindowUiController
     
         public void SetSelectedItem(string itemCode)
         {
-            itemsListWindow.GetComponent<CharacterCustomizeItemsListUiController>().SetSelectedItemCode(itemCode);
+            itemsListWindow.GetComponent<CharacterCustomizeItemsListUiController>().SetSelectedItemCode(itemCode != null ? itemCode : "");
         }
     }
 
@@ -101,8 +101,8 @@ public class CharacterCustomizeWindowUiController : WindowUiController
     {
         CharacterCustomize customize = tempCharacterCustomizies.GetCharacterCustomizeByCustomizeType(type);
 
-        if (customize == null)
-            return "";
+        if (customize == null || customize.itemSO == null)
+            return null;
         
         return customize.itemSO.code;
     }
