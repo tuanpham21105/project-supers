@@ -44,4 +44,10 @@ public class MainMenuCharacterModelController : MonoBehaviour
         
         PutOnAccessory(StoreData.instance.GetLocalListByType(type).findByCode(accessory.itemCode), accessory.properties);
     }
+
+    //
+    public void SetCharacterCustomize(CharacterCustomizeItemSO itemSO)
+    {
+        characterAccessoriesController.SetCharacterCustomize(itemSO);
+    }
 }

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc2146504501977fbb3383f6a98e2072, type: 3}
+  m_Name: HumanMale
+  m_EditorClassIdentifier: 
+  code: HUMANMALE
+  itemName: Human Male
+  itemSprite: {fileID: 21300000, guid: 77126c55c45337da59049881498f9a5d, type: 3}
+  type: 0
+  headMesh: {fileID: 5507760748409398153, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  earsMesh: {fileID: -7708679493021786734, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  chestMesh: {fileID: -4960413014980463905, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  hipMesh: {fileID: -8012424861572341766, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  rightForearmMesh: {fileID: -7814253943052180533, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  rightArmMesh: {fileID: -4487450913707331114, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  leftForearmMesh: {fileID: -5538346194842527575, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  leftArmMesh: {fileID: 1950709746301170511, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  rightShinMesh: {fileID: -5508893222923049635, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  rightThighMesh: {fileID: -7962812798902225621, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  leftShinMesh: {fileID: 8550459388241405859, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
+  leftThighMesh: {fileID: 54189668175612797, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}

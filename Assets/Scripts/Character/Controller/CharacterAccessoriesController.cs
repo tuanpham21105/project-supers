@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using com.cyborgAssets.inspectorButtonPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CharacterAccessoriesController : MonoBehaviour
@@ -201,4 +202,50 @@ public class CharacterAccessoriesController : MonoBehaviour
 
         slot.SetColors(properties);
     }
+
+    //
+    public void SetCharacterCustomize(CharacterCustomizeItemSO itemSO)
+    {
+        switch (itemSO.type)
+        {
+            case CharacterCustomizeType.Races:
+                CharacterCustomizeRacesSO racesSO = itemSO as CharacterCustomizeRacesSO;
+                SetCharacterRaces(racesSO);
+                break;
+            case CharacterCustomizeType.Eyes:
+                break;
+            case CharacterCustomizeType.Mouth:
+                break;
+            case CharacterCustomizeType.Front_Hair:
+                break;
+            case CharacterCustomizeType.Top_Hair:
+                break;
+            case CharacterCustomizeType.Side_Hair:
+                break;
+        }
+    }
+
+    [ProButton]
+    void SetCharacterRaces(CharacterCustomizeRacesSO racesSO)
+    {
+        SetMesh(racesSO.headMesh, characterObjectsData.headMesh);
+        SetMesh(racesSO.earsMesh, characterObjectsData.earsMesh);
+        SetMesh(racesSO.chestMesh, characterObjectsData.chestMesh);
+        SetMesh(racesSO.hipMesh, characterObjectsData.hipMesh);
+        SetMesh(racesSO.rightForearmMesh, characterObjectsData.rightForearmMesh);
+        SetMesh(racesSO.rightArmMesh, characterObjectsData.rightArmMesh);
+        SetMesh(racesSO.leftForearmMesh, characterObjectsData.leftForearmMesh);
+        SetMesh(racesSO.leftArmMesh, characterObjectsData.leftArmMesh);
+        SetMesh(racesSO.rightShinMesh, characterObjectsData.rightShinMesh);
+        SetMesh(racesSO.rightThighMesh, characterObjectsData.rightThighMesh);
+        SetMesh(racesSO.leftShinMesh, characterObjectsData.leftShinMesh);
+        SetMesh(racesSO.leftThighMesh, characterObjectsData.leftThighMesh);
+    }
+
+    void SetMesh(Mesh origin, GameObject target)
+    {
+        target.GetComponent<MeshFilter>().mesh = origin;
+    }
+
+
 }

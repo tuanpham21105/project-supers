@@ -769,9 +769,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: AccessoriesItemUiController, Assembly-CSharp
-        m_MethodName: OnPress
+      - m_Target: {fileID: 1043292325522980072}
+        m_TargetAssemblyTypeName: CharacterCustomizeItemButtonUiController, Assembly-CSharp
+        m_MethodName: Click
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -793,3 +793,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c914cfdfbc71c37820b88a155e99dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundImage: {fileID: 4918886807008450070}
+  displayImage: {fileID: 4115292206892121354}
+  selectedBackgroundSprite: {fileID: 21300000, guid: 5cbf0e340a7effeac9dc740e7a79d6cc, type: 3}
+  normalBackgroundSprite: {fileID: 21300000, guid: 584d31df5d3446035ba5685c1ecee683, type: 3}
+  itemSO: {fileID: 0}
+  isSelected: 0

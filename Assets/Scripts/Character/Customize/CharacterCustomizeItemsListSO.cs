@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CharacterCustomizeItem", menuName = "Game/Character Customize Item")]
+[CreateAssetMenu(fileName = "CharacterCustomizeItemsList", menuName = "Game/Character Customize Items List")]
 public class CharacterCustomizeItemsListSO : ScriptableObject
 {
-    public List<CharacterCustomizeItemSo> items = new List<CharacterCustomizeItemSo>();
+    public List<CharacterCustomizeItemSO> items = new List<CharacterCustomizeItemSO>();
 
-    public CharacterCustomizeItemSo findByCode(string code)
+    public CharacterCustomizeItemSO findByCode(string code)
     {
         if (code == "" || code == null)
             return items[0];
 
-        foreach (CharacterCustomizeItemSo item in items) 
+        foreach (CharacterCustomizeItemSO item in items) 
         {
             if (item.code.Equals(code)) 
                 return item;

@@ -16,25 +16,39 @@ public class CharacterCustomizeItemsListUiController : MonoBehaviour
     [SerializeField] private CharacterCustomizeItemsListSO itemsListSO;
 
     [Header("Runtime")]
+    [SerializeField] private string selectedItemCode;
     [SerializeField] private CharacterCustomizeItemButtonUiController selectedItem;
-    // [SerializeField] private Dictionary<string, GameObject> itemButtons;
+    [SerializeField] private Dictionary<string, CharacterCustomizeItemButtonUiController> itemButtons = new Dictionary<string, CharacterCustomizeItemButtonUiController>();
 
     // 
-    public event Action<CharacterCustomizeItemSo> onItemSelected;
+    public event Action<CharacterCustomizeItemSO> onItemSelected;
     
     void OnEnable()
     {
         if (selectedItem == null)
         {
-            foreach (CharacterCustomizeItemSo item in itemsListSO.items)
+            foreach (CharacterCustomizeItemSO item in itemsListSO.items)
             {
-                GameObject newItem = Instantiate(itemPrefab, transform);
+                Debug.Log(item.code);
 
-                newItem.GetComponent<CharacterCustomizeItemButtonUiController>().Initialize(item);
-                newItem.GetComponent<CharacterCustomizeItemButtonUiController>().onSelected += handleItemSelected;
+                GameObject newItem = Instantiate(itemPrefab, content);
 
-                // itemButtons.Add(item.code, newItem);
+                CharacterCustomizeItemButtonUiController component = newItem.GetComponent<CharacterCustomizeItemButtonUiController>();
+
+                component.Initialize(item);
+                component.onSelected += handleItemSelected;
+
+                itemButtons.Add(item.code, component);
+
+                if (item.code.Equals(selectedItemCode))
+                {
+                    SetSelectedItem(component);
+                }
             }
+        }
+        else
+        {
+            SetSelectedItem(itemButtons[selectedItemCode]);
         }
     }
 
@@ -55,5 +69,10 @@ public class CharacterCustomizeItemsListUiController : MonoBehaviour
         selectedItem = item;
 
         selectedItem.SetSelected(true);
+    }
+
+    public void SetSelectedItemCode(string code)
+    {
+        selectedItemCode = code;
     }
 }

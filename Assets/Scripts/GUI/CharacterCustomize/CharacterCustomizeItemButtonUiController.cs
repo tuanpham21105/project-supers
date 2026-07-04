@@ -15,18 +15,22 @@ public class CharacterCustomizeItemButtonUiController : MonoBehaviour
     [SerializeField] private Sprite normalBackgroundSprite;
 
     [Header("Data")]
-    [SerializeField] public CharacterCustomizeItemSo itemSO;
+    [SerializeField] public CharacterCustomizeItemSO itemSO;
+    [SerializeField] public bool isSelected = false;
 
     //
     public event Action<CharacterCustomizeItemButtonUiController> onSelected;
 
     public void Click()
     {
+        if (isSelected)
+            return;
+
         onSelected?.Invoke(this);
         SetSelected(true);
     }
 
-    public void Initialize(CharacterCustomizeItemSo data)
+    public void Initialize(CharacterCustomizeItemSO data)
     {
         itemSO = data;
 
@@ -35,6 +39,7 @@ public class CharacterCustomizeItemButtonUiController : MonoBehaviour
 
     public void SetSelected(bool state)
     {
+        isSelected = state;
         backgroundImage.sprite = state ? selectedBackgroundSprite : normalBackgroundSprite;        
     }
 }

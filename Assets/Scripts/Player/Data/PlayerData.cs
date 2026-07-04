@@ -175,6 +175,7 @@ public class PlayerData : MonoBehaviour
         }
     }
     public CharacterAccessoriesSet characterAccessories = new CharacterAccessoriesSet();
+    public CharacterCustomiziesSet characterCustomizies = new CharacterCustomiziesSet();
 
     public event Action onPointsChange;
     
@@ -188,10 +189,5 @@ public class PlayerData : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
-    }
-
-    public void updateUsername(string text)
-    {
-        username = text;
     }
 }

@@ -15,21 +15,34 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         public void SetActive(bool state)
         {
             if (itemsListWindow != null)
+            {
                 itemsListWindow.SetActive(state);
+            }
 
             if (propertiesWindow != null)
                 propertiesWindow.SetActive(state);
         }
+    
+        public void SetSelectedItem(string itemCode)
+        {
+            itemsListWindow.GetComponent<CharacterCustomizeItemsListUiController>().SetSelectedItemCode(itemCode);
+        }
     }
 
-    [SerializeField] private List<CharacterCustomizeTypeButtonUiController> characterCustomizeTypeButtons;
+    [SerializeField] private List<CharacterCustomizeTypeButtonUiController> characterCustomizeTypeButtons = new List<CharacterCustomizeTypeButtonUiController>();
 
-    [SerializeField] private List<CharacterCustomizeTypeWindow> characterCustomizeTypeWindows;
+    [SerializeField] private List<CharacterCustomizeTypeWindow> characterCustomizeTypeWindows = new List<CharacterCustomizeTypeWindow>();
     [SerializeField] private CharacterCustomizeTypeWindow openedCharacterCustomizeTypeWindows;
 
-    public override void Initialize()
+    [SerializeField] CharacterCustomiziesSet tempCharacterCustomizies = new CharacterCustomiziesSet();
+
+    void OnDestroy()
     {
-        base.Initialize();
+    }
+
+    public override void OnOpenWindow()
+    {
+        base.OnOpenWindow();
 
         foreach (CharacterCustomizeTypeButtonUiController a in characterCustomizeTypeButtons)
         {
@@ -40,10 +53,15 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         {
             a.itemsListWindow.GetComponent<CharacterCustomizeItemsListUiController>().onItemSelected += handleItemSelected;
         }
+
+        tempCharacterCustomizies = PlayerData.instance.characterCustomizies.Clone();
+
+        OpenContentByType(CharacterCustomizeType.Races);
     }
 
-    void OnDestroy()
+    public override void OnCloseWindow()
     {
+        base.OnCloseWindow();
 
         foreach (CharacterCustomizeTypeButtonUiController a in characterCustomizeTypeButtons)
         {
@@ -56,13 +74,6 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         }
     }
 
-    public override void OnOpenWindow()
-    {
-        base.OnOpenWindow();
-
-        OpenContentByType(CharacterCustomizeType.Races);
-    }
-
     void handleTypeButtonClick(CharacterCustomizeType type)
     {
         OpenContentByType(type);
@@ -72,10 +83,7 @@ public class CharacterCustomizeWindowUiController : WindowUiController
     {
         if (openedCharacterCustomizeTypeWindows != null)
         {
-            if (openedCharacterCustomizeTypeWindows.type == type)
-                return;
-
-                openedCharacterCustomizeTypeWindows.SetActive(false);
+            openedCharacterCustomizeTypeWindows.SetActive(false);
         }
 
         foreach (CharacterCustomizeTypeWindow a in characterCustomizeTypeWindows)
@@ -83,13 +91,26 @@ public class CharacterCustomizeWindowUiController : WindowUiController
             if (type == a.type)
             {
                 openedCharacterCustomizeTypeWindows = a;
+                a.SetSelectedItem(GetItemCodeByCustomizeType(type));
                 a.SetActive(true);
             }
         }
     }
 
-    void handleItemSelected(CharacterCustomizeItemSo itemSO)
+    string GetItemCodeByCustomizeType(CharacterCustomizeType type)
     {
+        CharacterCustomize customize = tempCharacterCustomizies.GetCharacterCustomizeByCustomizeType(type);
+
+        if (customize == null)
+            return "";
         
+        return customize.itemSO.code;
+    }
+
+    void handleItemSelected(CharacterCustomizeItemSO itemSO)
+    {
+        tempCharacterCustomizies.GetCharacterCustomizeByCustomizeType(itemSO.type).itemSO = itemSO;
+
+        MainMenuCharacterModelController.instance.SetCharacterCustomize(itemSO);
     }
 }
