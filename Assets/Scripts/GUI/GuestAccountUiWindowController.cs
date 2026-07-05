@@ -1,5 +1,7 @@
+using com.cyborgAssets.inspectorButtonPro;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GuestAccountUiWindowController : WindowUiController
 {
@@ -7,6 +9,9 @@ public class GuestAccountUiWindowController : WindowUiController
     [SerializeField] private GameObject guestUsernameTextFieldObject;
     [SerializeField] private TMP_InputField createdDateextField;
     [SerializeField] private GameObject createdDateTextFieldObject;
+    [SerializeField] private TextMeshProUGUI levelsTextField;
+    [SerializeField] private TextMeshProUGUI expTextField;
+    [SerializeField] private Image expProgressBar;
 
     public void DeleteGuestAccount()
     {
@@ -30,5 +35,9 @@ public class GuestAccountUiWindowController : WindowUiController
 
         guestUsernameTextField.text = PlayerData.instance.username;
         createdDateextField.text = PlayerData.instance.createdDate;
+        levelsTextField.text = "Levels: " + PlayerData.instance.levels;
+        long levelsUpExp = PlayerData.instance.levelsUpExp;
+        expTextField.text = BigNumberStringify.decorate(PlayerData.instance.exp) + " EXP / " + BigNumberStringify.decorate(levelsUpExp) + " EXP";
+        expProgressBar.fillAmount = BigNumberStringify.ratio(PlayerData.instance.exp, levelsUpExp);
     }
 }

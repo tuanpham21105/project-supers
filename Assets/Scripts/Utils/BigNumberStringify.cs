@@ -15,4 +15,9 @@ public class BigNumberStringify
         else
             return (number / 1_000_000_000_000.0).ToString("0.0") + "T";
     }
+
+    public static float ratio(long a, long b)
+    {
+        return a == 0 ? 0 : (float) (1.0f / ((double) (b / a)));
+    }
 }

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AccountUiWindow : WindowUiController
 {
@@ -9,6 +10,9 @@ public class AccountUiWindow : WindowUiController
     [SerializeField] private GameObject emailTextFieldObject;
     [SerializeField] private TMP_InputField createdDateTextField;
     [SerializeField] private GameObject createdDateTextFieldObject;
+    [SerializeField] private TextMeshProUGUI levelsTextField;
+    [SerializeField] private TextMeshProUGUI expTextField;
+    [SerializeField] private Image expProgressBar;
 
     public void Logout()
     {
@@ -23,5 +27,9 @@ public class AccountUiWindow : WindowUiController
         usernameTextField.text = PlayerData.instance.username;
         emailTextField.text = PlayerData.instance.email;
         createdDateTextField.text = PlayerData.instance.createdDate;
+        levelsTextField.text = "Levels: " + PlayerData.instance.levels;
+        long levelsUpExp = PlayerData.instance.levelsUpExp;
+        expTextField.text = PlayerData.instance.exp + " EXP / " + levelsUpExp + " EXP";
+        expProgressBar.fillAmount = PlayerData.instance.exp / levelsUpExp;
     }
 }

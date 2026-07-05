@@ -92,9 +92,13 @@ public class MainMenuController : MonoBehaviour
             (response) =>
             {
                 PlayerData.instance.Points = response.points;
+                PlayerData.instance.levels = response.levels;
+                PlayerData.instance.exp = response.exp;
+                PlayerData.instance.levelsUpExp = response.levelsUpExp;
                 Debug.Log($"[MainMenuController] Player inventory loaded");
                 
                 MainMenuHeaderUiController.instance.SetPoints();
+                MainMenuHeaderUiController.instance.SetLevels();
             },
             (code, message) =>
             {

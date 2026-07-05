@@ -88,8 +88,8 @@ public class CharactersManager : MonoBehaviour
             if (playerData.username.CompareTo(player) == 0)
             {
                 CameraController.instance.SetCharacter(character.transform);
-                ApplyCharacterAccessories(player, playerData.characterAccessories);
                 ApplyCharacterCustomize(player, playerData.characterCustomizies);
+                ApplyCharacterAccessories(player, playerData.characterAccessories);
             }
             else
             {
@@ -98,11 +98,11 @@ public class CharactersManager : MonoBehaviour
                     player,
                     (response) =>
                     {
-                        CharacterAccessoriesSet set = CharacterAccessoriesSet.MapFromResponse(response);
-                        ApplyCharacterAccessories(capturedPlayer, set);
                         CharacterCustomiziesSet character = new CharacterCustomiziesSet();
                         character.convertFromResponse(response.character);
                         ApplyCharacterCustomize(player, character);
+                        CharacterAccessoriesSet set = CharacterAccessoriesSet.MapFromResponse(response);
+                        ApplyCharacterAccessories(capturedPlayer, set);
                     },
                     (code, message) =>
                     {
@@ -406,18 +406,32 @@ public class CharactersManager : MonoBehaviour
         int index = matchData.GetPlayerIndex(playerUsername);
         GameObject character = characters[index];
         CharacterAccessoriesController controller = character.GetComponent<CharacterAccessoriesController>();
-
-        controller.SetCharacterCustomize(characterCustomizies.races.itemSO);
-        controller.SetRacesColor(characterCustomizies.races.skinColor);
-
-        controller.SetCharacterCustomize(characterCustomizies.eyes.itemSO);
-        controller.SetEyesColors(characterCustomizies.eyes.irisColor, characterCustomizies.eyes.scleraColor, characterCustomizies.eyes.eyebrowEyelidColor);
-
-        controller.SetCharacterCustomize(characterCustomizies.mouth.itemSO);
         
-        controller.SetCharacterCustomize(characterCustomizies.frontHair.itemSO);
-        controller.SetCharacterCustomize(characterCustomizies.topHair.itemSO);
-        controller.SetCharacterCustomize(characterCustomizies.sideHair.itemSO);
-        controller.SetHairColors(characterCustomizies.frontHair.primaryColor, characterCustomizies.frontHair.secondaryColor, characterCustomizies.frontHair.tertiaryColor);
+        if (characterCustomizies.races?.itemSO != null)
+        {
+            controller.SetCharacterCustomize(characterCustomizies.races.itemSO);
+            controller.SetRacesColor(characterCustomizies.races.skinColor);
+        }
+
+        if (characterCustomizies.eyes?.itemSO != null)
+        {
+            controller.SetCharacterCustomize(characterCustomizies.eyes.itemSO);
+            controller.SetEyesColors(characterCustomizies.eyes.irisColor, characterCustomizies.eyes.scleraColor, characterCustomizies.eyes.eyebrowEyelidColor);
+        }
+
+        if (characterCustomizies.mouth?.itemSO != null)
+            controller.SetCharacterCustomize(characterCustomizies.mouth.itemSO);
+        
+        if (characterCustomizies.frontHair?.itemSO != null)
+            controller.SetCharacterCustomize(characterCustomizies.frontHair.itemSO);
+
+        if (characterCustomizies.topHair?.itemSO != null)
+            controller.SetCharacterCustomize(characterCustomizies.topHair.itemSO);
+
+        if (characterCustomizies.sideHair?.itemSO != null)
+            controller.SetCharacterCustomize(characterCustomizies.sideHair.itemSO);
+
+        if (characterCustomizies.frontHair?.itemSO != null)
+            controller.SetHairColors(characterCustomizies.frontHair.primaryColor, characterCustomizies.frontHair.secondaryColor, characterCustomizies.frontHair.tertiaryColor);
     }
 }

@@ -9,6 +9,7 @@ public class MainMenuHeaderUiController : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI usernameTextField;
     [SerializeField] private TextMeshProUGUI pointsTextField;
+    [SerializeField] private TextMeshProUGUI levelsTextField;
 
     void Awake()
     {
@@ -34,4 +35,8 @@ public class MainMenuHeaderUiController : MonoBehaviour
         pointsTextField.text = BigNumberStringify.decorate(points);
     }
 
+    public void SetLevels()
+    {
+        levelsTextField.text = "Lvls." + PlayerData.instance.levels;
+    }
 }

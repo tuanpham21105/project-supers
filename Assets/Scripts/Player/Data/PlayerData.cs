@@ -174,8 +174,13 @@ public class PlayerData : MonoBehaviour
             onPointsChange?.Invoke();
         }
     }
+    
     public CharacterAccessoriesSet characterAccessories = new CharacterAccessoriesSet();
     public CharacterCustomiziesSet characterCustomizies = new CharacterCustomiziesSet();
+
+    public int levels;
+    public long exp;
+    public long levelsUpExp;
 
     public event Action onPointsChange;
     
