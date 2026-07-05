@@ -3613,6 +3613,12 @@ MonoBehaviour:
   localHipList: {fileID: 11400000, guid: edd85dd431db8857cb430cc9475d8177, type: 2}
   localLegList: {fileID: 11400000, guid: a71f8faa69ac21b83ae9a5ef7abc1739, type: 2}
   localBootsList: {fileID: 11400000, guid: e6ce269770c412d42a6424ea0ecf8782, type: 2}
+  racesList: {fileID: 11400000, guid: 821f4310148782db6aa03c5d6d2208fe, type: 2}
+  eyesList: {fileID: 11400000, guid: 805cbc3a9a0fbf4aea45599718cf0574, type: 2}
+  mouthList: {fileID: 11400000, guid: f66903bed9501c92ebae4fe35c30c76a, type: 2}
+  frontHairList: {fileID: 11400000, guid: b76436e3d6b82d041965e529a826d270, type: 2}
+  topHairList: {fileID: 11400000, guid: b5ed30640c08f8f6abb7da7932569f24, type: 2}
+  sideHairList: {fileID: 11400000, guid: b9d209dea3305a1e9a3217dcaee1928d, type: 2}
 --- !u!4 &236667902
 Transform:
   m_ObjectHideFlags: 0
@@ -11261,30 +11267,30 @@ MonoBehaviour:
         tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
   characterCustomizies:
     races:
-      itemSO: {fileID: 11400000, guid: b906e73d17fafb79db9f6e36f5f1072a, type: 2}
-      skinColor: {r: 0, g: 0, b: 0, a: 0}
+      itemSO: {fileID: 11400000, guid: 1beae9bc59d99f5968780189f433471d, type: 2}
+      skinColor: {r: 1, g: 0, b: 0, a: 1}
     eyes:
       itemSO: {fileID: 11400000, guid: 9e78357ae788f7260bd81a79c5a3c06c, type: 2}
-      irisColor: {r: 0, g: 0, b: 0, a: 0}
-      scleraColor: {r: 0, g: 0, b: 0, a: 0}
-      eyebrowEyelidColor: {r: 0, g: 0, b: 0, a: 0}
+      irisColor: {r: 0, g: 0, b: 0, a: 1}
+      scleraColor: {r: 1, g: 1, b: 1, a: 1}
+      eyebrowEyelidColor: {r: 0, g: 0, b: 0, a: 1}
     mouth:
       itemSO: {fileID: 11400000, guid: 08b3856dfff5593838e5f9902f725fd7, type: 2}
     topHair:
       itemSO: {fileID: 11400000, guid: 99b14e63b26ab442ba5176d215d74d14, type: 2}
-      primaryColor: {r: 0, g: 0, b: 0, a: 0}
-      secondaryColor: {r: 0, g: 0, b: 0, a: 0}
-      tertiaryColor: {r: 0, g: 0, b: 0, a: 0}
+      primaryColor: {r: 0, g: 0, b: 0, a: 1}
+      secondaryColor: {r: 0, g: 0, b: 0, a: 1}
+      tertiaryColor: {r: 0, g: 0, b: 0, a: 1}
     frontHair:
       itemSO: {fileID: 11400000, guid: c4d6ba35e30a59b76b3a77630150d58b, type: 2}
-      primaryColor: {r: 0, g: 0, b: 0, a: 0}
-      secondaryColor: {r: 0, g: 0, b: 0, a: 0}
-      tertiaryColor: {r: 0, g: 0, b: 0, a: 0}
+      primaryColor: {r: 0, g: 0, b: 0, a: 1}
+      secondaryColor: {r: 0, g: 0, b: 0, a: 1}
+      tertiaryColor: {r: 0, g: 0, b: 0, a: 1}
     sideHair:
       itemSO: {fileID: 11400000, guid: 5eaca7ada8a2db7fa8fc8d352a41f90d, type: 2}
-      primaryColor: {r: 0, g: 0, b: 0, a: 0}
-      secondaryColor: {r: 0, g: 0, b: 0, a: 0}
-      tertiaryColor: {r: 0, g: 0, b: 0, a: 0}
+      primaryColor: {r: 0, g: 0, b: 0, a: 1}
+      secondaryColor: {r: 0, g: 0, b: 0, a: 1}
+      tertiaryColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &571047923
 MonoBehaviour:
   m_ObjectHideFlags: 0

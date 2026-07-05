@@ -84,6 +84,27 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         skinCustomiziesUiController.onPickColor -= handlePickRacesColor;
         eyesCustomiziesUiController.onPickColor -= handlePickEyesColor;
         hairCustomiziesUiController.onPickColor -= handlePickHairColors;
+
+        Save();
+    }
+
+    void Save()
+    {
+        PlayerInventoryService.instance.SavePlayerCharacter
+        (
+            tempCharacterCustomizies.convertToRequest(),
+            (response) =>
+            {
+                PlayerData.instance.characterCustomizies = tempCharacterCustomizies.Clone();
+
+                Debug.Log($"Success to save character customize.");
+            },
+            (code, error) =>
+            {
+                Debug.LogError($"Failed to save character customize: {error}");
+                MainMenuCharacterModelController.instance.SetCharacterCustomiziesFromPlayerData();
+            }
+        );
     }
 
     void handleTypeButtonClick(CharacterCustomizeType type)

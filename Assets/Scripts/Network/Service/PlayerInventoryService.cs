@@ -64,4 +64,16 @@ public class PlayerInventoryService : MonoBehaviour
             onError
         ));
     }
+
+    public void SavePlayerCharacter(PlayerCharacterRequest request, Action<PlayerCharacterResponse> onSuccess, Action<long, string> onError)
+    {
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<PlayerCharacterResponse>(
+            "PUT",
+            "/api/player/inventory/character",
+            request,
+            null,
+            onSuccess,
+            onError
+        ));
+    }
 }

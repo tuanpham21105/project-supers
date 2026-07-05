@@ -105,21 +105,9 @@ public class MainMenuController : MonoBehaviour
         PlayerInventoryService.instance.GetPlayerAccessoriesSet(
             (response) =>
             {
-                PlayerData.instance.characterAccessories = new CharacterAccessoriesSet
-                {
-                    hatItem = CharacterAccessory.MapAccessoryFromResponse(response.hatItem),
-                    maskItem = CharacterAccessory.MapAccessoryFromResponse(response.maskItem),
-                    neckItem = CharacterAccessory.MapAccessoryFromResponse(response.neckItem),
-                    chestItem = CharacterAccessory.MapAccessoryFromResponse(response.chestItem),
-                    backItem = CharacterAccessory.MapAccessoryFromResponse(response.backItem),
-                    shouldersItem = CharacterAccessory.MapAccessoryFromResponse(response.shouldersItem),
-                    glovesItem = CharacterAccessory.MapAccessoryFromResponse(response.glovesItem),
-                    hipItem = CharacterAccessory.MapAccessoryFromResponse(response.hipItem),
-                    legItem = CharacterAccessory.MapAccessoryFromResponse(response.legItem),
-                    bootsItem = CharacterAccessory.MapAccessoryFromResponse(response.bootsItem),
-                };
+                SetupPlayerAccessoriesData(response);
 
-                MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
+                SetupPlayerCharacterData(response.character);
 
                 Debug.Log($"[MainMenuController] Player accessories set loaded.");
             },
@@ -128,6 +116,35 @@ public class MainMenuController : MonoBehaviour
                 Debug.LogError($"[MainMenuController] Failed to fetch player accessories set: {message}");
             }
         );
+    }
+
+    void SetupPlayerAccessoriesData(PlayerAccessoriesSetResponse response)
+    {
+        PlayerData.instance.characterAccessories = new CharacterAccessoriesSet
+        {
+            hatItem = CharacterAccessory.MapAccessoryFromResponse(response.hatItem),
+            maskItem = CharacterAccessory.MapAccessoryFromResponse(response.maskItem),
+            neckItem = CharacterAccessory.MapAccessoryFromResponse(response.neckItem),
+            chestItem = CharacterAccessory.MapAccessoryFromResponse(response.chestItem),
+            backItem = CharacterAccessory.MapAccessoryFromResponse(response.backItem),
+            shouldersItem = CharacterAccessory.MapAccessoryFromResponse(response.shouldersItem),
+            glovesItem = CharacterAccessory.MapAccessoryFromResponse(response.glovesItem),
+            hipItem = CharacterAccessory.MapAccessoryFromResponse(response.hipItem),
+            legItem = CharacterAccessory.MapAccessoryFromResponse(response.legItem),
+            bootsItem = CharacterAccessory.MapAccessoryFromResponse(response.bootsItem),
+        };
+
+        MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
+    }
+
+    void SetupPlayerCharacterData(PlayerCharacterResponse response)
+    {
+        if (response == null)
+            return;
+
+        PlayerData.instance.characterCustomizies.convertFromResponse(response);
+
+        MainMenuCharacterModelController.instance.SetCharacterCustomiziesFromPlayerData();
     }
 
     [SerializeField] private GameObject openedWindow;

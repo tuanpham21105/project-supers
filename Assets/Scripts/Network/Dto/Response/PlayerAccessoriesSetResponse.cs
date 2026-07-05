@@ -10,4 +10,5 @@ public class PlayerAccessoriesSetResponse
     public PlayerAccessoryItemResponse hipItem { get; set; }
     public PlayerAccessoryItemResponse legItem { get; set; }
     public PlayerAccessoryItemResponse bootsItem { get; set; }
+    public PlayerCharacterResponse character;
 }
