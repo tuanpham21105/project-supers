@@ -156,9 +156,9 @@ public class PlayerData : MonoBehaviour
 {
     public static PlayerData instance;
 
-    public String email;
-    public String username;
-    public String createdDate;
+    public string email = "";
+    public string username = "";
+    public string createdDate;
     public bool isGuest = false;
 
     private long points = 0;

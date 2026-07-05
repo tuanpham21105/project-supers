@@ -57,6 +57,6 @@ public class MatchFinishManager : MonoBehaviour
 
         P2PManager.instance.DestroyPeer();
 
-        SceneService.instance.LoadScene("StartScene");
+        SceneService.instance.LoadScene("MatchResultScene");
     }
 }

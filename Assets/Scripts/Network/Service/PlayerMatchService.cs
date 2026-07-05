@@ -47,7 +47,7 @@ public class PlayerMatchService : MonoBehaviour
     {
         StartCoroutine(RestApiService.instance.SendRequestWithJwt<MatchResultResponse>(
             "GET",
-            "/api/player/match/" + id,
+            "/api/player/match/result/" + id,
             null,
             null,
             onSuccess,

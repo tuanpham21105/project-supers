@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TrainingAreaScene.unity
     guid: 82e8ef52c7570ca55b8916a38962ae7c
+  - enabled: 1
+    path: Assets/Scenes/MatchResultScene.unity
+    guid: 103078cf2e1e9721ea438d5b1c4ffa79
   m_configObjects: {}
