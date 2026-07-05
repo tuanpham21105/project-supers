@@ -3871,18 +3871,22 @@ PrefabInstance:
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 313810920}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SelectColorLevel
+      value: SelectColorLevels
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: AccessoriesColorPalleteUiController, Assembly-CSharp
+      value: CharacterCustomizeEyesCustomiziesUiController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -4289,6 +4293,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e733bf7586e4f3c758aea9c14b2e4bc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorPickerUiController: {fileID: 1541489976}
+  colorLevelButtons:
+  - {fileID: 656326344}
+  - {fileID: 1845925313}
+  - {fileID: 1742818472}
+  selectedColorLevel: 0
 --- !u!1001 &317748105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15922,18 +15932,18 @@ PrefabInstance:
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 313810920}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SelectColorLevel
+      value: SelectColorLevels
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: AccessoriesColorPalleteUiController, Assembly-CSharp
+      value: CharacterCustomizeEyesCustomiziesUiController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -16081,6 +16091,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6255668404346473557, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
   m_PrefabInstance: {fileID: 656326342}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &656326344 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5488421441853904471, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
+  m_PrefabInstance: {fileID: 656326342}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d38ea2151b975043086de184795cdf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &662865822
 GameObject:
   m_ObjectHideFlags: 0
@@ -20299,6 +20320,7 @@ MonoBehaviour:
     itemsListWindow: {fileID: 0}
     propertiesWindow: {fileID: 0}
   skinCustomiziesUiController: {fileID: 468019758}
+  eyesCustomiziesUiController: {fileID: 313810920}
   tempCharacterCustomizies:
     races:
       itemSO: {fileID: 0}
@@ -25034,6 +25056,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ColorPart
       objectReference: {fileID: 0}
+    - target: {fileID: 6173259345574674975, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6255668404346473557, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -26975,6 +27001,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1536873737}
   m_CullTransparentMesh: 1
+--- !u!114 &1541489976 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5153002273137844860, guid: fb6c9ede95ca3a16e8d174cae036960d, type: 3}
+  m_PrefabInstance: {fileID: 628859253}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7813f925f11fbb96a82db8697690b588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1553884629
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28747,6 +28784,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1728361882}
   m_CullTransparentMesh: 1
+--- !u!114 &1742818472 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5488421441853904471, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
+  m_PrefabInstance: {fileID: 257938686}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d38ea2151b975043086de184795cdf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1766988785
 GameObject:
   m_ObjectHideFlags: 0
@@ -30042,18 +30090,22 @@ PrefabInstance:
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 313810920}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SelectColorLevel
+      value: SelectColorLevels
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: AccessoriesColorPalleteUiController, Assembly-CSharp
+      value: CharacterCustomizeEyesCustomiziesUiController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -30201,6 +30253,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6255668404346473557, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
   m_PrefabInstance: {fileID: 1845925311}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1845925313 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5488421441853904471, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
+  m_PrefabInstance: {fileID: 1845925311}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d38ea2151b975043086de184795cdf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1852530916
 GameObject:
   m_ObjectHideFlags: 0

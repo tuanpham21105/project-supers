@@ -55,4 +55,9 @@ public class MainMenuCharacterModelController : MonoBehaviour
     {
         characterAccessoriesController.SetRacesColor(skinColor);
     }
+
+    public void SetCharacterEyesColors(Color irisColor, Color scleraColor, Color eyelidColor)
+    {
+        characterAccessoriesController.SetEyesColors(irisColor, scleraColor, eyelidColor);
+    }
 }

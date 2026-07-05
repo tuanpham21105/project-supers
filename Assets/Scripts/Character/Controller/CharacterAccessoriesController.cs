@@ -318,9 +318,6 @@ public class CharacterAccessoriesController : MonoBehaviour
 
     public void SetRacesColor(Color skinColor)
     {
-        if (block == null)
-            block = new MaterialPropertyBlock();
-        
         SetColorInternal(characterObjectsData.headMesh.GetComponent<Renderer>(), 0, skinColor);
         SetColorInternal(characterObjectsData.earsMesh.GetComponent<Renderer>(), 0, skinColor);
         SetColorInternal(characterObjectsData.chestMesh.GetComponent<Renderer>(), 0, skinColor);
@@ -335,12 +332,23 @@ public class CharacterAccessoriesController : MonoBehaviour
         SetColorInternal(characterObjectsData.leftThighMesh.GetComponent<Renderer>(), 0, skinColor);
     }
 
+    public void SetEyesColors(Color irisColor, Color scleraColor, Color eyelidColor)
+    {
+        Renderer renderer = characterObjectsData.eyesMesh.GetComponent<Renderer>();
+        SetColorInternal(renderer, 0, irisColor);
+        SetColorInternal(renderer, 1, scleraColor);
+        SetColorInternal(renderer, 2, eyelidColor);
+    }
+
     private MaterialPropertyBlock block;
     private void SetColorInternal(Renderer renderer, int materialIndex, Color color)
     {
         if (renderer.sharedMaterials.Length <= materialIndex)
             return;
 
+        if (block == null)
+            block = new MaterialPropertyBlock();
+            
         renderer.GetPropertyBlock(block, materialIndex);
         block.SetColor("_Color", color);
         block.SetColor("baseColorFactor", color);

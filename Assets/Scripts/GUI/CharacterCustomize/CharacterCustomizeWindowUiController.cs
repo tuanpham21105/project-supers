@@ -35,6 +35,7 @@ public class CharacterCustomizeWindowUiController : WindowUiController
     [SerializeField] private CharacterCustomizeTypeWindow openedCharacterCustomizeTypeWindows;
 
     [SerializeField] private CharacterCustomizeSkinCustomiziesUiController skinCustomiziesUiController;
+    [SerializeField] private CharacterCustomizeEyesCustomiziesUiController eyesCustomiziesUiController;
 
     [SerializeField] CharacterCustomiziesSet tempCharacterCustomizies = new CharacterCustomiziesSet();
 
@@ -57,6 +58,7 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         }
 
         skinCustomiziesUiController.onPickColor += handlePickRacesColor;
+        eyesCustomiziesUiController.onPickColor += handlePickEyesColor;
 
         tempCharacterCustomizies = PlayerData.instance.characterCustomizies.Clone();
 
@@ -78,6 +80,7 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         }
 
         skinCustomiziesUiController.onPickColor -= handlePickRacesColor;
+        eyesCustomiziesUiController.onPickColor -= handlePickEyesColor;
     }
 
     void handleTypeButtonClick(CharacterCustomizeType type)
@@ -112,6 +115,8 @@ public class CharacterCustomizeWindowUiController : WindowUiController
                 typeWindow.propertiesWindow.GetComponent<CharacterCustomizeSkinCustomiziesUiController>().SetColor(tempCharacterCustomizies.races.skinColor);
                 break;
             case CharacterCustomizeType.Eyes:
+                CharacterCustomizeEyes eyes = tempCharacterCustomizies.eyes;
+                typeWindow.propertiesWindow.GetComponent<CharacterCustomizeEyesCustomiziesUiController>().SetColors(eyes.irisColor, eyes.scleraColor, eyes.eyebrowEyelidColor);
                 break;
             case CharacterCustomizeType.Front_Hair:
                 break;
@@ -145,5 +150,14 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         tempCharacterCustomizies.races.skinColor = skinColor;
 
         MainMenuCharacterModelController.instance.SetCharacterRacesColor(skinColor);
+    }
+
+    void handlePickEyesColor(Color iris, Color sclera, Color eyelid)
+    {
+        tempCharacterCustomizies.eyes.irisColor = iris;
+        tempCharacterCustomizies.eyes.scleraColor = sclera;
+        tempCharacterCustomizies.eyes.eyebrowEyelidColor = eyelid;
+
+        MainMenuCharacterModelController.instance.SetCharacterEyesColors(iris, sclera, eyelid);
     }
 }
