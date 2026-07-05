@@ -20,6 +20,7 @@ public class GuestAccountUiWindowController : WindowUiController
             {
                 Debug.Log("[GuestAccountUiWindowController] Delete account successful.");
                 PlayerAuthService.instance.Logout();
+                PlayerData.instance.Logout();
                 SceneService.instance.ReloadCurrentScene();
             },
             (code, message) =>

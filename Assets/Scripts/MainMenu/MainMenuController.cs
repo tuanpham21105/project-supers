@@ -29,6 +29,7 @@ public class MainMenuController : MonoBehaviour
     {
         if (PlayerAuthService.instance.IsLoggedIn())
         {
+            
             FetchAndAssignPlayerData();
         }
         else

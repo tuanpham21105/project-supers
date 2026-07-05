@@ -16,7 +16,9 @@ public class AccountUiWindow : WindowUiController
 
     public void Logout()
     {
+        Debug.Log("[AccountWindowController] Logout.");
         PlayerAuthService.instance.Logout();
+        PlayerData.instance.Logout();
         SceneService.instance.ReloadCurrentScene();
     }
 

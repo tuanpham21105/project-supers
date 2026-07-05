@@ -195,4 +195,9 @@ public class PlayerData : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
+
+    public void Logout()
+    {
+        Destroy(gameObject);
+    }
 }
