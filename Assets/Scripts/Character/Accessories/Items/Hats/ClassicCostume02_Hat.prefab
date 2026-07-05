@@ -137,3 +137,12 @@ MonoBehaviour:
   - gameObject: {fileID: 0}
     piece: 2
     type: 0
+  - gameObject: {fileID: 0}
+    piece: 17
+    type: 0
+  - gameObject: {fileID: 0}
+    piece: 18
+    type: 0
+  - gameObject: {fileID: 0}
+    piece: 19
+    type: 0

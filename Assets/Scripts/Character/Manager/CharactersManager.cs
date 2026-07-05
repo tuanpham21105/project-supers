@@ -89,6 +89,7 @@ public class CharactersManager : MonoBehaviour
             {
                 CameraController.instance.SetCharacter(character.transform);
                 ApplyCharacterAccessories(player, playerData.characterAccessories);
+                ApplyCharacterCustomize(player, playerData.characterCustomizies);
             }
             else
             {
@@ -99,6 +100,9 @@ public class CharactersManager : MonoBehaviour
                     {
                         CharacterAccessoriesSet set = CharacterAccessoriesSet.MapFromResponse(response);
                         ApplyCharacterAccessories(capturedPlayer, set);
+                        CharacterCustomiziesSet character = new CharacterCustomiziesSet();
+                        character.convertFromResponse(response.character);
+                        ApplyCharacterCustomize(player, character);
                     },
                     (code, message) =>
                     {
@@ -395,5 +399,25 @@ public class CharactersManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void ApplyCharacterCustomize(String playerUsername, CharacterCustomiziesSet characterCustomizies)
+    {
+        int index = matchData.GetPlayerIndex(playerUsername);
+        GameObject character = characters[index];
+        CharacterAccessoriesController controller = character.GetComponent<CharacterAccessoriesController>();
+
+        controller.SetCharacterCustomize(characterCustomizies.races.itemSO);
+        controller.SetRacesColor(characterCustomizies.races.skinColor);
+
+        controller.SetCharacterCustomize(characterCustomizies.eyes.itemSO);
+        controller.SetEyesColors(characterCustomizies.eyes.irisColor, characterCustomizies.eyes.scleraColor, characterCustomizies.eyes.eyebrowEyelidColor);
+
+        controller.SetCharacterCustomize(characterCustomizies.mouth.itemSO);
+        
+        controller.SetCharacterCustomize(characterCustomizies.frontHair.itemSO);
+        controller.SetCharacterCustomize(characterCustomizies.topHair.itemSO);
+        controller.SetCharacterCustomize(characterCustomizies.sideHair.itemSO);
+        controller.SetHairColors(characterCustomizies.frontHair.primaryColor, characterCustomizies.frontHair.secondaryColor, characterCustomizies.frontHair.tertiaryColor);
     }
 }

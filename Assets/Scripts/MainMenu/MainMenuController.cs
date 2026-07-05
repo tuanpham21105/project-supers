@@ -139,10 +139,10 @@ public class MainMenuController : MonoBehaviour
 
     void SetupPlayerCharacterData(PlayerCharacterResponse response)
     {
-        if (response == null)
-            return;
-
-        PlayerData.instance.characterCustomizies.convertFromResponse(response);
+        if (response != null)
+        {
+            PlayerData.instance.characterCustomizies.convertFromResponse(response);
+        }
 
         MainMenuCharacterModelController.instance.SetCharacterCustomiziesFromPlayerData();
     }

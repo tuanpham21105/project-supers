@@ -134,3 +134,12 @@ MonoBehaviour:
   - gameObject: {fileID: 6090839973100579851}
     piece: 0
     type: 1
+  - gameObject: {fileID: 0}
+    piece: 17
+    type: 0
+  - gameObject: {fileID: 0}
+    piece: 18
+    type: 0
+  - gameObject: {fileID: 0}
+    piece: 19
+    type: 0
