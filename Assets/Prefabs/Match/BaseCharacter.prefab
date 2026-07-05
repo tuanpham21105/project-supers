@@ -429,6 +429,7 @@ MonoBehaviour:
   hipAccessories: {fileID: 0}
   legAccessories: {fileID: 0}
   bootsAccessories: {fileID: 0}
+  racesItemSO: {fileID: 11400000, guid: b906e73d17fafb79db9f6e36f5f1072a, type: 2}
 --- !u!1 &6498957513261650957
 GameObject:
   m_ObjectHideFlags: 0

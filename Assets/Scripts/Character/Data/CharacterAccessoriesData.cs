@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CharacterAccessoriesData : MonoBehaviour
 {
+    [Header("Accessories Data")]
     public CharacterAccessoryItemData hatAccessories;
     public CharacterAccessoryItemData maskAccessories;
     public CharacterAccessoryItemData neckAccessories;
@@ -12,4 +13,7 @@ public class CharacterAccessoriesData : MonoBehaviour
     public CharacterAccessoryItemData hipAccessories;
     public CharacterAccessoryItemData legAccessories;
     public CharacterAccessoryItemData bootsAccessories;
+
+    [Header("Character Data")]
+    public CharacterCustomizeRacesSO racesItemSO;
 }

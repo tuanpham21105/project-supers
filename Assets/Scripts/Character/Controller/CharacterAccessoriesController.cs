@@ -206,7 +206,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         slot.SetColors(properties);
     }
 
-    //
+    //============================================================
     public void SetCharacterCustomize(CharacterCustomizeItemSO itemSO)
     {
         switch (itemSO.type)
@@ -236,6 +236,8 @@ public class CharacterAccessoriesController : MonoBehaviour
     void SetCharacterRaces(CharacterCustomizeItemSO itemSO)
     {
         CharacterCustomizeRacesSO racesSO = itemSO as CharacterCustomizeRacesSO;
+
+        characterAccessoriesData.racesItemSO = racesSO;
 
         SetMesh(racesSO.headMesh, characterObjectsData.headMesh);
         SetMesh(racesSO.earsMesh, characterObjectsData.earsMesh);
