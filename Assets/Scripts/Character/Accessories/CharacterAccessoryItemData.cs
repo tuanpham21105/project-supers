@@ -5,9 +5,6 @@ using UnityEngine;
 
 public enum AccessoriesPiecePart
 {
-    FrontHair,
-    TopHair,
-    SideHair,
     Head,
     Mask,
     Ears,
@@ -24,7 +21,10 @@ public enum AccessoriesPiecePart
     RightThigh,
     RightShin,
     LeftThigh,
-    LeftShin
+    LeftShin,
+    FrontHair,
+    TopHair,
+    SideHair
 }
 
 public enum AccessoriesType
@@ -99,6 +99,9 @@ public class CharacterAccessoryItemData : MonoBehaviour
 
     private void SetColorInternal(Renderer renderer, int materialIndex, Color color)
     {
+        if (renderer.sharedMaterials.Length <= materialIndex)
+            return;
+
         renderer.GetPropertyBlock(block, materialIndex);
         block.SetColor("_Color", color);
         block.SetColor("baseColorFactor", color);

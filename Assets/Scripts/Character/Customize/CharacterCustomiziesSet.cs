@@ -109,7 +109,7 @@ public class CharacterCustomizeRaces : CharacterCustomize
 [Serializable]
 public class CharacterCustomizeEyes : CharacterCustomize
 {
-    public Color pupilColor;
+    // public Color pupilColor;
     public Color irisColor;
     public Color scleraColor;
     public Color eyebrowEyelidColor;
@@ -119,7 +119,7 @@ public class CharacterCustomizeEyes : CharacterCustomize
         return new CharacterCustomizeEyes
         {
             itemSO = itemSO,
-            pupilColor = pupilColor,
+            // pupilColor = pupilColor,
             irisColor = irisColor,
             scleraColor = scleraColor,
             eyebrowEyelidColor = eyebrowEyelidColor,

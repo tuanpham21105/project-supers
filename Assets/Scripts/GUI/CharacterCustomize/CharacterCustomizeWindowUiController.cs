@@ -34,6 +34,8 @@ public class CharacterCustomizeWindowUiController : WindowUiController
     [SerializeField] private List<CharacterCustomizeTypeWindow> characterCustomizeTypeWindows = new List<CharacterCustomizeTypeWindow>();
     [SerializeField] private CharacterCustomizeTypeWindow openedCharacterCustomizeTypeWindows;
 
+    [SerializeField] private CharacterCustomizeSkinCustomiziesUiController skinCustomiziesUiController;
+
     [SerializeField] CharacterCustomiziesSet tempCharacterCustomizies = new CharacterCustomiziesSet();
 
     void OnDestroy()
@@ -54,6 +56,8 @@ public class CharacterCustomizeWindowUiController : WindowUiController
             a.itemsListWindow.GetComponent<CharacterCustomizeItemsListUiController>().onItemSelected += handleItemSelected;
         }
 
+        skinCustomiziesUiController.onPickColor += handlePickRacesColor;
+
         tempCharacterCustomizies = PlayerData.instance.characterCustomizies.Clone();
 
         OpenContentByType(CharacterCustomizeType.Races);
@@ -72,6 +76,8 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         {
             a.itemsListWindow.GetComponent<CharacterCustomizeItemsListUiController>().onItemSelected -= handleItemSelected;
         }
+
+        skinCustomiziesUiController.onPickColor -= handlePickRacesColor;
     }
 
     void handleTypeButtonClick(CharacterCustomizeType type)
@@ -92,8 +98,28 @@ public class CharacterCustomizeWindowUiController : WindowUiController
             {
                 openedCharacterCustomizeTypeWindows = a;
                 a.SetSelectedItem(GetItemCodeByCustomizeType(type));
+                SetCustomize(a, type);
                 a.SetActive(true);
             }
+        }
+    }
+
+    void SetCustomize(CharacterCustomizeTypeWindow typeWindow, CharacterCustomizeType type)
+    {
+        switch (type)
+        {
+            case CharacterCustomizeType.Races:
+                typeWindow.propertiesWindow.GetComponent<CharacterCustomizeSkinCustomiziesUiController>().SetColor(tempCharacterCustomizies.races.skinColor);
+                break;
+            case CharacterCustomizeType.Eyes:
+                break;
+            case CharacterCustomizeType.Front_Hair:
+                break;
+            case CharacterCustomizeType.Top_Hair:
+                break;
+            case CharacterCustomizeType.Side_Hair:
+                break;
+
         }
     }
 
@@ -112,5 +138,12 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         tempCharacterCustomizies.GetCharacterCustomizeByCustomizeType(itemSO.type).itemSO = itemSO;
 
         MainMenuCharacterModelController.instance.SetCharacterCustomize(itemSO);
+    }
+
+    void handlePickRacesColor(Color skinColor)
+    {
+        tempCharacterCustomizies.races.skinColor = skinColor;
+
+        MainMenuCharacterModelController.instance.SetCharacterRacesColor(skinColor);
     }
 }

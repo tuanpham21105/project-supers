@@ -10202,6 +10202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9126f7cf1402c166899e5ee46a8d7eb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorPickerUiController: {fileID: 2055568159}
+  skinColorButton: {fileID: 776800698}
 --- !u!1 &477637720
 GameObject:
   m_ObjectHideFlags: 0
@@ -11253,7 +11255,6 @@ MonoBehaviour:
       skinColor: {r: 0, g: 0, b: 0, a: 0}
     eyes:
       itemSO: {fileID: 11400000, guid: 9e78357ae788f7260bd81a79c5a3c06c, type: 2}
-      pupilColor: {r: 0, g: 0, b: 0, a: 0}
       irisColor: {r: 0, g: 0, b: 0, a: 0}
       scleraColor: {r: 0, g: 0, b: 0, a: 0}
       eyebrowEyelidColor: {r: 0, g: 0, b: 0, a: 0}
@@ -17474,14 +17475,14 @@ PrefabInstance:
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 776800698}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SelectColorLevel
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1222441800512967285, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -17634,6 +17635,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
+--- !u!114 &776800698 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5488421441853904471, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
+  m_PrefabInstance: {fileID: 776800697}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d38ea2151b975043086de184795cdf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &776800699 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6255668404346473557, guid: cd17ff808c548340789a58775bcc4fcd, type: 3}
@@ -20286,13 +20298,13 @@ MonoBehaviour:
     type: 1
     itemsListWindow: {fileID: 0}
     propertiesWindow: {fileID: 0}
+  skinCustomiziesUiController: {fileID: 468019758}
   tempCharacterCustomizies:
     races:
       itemSO: {fileID: 0}
       skinColor: {r: 0, g: 0, b: 0, a: 0}
     eyes:
       itemSO: {fileID: 0}
-      pupilColor: {r: 0, g: 0, b: 0, a: 0}
       irisColor: {r: 0, g: 0, b: 0, a: 0}
       scleraColor: {r: 0, g: 0, b: 0, a: 0}
       eyebrowEyelidColor: {r: 0, g: 0, b: 0, a: 0}
@@ -37586,6 +37598,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2248680590875003538, guid: fb6c9ede95ca3a16e8d174cae036960d, type: 3}
   m_PrefabInstance: {fileID: 2055568156}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2055568159 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5153002273137844860, guid: fb6c9ede95ca3a16e8d174cae036960d, type: 3}
+  m_PrefabInstance: {fileID: 2055568156}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7813f925f11fbb96a82db8697690b588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2065398009
 GameObject:
   m_ObjectHideFlags: 0

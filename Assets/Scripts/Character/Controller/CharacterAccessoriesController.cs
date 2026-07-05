@@ -269,10 +269,10 @@ public class CharacterAccessoriesController : MonoBehaviour
 
         Material[] materials = renderer.sharedMaterials;
 
-        materials[3] = eyesSO.eyelidMaterial;
-        materials[2] = eyesSO.scleraMaterial;
-        materials[1] = eyesSO.pupilMaterial;
+        materials[2] = eyesSO.eyelidMaterial;
+        materials[1] = eyesSO.scleraMaterial;
         materials[0] = eyesSO.irisMaterial;
+        // materials[0] = eyesSO.pupilMaterial;
 
         renderer.sharedMaterials = materials;
     }
@@ -314,5 +314,36 @@ public class CharacterAccessoriesController : MonoBehaviour
         renderer.sharedMaterials = materials;
 
         SetMesh(hairSO.hair, hairMesh);
+    }
+
+    public void SetRacesColor(Color skinColor)
+    {
+        if (block == null)
+            block = new MaterialPropertyBlock();
+        
+        SetColorInternal(characterObjectsData.headMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.earsMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.chestMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.hipMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.rightForearmMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.rightArmMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.leftForearmMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.leftArmMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.rightShinMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.rightThighMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.leftShinMesh.GetComponent<Renderer>(), 0, skinColor);
+        SetColorInternal(characterObjectsData.leftThighMesh.GetComponent<Renderer>(), 0, skinColor);
+    }
+
+    private MaterialPropertyBlock block;
+    private void SetColorInternal(Renderer renderer, int materialIndex, Color color)
+    {
+        if (renderer.sharedMaterials.Length <= materialIndex)
+            return;
+
+        renderer.GetPropertyBlock(block, materialIndex);
+        block.SetColor("_Color", color);
+        block.SetColor("baseColorFactor", color);
+        renderer.SetPropertyBlock(block, materialIndex);
     }
 }

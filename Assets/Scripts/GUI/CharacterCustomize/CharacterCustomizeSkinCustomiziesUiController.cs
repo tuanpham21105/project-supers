@@ -1,18 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterCustomizeSkinCustomiziesUiController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Objects")]
+    [SerializeField] private ColorPickerUiController colorPickerUiController;
+    [SerializeField] private ColorLevelButtonUiController skinColorButton;
+
+    //
+    public event Action<Color> onPickColor;
+
+    public void PickColor(Color color)
     {
-        
+        onPickColor?.Invoke(color);
+
+        SetColor(color);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetColor(Color skin)
     {
-        
+        skinColorButton.SetColor(skin);
+    }
+
+    void OnEnable()
+    {
+        colorPickerUiController.onPickColor += PickColor;
+
+        skinColorButton.Select();
+    }
+
+    void OnDisable()
+    {
+        colorPickerUiController.onPickColor -= PickColor;
     }
 }

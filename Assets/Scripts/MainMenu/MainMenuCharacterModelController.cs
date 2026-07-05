@@ -50,4 +50,9 @@ public class MainMenuCharacterModelController : MonoBehaviour
     {
         characterAccessoriesController.SetCharacterCustomize(itemSO);
     }
+
+    public void SetCharacterRacesColor(Color skinColor)
+    {
+        characterAccessoriesController.SetRacesColor(skinColor);
+    }
 }
