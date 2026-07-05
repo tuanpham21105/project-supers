@@ -60,4 +60,9 @@ public class MainMenuCharacterModelController : MonoBehaviour
     {
         characterAccessoriesController.SetEyesColors(irisColor, scleraColor, eyelidColor);
     }
+
+    public void SetCharacterHairColors(Color primary, Color secondary, Color tertiary)
+    {
+        characterAccessoriesController.SetHairColors(primary, secondary, tertiary);
+    }
 }

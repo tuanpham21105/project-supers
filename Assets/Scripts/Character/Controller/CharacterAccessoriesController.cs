@@ -340,6 +340,24 @@ public class CharacterAccessoriesController : MonoBehaviour
         SetColorInternal(renderer, 2, eyelidColor);
     }
 
+    public void SetHairColors(Color primaryColor, Color secondaryColor, Color tertiaryColor)
+    {
+        Renderer fRenderer = characterObjectsData.frontHairMesh.GetComponent<Renderer>();
+        SetColorInternal(fRenderer, 0, primaryColor);    
+        SetColorInternal(fRenderer, 1, secondaryColor);    
+        SetColorInternal(fRenderer, 2, tertiaryColor);    
+
+        Renderer tRenderer = characterObjectsData.topHairMesh.GetComponent<Renderer>();
+        SetColorInternal(tRenderer, 0, primaryColor);    
+        SetColorInternal(tRenderer, 1, secondaryColor);    
+        SetColorInternal(tRenderer, 2, tertiaryColor);  
+
+        Renderer sRenderer = characterObjectsData.sideHairMesh.GetComponent<Renderer>();
+        SetColorInternal(sRenderer, 0, primaryColor);    
+        SetColorInternal(sRenderer, 1, secondaryColor);    
+        SetColorInternal(sRenderer, 2, tertiaryColor);  
+    }
+
     private MaterialPropertyBlock block;
     private void SetColorInternal(Renderer renderer, int materialIndex, Color color)
     {

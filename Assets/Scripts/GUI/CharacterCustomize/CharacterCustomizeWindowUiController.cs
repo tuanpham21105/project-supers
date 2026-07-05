@@ -36,6 +36,7 @@ public class CharacterCustomizeWindowUiController : WindowUiController
 
     [SerializeField] private CharacterCustomizeSkinCustomiziesUiController skinCustomiziesUiController;
     [SerializeField] private CharacterCustomizeEyesCustomiziesUiController eyesCustomiziesUiController;
+    [SerializeField] private CharacterCustomizeHairCustomiziesUiController hairCustomiziesUiController;
 
     [SerializeField] CharacterCustomiziesSet tempCharacterCustomizies = new CharacterCustomiziesSet();
 
@@ -59,6 +60,7 @@ public class CharacterCustomizeWindowUiController : WindowUiController
 
         skinCustomiziesUiController.onPickColor += handlePickRacesColor;
         eyesCustomiziesUiController.onPickColor += handlePickEyesColor;
+        hairCustomiziesUiController.onPickColor += handlePickHairColors;
 
         tempCharacterCustomizies = PlayerData.instance.characterCustomizies.Clone();
 
@@ -81,6 +83,7 @@ public class CharacterCustomizeWindowUiController : WindowUiController
 
         skinCustomiziesUiController.onPickColor -= handlePickRacesColor;
         eyesCustomiziesUiController.onPickColor -= handlePickEyesColor;
+        hairCustomiziesUiController.onPickColor -= handlePickHairColors;
     }
 
     void handleTypeButtonClick(CharacterCustomizeType type)
@@ -119,10 +122,16 @@ public class CharacterCustomizeWindowUiController : WindowUiController
                 typeWindow.propertiesWindow.GetComponent<CharacterCustomizeEyesCustomiziesUiController>().SetColors(eyes.irisColor, eyes.scleraColor, eyes.eyebrowEyelidColor);
                 break;
             case CharacterCustomizeType.Front_Hair:
+                CharacterCustomizeHair frontHair = tempCharacterCustomizies.frontHair;
+                typeWindow.propertiesWindow.GetComponent<CharacterCustomizeHairCustomiziesUiController>().SetColors(frontHair.primaryColor, frontHair.secondaryColor, frontHair.tertiaryColor);
                 break;
             case CharacterCustomizeType.Top_Hair:
+                CharacterCustomizeHair topHair = tempCharacterCustomizies.frontHair;
+                typeWindow.propertiesWindow.GetComponent<CharacterCustomizeHairCustomiziesUiController>().SetColors(topHair.primaryColor, topHair.secondaryColor, topHair.tertiaryColor);
                 break;
             case CharacterCustomizeType.Side_Hair:
+                CharacterCustomizeHair sideHair = tempCharacterCustomizies.frontHair;
+                typeWindow.propertiesWindow.GetComponent<CharacterCustomizeHairCustomiziesUiController>().SetColors(sideHair.primaryColor, sideHair.secondaryColor, sideHair.tertiaryColor);
                 break;
 
         }
@@ -159,5 +168,22 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         tempCharacterCustomizies.eyes.eyebrowEyelidColor = eyelid;
 
         MainMenuCharacterModelController.instance.SetCharacterEyesColors(iris, sclera, eyelid);
+    }
+
+    void handlePickHairColors(Color primary, Color secondary, Color tertiary)
+    {
+        tempCharacterCustomizies.frontHair.primaryColor = primary;
+        tempCharacterCustomizies.frontHair.secondaryColor = secondary;
+        tempCharacterCustomizies.frontHair.tertiaryColor = tertiary;
+
+        tempCharacterCustomizies.topHair.primaryColor = primary;
+        tempCharacterCustomizies.topHair.secondaryColor = secondary;
+        tempCharacterCustomizies.topHair.tertiaryColor = tertiary;
+
+        tempCharacterCustomizies.sideHair.primaryColor = primary;
+        tempCharacterCustomizies.sideHair.secondaryColor = secondary;
+        tempCharacterCustomizies.sideHair.tertiaryColor = tertiary;
+
+        MainMenuCharacterModelController.instance.SetCharacterHairColors(primary, secondary, tertiary);
     }
 }
