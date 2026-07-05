@@ -5,6 +5,7 @@ using UnityEngine;
 public class MatchConnectionManager : MonoBehaviour
 {
     public static MatchConnectionManager instance;
+    public bool IsConnected = true;
 
     public event Action onReconnecting;
     public event Action onReconnected;
@@ -20,7 +21,10 @@ public class MatchConnectionManager : MonoBehaviour
 
     void Start()
     {
-        P2PManager.instance.OnDisconnected += handleOnPeerDisconnected;
+        if (P2PManager.instance.IsConnected)
+            P2PManager.instance.OnDisconnected += handleOnPeerDisconnected;
+        else    
+            handleOnPeerDisconnected();
     }
 
     void OnDestroy()
@@ -41,6 +45,8 @@ public class MatchConnectionManager : MonoBehaviour
         Debug.Log("[MatchConnectionManager] Reconnecting...");
         onReconnecting?.Invoke();
 
+        IsConnected = false;
+
         if (MatchManager.instance.IsPlayerHost())
             StartCoroutine(ReconnectHost());
         else
@@ -53,6 +59,8 @@ public class MatchConnectionManager : MonoBehaviour
 
         onReconnected?.Invoke();
         Debug.Log("[MatchConnectionManager] Reconnected.");
+
+        IsConnected = true;
     }
 
     IEnumerator ReconnectHost()
@@ -92,15 +100,19 @@ public class MatchConnectionManager : MonoBehaviour
 
         if (!initSuccess)
         {
-            MatchFinishManager.instance.Finish();
+            Debug.Log($"[MatchConnectionManager] Can't connect to relay server");
+
+            handleOnPeerReconnectFail();
             yield break;
         }
 
-        yield return new WaitForSecondsRealtime(reconnectWait * 4f);
+        yield return new WaitForSecondsRealtime(reconnectWait * 6);
 
         if (!P2PManager.instance.IsConnected)
         {
-            MatchFinishManager.instance.Finish();
+            Debug.Log($"[MatchConnectionManager] Cleint not reconnected");
+
+            handleOnPeerReconnectFail();
             yield break;
         }
 
@@ -147,10 +159,19 @@ public class MatchConnectionManager : MonoBehaviour
 
         if (!connected)
         {
-            MatchFinishManager.instance.Finish();
+            Debug.Log($"[MatchConnectionManager] Can't connect to host");
+
+            handleOnPeerReconnectFail();
             yield break;
         }
         
         handleOnPeerConnected();
+    }
+
+    void handleOnPeerReconnectFail()
+    {
+        Debug.Log($"[MatchConnectionManager] Reconnecting failed");
+
+        MatchFinishManager.instance.Finish();
     }
 }

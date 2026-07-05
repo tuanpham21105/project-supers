@@ -88,7 +88,8 @@ public class MatchManager : MonoBehaviour
 
         matchReadyOverlayUiController.SetText("Fight!!!");
 
-        isMatchStart = true;
+        if (MatchConnectionManager.instance.IsConnected) 
+            isMatchStart = true;
 
         yield return new WaitForSecondsRealtime(0.7f);
 

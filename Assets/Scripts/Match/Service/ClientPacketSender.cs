@@ -31,11 +31,11 @@ public class ClientPacketSender : MonoBehaviour
             return;
         }
 
-        // Verify sender is the host
-        // if (MatchManager.instance.IsPlayerHost())
-        // {
-        //     return;
-        // }
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[ClientPacketSender] Cannot send: not connected.");
+            return;
+        }
 
         ActionEventPacket packet = new ActionEventPacket();
         packet.action = action.ToString();
@@ -49,6 +49,12 @@ public class ClientPacketSender : MonoBehaviour
         if (P2PManager.instance == null)
         {
             Debug.LogError("[ClientPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[ClientPacketSender] Cannot send: not connected.");
             return;
         }
 
@@ -70,6 +76,12 @@ public class ClientPacketSender : MonoBehaviour
         if (P2PManager.instance == null)
         {
             Debug.LogError("[ClientPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[ClientPacketSender] Cannot send: not connected.");
             return;
         }
 

@@ -25,6 +25,12 @@ public class HostPacketSender : MonoBehaviour
             return;
         }
 
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[HostPacketSender] Cannot send: not connected.");
+            return;
+        }
+
         // Verify sender is the host
         if (!MatchManager.instance.IsPlayerHost())
         {
@@ -45,6 +51,12 @@ public class HostPacketSender : MonoBehaviour
         if (P2PManager.instance == null)
         {
             Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[HostPacketSender] Cannot send: not connected.");
             return;
         }
 
@@ -71,6 +83,12 @@ public class HostPacketSender : MonoBehaviour
             return;
         }
 
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[HostPacketSender] Cannot send: not connected.");
+            return;
+        }
+
         // Verify sender is the host
         if (!MatchManager.instance.IsPlayerHost())
         {
@@ -89,6 +107,12 @@ public class HostPacketSender : MonoBehaviour
         if (P2PManager.instance == null)
         {
             Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[HostPacketSender] Cannot send: not connected.");
             return;
         }
 
@@ -113,6 +137,12 @@ public class HostPacketSender : MonoBehaviour
             return;
         }
 
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[HostPacketSender] Cannot send: not connected.");
+            return;
+        }
+
         // Verify sender is the host
         if (!MatchManager.instance.IsPlayerHost())
         {
@@ -131,6 +161,12 @@ public class HostPacketSender : MonoBehaviour
         if (P2PManager.instance == null)
         {
             Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[HostPacketSender] Cannot send: not connected.");
             return;
         }
 

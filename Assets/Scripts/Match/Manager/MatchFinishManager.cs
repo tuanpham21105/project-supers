@@ -22,18 +22,16 @@ public class MatchFinishManager : MonoBehaviour
 
     public void Finish(String winner = "")
     {
-        if(!MatchManager.instance.IsMatchStart()) return;
-
         PlayerMatchService.instance.FinishMatch(
             MatchData.matchId, 
             winner,
             (response) =>
             {
-                
+                Debug.LogError($"[MatchFinishManager] {response.message}");
             },
             (code, error) =>
             {
-                
+                Debug.LogError($"[MatchFinishManager] {error}");
             }
         );
 
