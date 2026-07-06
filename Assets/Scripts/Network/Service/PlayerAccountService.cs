@@ -34,6 +34,18 @@ public class PlayerAccountService : MonoBehaviour
         ));
     }
 
+    public void SearchPlayers(string keyword, Action<OtherPlayersListResponse> onSuccess, Action<long, string> onError)
+    {
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<OtherPlayersListResponse>(
+            "GET",
+            "/api/player/account/search?keyword=" + keyword,
+            null,
+            null,
+            onSuccess,
+            onError
+        ));
+    }
+
     /// <summary>
     /// Retrieves another player's public account details by username.
     /// </summary>

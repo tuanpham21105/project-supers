@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainWindowUiController : WindowUiController
 {
@@ -8,6 +9,7 @@ public class MainWindowUiController : WindowUiController
     [SerializeField] private GameObject cancelButton;
     [SerializeField] private GameObject findingMatchDisplayText;
     [SerializeField] private GameObject battleCostDisplayText;
+    [SerializeField] private Button challengeButton;
 
     void OnDestroy()
     {
@@ -27,6 +29,7 @@ public class MainWindowUiController : WindowUiController
         cancelButton.SetActive(false);
         findingMatchDisplayText.SetActive(false);
         battleCostDisplayText.SetActive(false);
+        challengeButton.interactable = false;
     }
 
     public void CancelButton()
@@ -40,6 +43,7 @@ public class MainWindowUiController : WindowUiController
         cancelButton.SetActive(false);
         findingMatchDisplayText.SetActive(false);
         battleCostDisplayText.SetActive(true);
+        challengeButton.interactable = true;
     }
 
     void handleStartMatchMakingSuccess()
@@ -52,6 +56,7 @@ public class MainWindowUiController : WindowUiController
         cancelButton.SetActive(true);
         findingMatchDisplayText.SetActive(true);
         battleCostDisplayText.SetActive(false);
+        challengeButton.interactable = false;
     }
 
     void handleStartMatchMakingFailed(string error)
@@ -64,6 +69,7 @@ public class MainWindowUiController : WindowUiController
         cancelButton.SetActive(false);
         findingMatchDisplayText.SetActive(false);
         battleCostDisplayText.SetActive(true);
+        challengeButton.interactable = true;
     }
 
     public void GoToTrainingArea()
