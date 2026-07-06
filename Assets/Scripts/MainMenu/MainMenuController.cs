@@ -29,8 +29,19 @@ public class MainMenuController : MonoBehaviour
     {
         if (PlayerAuthService.instance.IsLoggedIn())
         {
-            if (PlayerData.instance.email == "" && PlayerData.instance.username == "")
+            if (PlayerData.instance.username == "")
+            {
                 FetchAndAssignPlayerData();
+            }
+            else
+            {
+                MainMenuHeaderUiController.instance.SetPoints();
+                MainMenuHeaderUiController.instance.SetLevels();
+
+                MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
+
+                MainMenuCharacterModelController.instance.SetCharacterCustomiziesFromPlayerData();
+            }
         }
         else
         {
