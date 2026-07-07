@@ -35,8 +35,11 @@ public class MainMenuController : MonoBehaviour
             }
             else
             {
+                MainMenuHeaderUiController.instance.SetHeaderUsername();
                 MainMenuHeaderUiController.instance.SetPoints();
                 MainMenuHeaderUiController.instance.SetLevels();
+
+                MainMenuSidebarUiController.instance.SetupSidebarUi();
 
                 MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
 
