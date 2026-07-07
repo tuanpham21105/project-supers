@@ -8,4 +8,5 @@ using UnityEngine;
 public class WsMessage
 {
     public string type;
+    public JToken content;
 }

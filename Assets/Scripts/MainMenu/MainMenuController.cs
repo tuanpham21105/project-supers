@@ -62,7 +62,7 @@ public class MainMenuController : MonoBehaviour
     private void FetchAndAssignPlayerData()
     {
         PlayerAccountService.instance.GetPlayerAccount(
-            (response) =>
+            async (response) =>
             {
                 PlayerData.instance.email = response.email;
                 PlayerData.instance.username = response.username;
@@ -70,11 +70,10 @@ public class MainMenuController : MonoBehaviour
                 PlayerData.instance.isGuest = response.isGuest;
                 Debug.Log($"[MainMenuController] Player data loaded: {response.username}");
 
-                MainMenuHeaderUiController.instance.SetHeaderUsername();
+                WebSocketService.instance.OnConnected += handleWsConnectSuccess;
+                WebSocketService.instance.OnDisconnected += handleWsConnectFailed;
 
-                MainMenuSidebarUiController.instance.SetupSidebarUi();
-
-                FetchAndAssignPlayerInventoryAndConfigsData();
+                await WebSocketService.instance.Connect();
             },
             (code, message) =>
             {
@@ -83,6 +82,28 @@ public class MainMenuController : MonoBehaviour
                 SceneService.instance.ReloadCurrentScene();
             }
         );
+    }
+
+    void handleWsConnectSuccess()
+    {
+        WebSocketService.instance.OnConnected -= handleWsConnectSuccess;
+        WebSocketService.instance.OnDisconnected -= handleWsConnectFailed;
+
+        MainMenuHeaderUiController.instance.SetHeaderUsername();
+
+        MainMenuSidebarUiController.instance.SetupSidebarUi();
+
+        FetchAndAssignPlayerInventoryAndConfigsData();
+    }
+
+    void handleWsConnectFailed()
+    {
+        WebSocketService.instance.OnConnected -= handleWsConnectSuccess;
+        WebSocketService.instance.OnDisconnected -= handleWsConnectFailed;
+
+        Debug.LogError("Cannot connect to server");
+        // PlayerAuthService.instance.Logout();
+        // SceneService.instance.ReloadCurrentScene();
     }
 
     void FetchAndAssignPlayerInventoryAndConfigsData()

@@ -22,6 +22,8 @@ public class ChallengePlayerItemUiController : MonoBehaviour
     {
         challengeButton.interactable = false;
 
+        ChallengeController.instance.SendChallenge(username);
+
         StartCoroutine(ChallengeCooldown());
     }
 

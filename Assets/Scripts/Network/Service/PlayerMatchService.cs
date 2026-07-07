@@ -69,4 +69,28 @@ public class PlayerMatchService : MonoBehaviour
             onError
         ));
     }
+
+    public void ChallengePlayer(ChallengeRequest request, Action<ChallengeResponse> onSuccess, Action<long, string> onError)
+    {
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<ChallengeResponse>(
+            "POST",
+            "/api/player/match/challenge",
+            request,
+            null,
+            onSuccess,
+            onError
+        ));
+    }
+
+    public void ResponseChallenge(ChallengeResponseRequest request, Action<MatchResponse> onSuccess, Action<long, string> onError)
+    {
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<MatchResponse>(
+            "POST",
+            "/api/player/match/challenge/response",
+            request,
+            null,
+            onSuccess,
+            onError
+        ));
+    }
 }

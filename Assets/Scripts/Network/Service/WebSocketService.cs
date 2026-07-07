@@ -68,11 +68,18 @@ public class WebSocketService : MonoBehaviour
 
         _ws.OnMessage += (bytes) =>
         {
-            string json = System.Text.Encoding.UTF8.GetString(bytes);
-            WsMessage msg = JsonConvert.DeserializeObject<WsMessage>(json);
-            Debug.Log($"[WS] Message received: {json}");
-            Debug.Log($"[WS] Message received - Type: {msg.type}");
-            OnMessageReceived?.Invoke(msg);
+            try
+            {
+                string json = System.Text.Encoding.UTF8.GetString(bytes);
+                WsMessage msg = JsonConvert.DeserializeObject<WsMessage>(json);
+                Debug.Log($"[WS] Message received: {json}");
+                Debug.Log($"[WS] Message received - Type: {msg.type}");
+                OnMessageReceived?.Invoke(msg);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         };
 
         await _ws.Connect();
