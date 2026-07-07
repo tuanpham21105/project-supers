@@ -33,7 +33,7 @@ public class ChallengeController : MonoBehaviour
 
             MatchMakingController.instance.CancelMatchMaking();
             MatchMakingController.instance.handleMatchMakingSuccess(content);
-            MatchMakingController.instance.OnWsMessageReceived(new WsMessage()
+            MatchMakingController.instance.OnMatchFoundWsMessageReceived(new WsMessage()
             {
                 type = "MATCH_FOUND"
             });

@@ -43,22 +43,18 @@ public class MatchMakingController : MonoBehaviour
         MatchData.matchId = "";
         MatchData.players.Clear();
 
-        P2PManager.instance.DestroyPeer();
-
         if (isMatchMaking) return;
 
         Debug.Log("[MatchMaking] Starting...");
 
         isMatchMaking = true;
 
-        // WebSocketService.instance.OnConnected += handleWsConnected;
-
-        // WebSocketService.instance.OnDisconnected += handleWsConnectFailed;
-
-        // 1. Connect WS
-        // await WebSocketService.instance.Connect();
-
-        handleWsConnected();
+        if (!P2PManager.instance.IsInitialized)
+        {
+            P2PManager.instance.OnReady += handlePeerConnectionReady;
+            P2PManager.instance.OnError += handlePeerError;
+            P2PManager.instance.Init(PlayerData.instance.username);
+        }
     }
 
     public void CancelMatchMaking()
@@ -73,7 +69,7 @@ public class MatchMakingController : MonoBehaviour
         // WebSocketService.instance.Disconnect();
 
         // 2. Clear listener
-        WebSocketService.instance.OnMessageReceived -= OnWsMessageReceived;
+        WebSocketService.instance.OnMessageReceived -= OnMatchFoundWsMessageReceived;
 
         // 3. Send cancel match making request
         PlayerMatchService.instance.CancelMatchMaking(
@@ -88,23 +84,12 @@ public class MatchMakingController : MonoBehaviour
         );
     }
 
-    private void handleWsConnectFailed() {
-        isMatchMaking = false;
-
-        onStartMatchMakingFailed?.Invoke($"Matchmaking failed: Can't connect to server.");
-    }
-
-    private void handleWsConnected() {
-        // WebSocketService.instance.OnConnected -= handleWsConnected;
-
-        // WebSocketService.instance.OnDisconnected -= handleWsConnectFailed;
-
+    void handlePeerConnectionReady()
+    {
         isMatchMaking = true;
 
-        // 2. Handle message received
-        WebSocketService.instance.OnMessageReceived += OnWsMessageReceived;
+        P2PManager.instance.OnReady -= handlePeerConnectionReady;
 
-        // 3. Send start match making request
         PlayerMatchService.instance.StartMatchMaking(
             (response) =>
             {
@@ -121,14 +106,19 @@ public class MatchMakingController : MonoBehaviour
         );
     }
 
+    void handlePeerError(string msg)
+    {
+        
+    }
+
     public void handleMatchMakingSuccess(MatchResponse response)
     {
+        onStartMatchMakingSuccess?.Invoke();
+
         isMatchMaking = true;
 
         MatchData.matchId = response.id;
         MatchData.hostPlayer = response.hostPlayer;
-
-        P2PManager.instance.OnReady += handlePeerConnectionReady;
 
         P2PManager.instance.OnConnected += handleOnPeerConnected;
 
@@ -137,17 +127,17 @@ public class MatchMakingController : MonoBehaviour
         if (PlayerData.instance.username == MatchData.hostPlayer)
         {
             Debug.Log($"[MatchMaking] Host - Waiting for match making...");
-            P2PManager.instance.Init(MatchData.matchId);
+
+            WebSocketService.instance.OnMessageReceived += OnMatchFoundWsMessageReceived;
         }
         else
-        {
-            P2PManager.instance.Init("Client " + MatchData.matchId);
+        {   
+            handleClientMatchFound();
+            handleMatchFound();
         }
-
-        onStartMatchMakingSuccess?.Invoke();
     }
 
-    public void OnWsMessageReceived(WsMessage message)
+    public void OnMatchFoundWsMessageReceived(WsMessage message)
     {
         Debug.Log($"[MatchMaking] WS Message received: {message.type}");
         if (message.type.CompareTo("MATCH_FOUND") == 0)
@@ -157,26 +147,16 @@ public class MatchMakingController : MonoBehaviour
         }
     }
 
-    private void handlePeerConnectionReady()
-    {
-        P2PManager.instance.OnReady -= handlePeerConnectionReady;
-
-        if (PlayerData.instance.username.CompareTo(MatchData.hostPlayer) == 0) 
-            return;
-        
-        handleClientMatchFound();
-        handleMatchFound();
-    }
-
     private void handleMatchFound()
     {
         Debug.Log($"[MatchMaking] Match found.");
 
-        // 1. Disconnect WS
-        // WebSocketService.instance.Disconnect();
+        onPeerConnecting?.Invoke();
 
-        // 2. Clear listener
-        WebSocketService.instance.OnMessageReceived -= OnWsMessageReceived;
+        WebSocketService.instance.OnMessageReceived -= OnMatchFoundWsMessageReceived;
+
+        if (peerConnectionTimeoutCouroutine != null)
+            StopCoroutine(peerConnectionTimeoutCouroutine);
 
         peerConnectionTimeoutCouroutine = StartCoroutine(peerConnectionTimeout());
     }
@@ -184,21 +164,18 @@ public class MatchMakingController : MonoBehaviour
     private void handleHostMatchFound()
     {
         Debug.Log($"[MatchMaking] Host - Waiting for Client connect to...");
-        onPeerConnecting?.Invoke();
     }
 
     private void handleClientMatchFound()
     {
         Debug.Log($"[MatchMaking] Client - Connecting to Host...");
 
-        onPeerConnecting?.Invoke();
-
-        P2PManager.instance.ConnectTo(MatchData.matchId);
+        P2PManager.instance.ConnectTo(MatchData.hostPlayer);
     }
 
     IEnumerator peerConnectionTimeout()
     {
-        yield return new WaitForSecondsRealtime(60f);
+        yield return new WaitForSecondsRealtime(30f);
 
         onPeerConnectionFailed?.Invoke("[MatchMaking] Can't connect to Player.");
 
@@ -206,17 +183,15 @@ public class MatchMakingController : MonoBehaviour
 
         peerConnectionTimeoutCouroutine = null;
 
-        P2PManager.instance.OnReady -= handlePeerConnectionReady;
-
         P2PManager.instance.OnConnected -= handleOnPeerConnected;
 
         P2PManager.instance.OnReliableData -= handlePacketReceived;
 
-        P2PManager.instance.DestroyPeer();
+        P2PManager.instance.DisconnectFromPeer();
 
         isMatchMaking = false;
 
-        StartMatchMaking();
+        // StartMatchMaking();
     }
 
     private void handleOnPeerConnected()
@@ -228,6 +203,9 @@ public class MatchMakingController : MonoBehaviour
         P2PManager.instance.OnConnected -= handleOnPeerConnected;
 
         onPeerConnected?.Invoke();
+
+        if (peerConnectionTimeoutCouroutine != null)
+            StopCoroutine(peerConnectionTimeoutCouroutine);
 
         peerConnectionTimeoutCouroutine = StartCoroutine(peerConnectionTimeout());
 
@@ -263,8 +241,6 @@ public class MatchMakingController : MonoBehaviour
             MatchData.players.Add(PlayerData.instance.username);
 
             StopCoroutine(peerConnectionTimeoutCouroutine);
-
-            SceneService.instance.LoadSceneDirect("LoadingScene");
         }
         else if (packet.type.CompareTo("LOAD_MATCH") == 0 && PlayerData.instance.username.CompareTo(MatchData.hostPlayer) != 0)
         {
