@@ -48,8 +48,31 @@ public class ChallengeController : MonoBehaviour
 
     public void SendChallenge(string username)
     {
+        if (!P2PManager.instance.IsInitialized)
+        { 
+            P2PManager.instance.OnReady += SendChallengeWaitForPeerReady(username);
+            P2PManager.instance.Init(PlayerData.instance.username);
+        }
+        else
+        {
+            RealSendChallenge(username);
+        }
+    }
+
+    Action SendChallengeWaitForPeerReady(string username)
+    {
+        return () =>
+        {
+            RealSendChallenge(username);
+        };
+    }
+
+    void RealSendChallenge(string username)
+    {
+        P2PManager.instance.OnReady -= SendChallengeWaitForPeerReady(username);
+
         PlayerMatchService.instance.ChallengePlayer(
-            new global::ChallengeRequest()
+            new ChallengeRequest()
             {
                 receiverUsername = username
             },
@@ -66,6 +89,35 @@ public class ChallengeController : MonoBehaviour
 
     public void ResponseChallenge(string id, bool state)
     {
+        if (!P2PManager.instance.IsInitialized)
+        { 
+            P2PManager.instance.OnReady += ResponseChallengeWaitForPeerReady(id, state);
+            P2PManager.instance.Init(PlayerData.instance.username);
+        }
+        else
+        {
+            RealResponseChallenge(id, state);
+        }
+    }
+
+    Action ResponseChallengeWaitForPeerReady(string id, bool state)
+    {
+        return () =>
+        {
+            RealResponseChallenge(id, state);
+        };
+    }
+
+    void RealResponseChallenge(string id, bool state)
+    {
+        P2PManager.instance.OnReady -= ResponseChallengeWaitForPeerReady(id, state);
+
+        if (state)
+        {
+
+            MatchMakingController.instance.CancelMatchMaking();
+        }
+
         PlayerMatchService.instance.ResponseChallenge(
             new ChallengeResponseRequest()
             {
@@ -75,14 +127,12 @@ public class ChallengeController : MonoBehaviour
             (response) =>
             {
                 if (state)
-                    MatchMakingController.instance.CancelMatchMaking();
-
-                MatchMakingController.instance.handleMatchMakingSuccess(response);
+                    MatchMakingController.instance.handleMatchMakingSuccess(response);
             },
             (code, error) =>
             {
                 Debug.LogError("Challenge no longer valid");
             }
-        );
+        );  
     }
 }

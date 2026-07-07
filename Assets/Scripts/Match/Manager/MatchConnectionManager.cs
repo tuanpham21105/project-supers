@@ -81,7 +81,7 @@ public class MatchConnectionManager : MonoBehaviour
             P2PManager.instance.OnReady += onReady;
             P2PManager.instance.OnError += onError;
 
-            P2PManager.instance.Init(MatchData.matchId);
+            P2PManager.instance.Init(PlayerData.instance.username);
 
             yield return new WaitUntil(() => ready || error);
 
@@ -124,7 +124,7 @@ public class MatchConnectionManager : MonoBehaviour
         P2PManager.instance.DestroyPeer();
         yield return new WaitForSecondsRealtime(reconnectDelay);
 
-        P2PManager.instance.Init("Client " + MatchData.matchId);
+        P2PManager.instance.Init(PlayerData.instance.username);
 
         bool ready = false;
         Action onReady = () => ready = true;

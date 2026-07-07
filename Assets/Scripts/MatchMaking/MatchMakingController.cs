@@ -37,7 +37,7 @@ public class MatchMakingController : MonoBehaviour
         P2PManager.instance.OnConnected -= handleOnPeerConnected;
     }
 
-    public async void StartMatchMaking()
+    public void StartMatchMaking()
     {
         MatchData.hostPlayer = "";
         MatchData.matchId = "";
@@ -54,6 +54,10 @@ public class MatchMakingController : MonoBehaviour
             P2PManager.instance.OnReady += handlePeerConnectionReady;
             P2PManager.instance.OnError += handlePeerError;
             P2PManager.instance.Init(PlayerData.instance.username);
+        }
+        else
+        {
+            handlePeerConnectionReady();
         }
     }
 
