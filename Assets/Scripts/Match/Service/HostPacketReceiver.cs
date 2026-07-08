@@ -70,7 +70,7 @@ public class HostPacketReceiver : MonoBehaviour
             }
             else if (packet.type.CompareTo("SURRENDER_ACKNOWLEDGE") == 0)
             {
-                Debug.Log($"[HostPacketReceiver] {player} surrender have been acknowledge.");
+                Debug.Log($"[HostPacketReceiver] {PlayerData.instance.username} surrender have been acknowledge.");
 
                 MatchManager.instance.Surrender();
             }

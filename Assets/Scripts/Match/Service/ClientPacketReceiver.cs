@@ -68,11 +68,7 @@ public class ClientPacketReceiver : MonoBehaviour
         }
         else if (packet.type.CompareTo("SURRENDER") == 0)
         {
-            Debug.Log($"[HostPacketReceiver] {PlayerData.instance.username} surrender.");
-
-            ClientPacketSender.instance.sendSurrenderAcknowledge();
-
-            MatchFinishManager.instance.Finish(PlayerData.instance.username);
+            MatchManager.instance.AcknowledgeSurrender();
         }
     } 
 

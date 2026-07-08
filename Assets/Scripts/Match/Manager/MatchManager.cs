@@ -212,6 +212,13 @@ public class MatchManager : MonoBehaviour
         isSurrender = true;
     }
 
+    public void AcknowledgeSurrender()
+    {
+        ClientPacketSender.instance.sendSurrenderAcknowledge();
+
+        MatchFinishManager.instance.Finish(PlayerData.instance.username);
+    }
+
     public void Surrender()
     {
         if (IsSurrender())

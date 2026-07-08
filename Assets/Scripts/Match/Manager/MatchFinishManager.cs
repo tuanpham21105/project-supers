@@ -22,19 +22,6 @@ public class MatchFinishManager : MonoBehaviour
 
     public void Finish(String winner = "")
     {
-        PlayerMatchService.instance.FinishMatch(
-            MatchData.matchId, 
-            winner,
-            (response) =>
-            {
-                Debug.LogError($"[MatchFinishManager] {response.message}");
-            },
-            (code, error) =>
-            {
-                Debug.LogError($"[MatchFinishManager] {error}");
-            }
-        );
-
         if (winner.Equals(""))
         {
             onMatchFinish?.Invoke(0);
@@ -48,12 +35,28 @@ public class MatchFinishManager : MonoBehaviour
             onMatchFinish?.Invoke(-1);
         }
 
-        StartCoroutine(EndMatch());
+        StartCoroutine(EndMatch(winner));
     }
 
-    IEnumerator EndMatch()
+    IEnumerator EndMatch(string winner)
     {
-        yield return new WaitForSecondsRealtime(5f);
+        if (MatchManager.instance.IsPlayerHost())
+            yield return new WaitForSecondsRealtime(2f);
+
+        PlayerMatchService.instance.FinishMatch(
+            MatchData.matchId, 
+            winner,
+            (response) =>
+            {
+                Debug.LogError($"[MatchFinishManager] {response.message}");
+            },
+            (code, error) =>
+            {
+                Debug.LogError($"[MatchFinishManager] {error}");
+            }
+        );
+
+        yield return new WaitForSecondsRealtime(MatchManager.instance.IsPlayerHost() ? 5f : 3f);
 
         P2PManager.instance.DisconnectFromPeer();
 
