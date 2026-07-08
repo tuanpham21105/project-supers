@@ -88,3 +88,16 @@ public class ClientInfoPacket : Packet
         type = "CLIENT_INFO";
     }
 }
+
+[Serializable]
+public class HitEventPacket : Packet
+{
+    public string player;
+    public int damage;
+    public bool isDeflected = false;
+
+    public HitEventPacket()
+    {
+        type = "HIT_EVENT";
+    }
+}

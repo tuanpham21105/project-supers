@@ -32,7 +32,7 @@ public class DamagePopup : MonoBehaviour
 
     [Header("Random Direction")]
     [Tooltip("Độ lệch ngang ngẫu nhiên so với hướng thẳng lên/xuống (0 = luôn thẳng, 1 = ngẫu nhiên hoàn toàn)")]
-    [SerializeField, Range(0f, 1f)] private float horizontalRandomness = 0.5f;
+    [SerializeField, Range(0f, 2f)] private float horizontalRandomness = 0.5f;
 
     [Header("Timing")]
     [SerializeField] private float duration = 1f;
@@ -92,7 +92,7 @@ public class DamagePopup : MonoBehaviour
         transform.position = worldPosition;
 
         // ─── Text & Color ───
-        tmp.text  = Mathf.RoundToInt(damage).ToString();
+        tmp.text  = BigNumberStringify.decorate(Mathf.RoundToInt(damage));
         tmp.color = isAlly ? allyColor : enemyColor;
 
         // ─── Scale theo damage (địch to hơn ta luôn) ───
@@ -106,7 +106,7 @@ public class DamagePopup : MonoBehaviour
         float distance = Mathf.Lerp(minDistance, maxDistance, damageT);
 
         Vector3 verticalDir = isAlly ? Vector3.down : Vector3.up;
-        Vector2 randomHorizontal = Random.insideUnitCircle;
+        Vector2 randomHorizontal = Random.insideUnitCircle.normalized;
         Vector3 horizontalDir = new Vector3(randomHorizontal.x, 0f, randomHorizontal.y);
 
         Vector3 direction = (verticalDir + horizontalDir * horizontalRandomness).normalized;
@@ -115,6 +115,36 @@ public class DamagePopup : MonoBehaviour
         _endPos   = worldPosition + direction * distance;
 
         // ─── Billboard ngay từ đầu để tránh giật hình frame đầu ───
+        FaceCamera();
+
+        if (_routine != null) StopCoroutine(_routine);
+        _routine = StartCoroutine(AnimateRoutine());
+    }
+
+    public void ShowDeflected(Vector3 worldPosition, bool isAlly,  DamagePopupManager manager)
+    {
+        _manager = manager;
+        transform.position = worldPosition;
+
+        tmp.text  = "DEFLECT";
+        tmp.color = isAlly ? allyColor : enemyColor;
+
+        float fontSize = maxFontSize;
+        if (isAlly) fontSize *= allySizeMultiplier;
+        _baseFontSize = fontSize;
+        tmp.fontSize = fontSize;
+
+        float distance = maxDistance;
+
+        Vector3 verticalDir = isAlly ? Vector3.down : Vector3.up;
+        Vector2 randomHorizontal = Random.insideUnitCircle.normalized;
+        Vector3 horizontalDir = new Vector3(randomHorizontal.x, 0f, randomHorizontal.y);
+
+        Vector3 direction = (verticalDir + horizontalDir * horizontalRandomness).normalized;
+
+        _startPos = worldPosition;
+        _endPos   = worldPosition + direction * distance;
+
         FaceCamera();
 
         if (_routine != null) StopCoroutine(_routine);

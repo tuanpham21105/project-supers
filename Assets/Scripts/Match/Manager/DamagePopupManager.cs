@@ -49,6 +49,12 @@ public class DamagePopupManager : MonoBehaviour
         popup.Show(worldPosition, isAlly, damage, this);
     }
 
+    public void ShowDeflected(Vector3 worldPosition, bool isAlly)
+    {
+        DamagePopup popup = GetFromPool();
+        popup.ShowDeflected(worldPosition, isAlly, this);
+    }
+
     private DamagePopup GetFromPool()
     {
         DamagePopup popup = _pool.Count > 0

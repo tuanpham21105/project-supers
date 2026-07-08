@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 5502654289541596181, guid: 9c1272450aed9fbedb6e5767c20d3a36, type: 3}
-  poolInitialSize: 50
+  poolInitialSize: 20
 --- !u!1001 &1748965641454634394
 PrefabInstance:
   m_ObjectHideFlags: 0

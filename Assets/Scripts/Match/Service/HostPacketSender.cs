@@ -102,11 +102,6 @@ public class HostPacketSender : MonoBehaviour
         P2PManager.instance.SendJsonUnreliable(packet);
     }
 
-    public void sendPlayerCharacterEvent()
-    {
-        
-    }
-
     public void sendLostFocus()
     {
         if (P2PManager.instance == null)
@@ -177,6 +172,37 @@ public class HostPacketSender : MonoBehaviour
 
         Packet packet = new Packet();
         packet.type = "SURRENDER";
+
+        P2PManager.instance.SendJson(packet);
+    }
+
+    public void sendHitEvent(string player, int damage, bool isDeflected)
+    {
+        if (P2PManager.instance == null)
+        {
+            Debug.LogError("[HostPacketSender] P2PManager dependency is missing.");
+            return;
+        }
+
+        if (!MatchConnectionManager.instance.IsConnected)
+        {
+            // Debug.LogWarning("[HostPacketSender] Cannot send: not connected.");
+            return;
+        }
+
+        // Verify sender is the host
+        if (!MatchManager.instance.IsPlayerHost())
+        {
+            // Debug.LogWarning("[HostPacketSender] Only the host can send host actions.");
+            return;
+        }
+
+        HitEventPacket packet = new HitEventPacket()
+        {
+            player = player,
+            damage = damage,
+            isDeflected = isDeflected
+        };
 
         P2PManager.instance.SendJson(packet);
     }

@@ -10,6 +10,8 @@ public class MatchFinishManager : MonoBehaviour
 
     public event Action<int> onMatchFinish;
 
+    public bool isFinish = false;
+
     void Awake()
     {
         instance = this;
@@ -22,6 +24,11 @@ public class MatchFinishManager : MonoBehaviour
 
     public void Finish(String winner = "")
     {
+        if (isFinish)
+            return;
+
+        isFinish = true;
+
         if (winner.Equals(""))
         {
             onMatchFinish?.Invoke(0);
@@ -40,8 +47,8 @@ public class MatchFinishManager : MonoBehaviour
 
     IEnumerator EndMatch(string winner)
     {
-        if (MatchManager.instance.IsPlayerHost())
-            yield return new WaitForSecondsRealtime(2f);
+        if (!MatchManager.instance.IsPlayerHost())
+            yield return new WaitForSecondsRealtime(1f);
 
         PlayerMatchService.instance.FinishMatch(
             MatchData.matchId, 
@@ -56,7 +63,7 @@ public class MatchFinishManager : MonoBehaviour
             }
         );
 
-        yield return new WaitForSecondsRealtime(MatchManager.instance.IsPlayerHost() ? 5f : 3f);
+        yield return new WaitForSecondsRealtime(MatchManager.instance.IsPlayerHost() ? 5f : 4f);
 
         P2PManager.instance.DisconnectFromPeer();
 

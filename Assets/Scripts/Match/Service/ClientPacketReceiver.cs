@@ -70,6 +70,11 @@ public class ClientPacketReceiver : MonoBehaviour
         {
             MatchManager.instance.AcknowledgeSurrender();
         }
+        else if (packet.type.CompareTo("HIT_EVENT") == 0)
+        {
+            HitEventPacket packet4 = JsonConvert.DeserializeObject<HitEventPacket>(data);
+            CharactersManager.instance.PlayerCharacterGetHit(packet4.player, packet4.damage, packet4.isDeflected);
+        }
     } 
 
     void receivePlayerCharacterFlyingInterrupted(FlyingInterruptedEventPacket packet)

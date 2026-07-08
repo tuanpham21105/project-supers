@@ -13,6 +13,9 @@ public class CharacterTakeDamageController : MonoBehaviour
     private CharacterObjectService characterObjectService;
     private CharacterDebuffController characterDebuffController;
 
+    // 
+    public event Action<int, bool> onGetHit;
+
     void Start()
     {
         if (characterStatsData == null) characterStatsData = GetComponent<CharacterStatsData>();
@@ -60,30 +63,35 @@ public class CharacterTakeDamageController : MonoBehaviour
         }
         else
         {
+            
         }
-            bool isFront = characterObjectService.IsPointFront(direction);
 
-            if (isFront)
+        bool isFront = characterObjectService.IsPointFront(direction);
+
+        if (isFront)
+        {
+            if (characterStatesData.blockFlag)
             {
-                if (characterStatesData.blockFlag)
-                {
-                    damage = (int)((float)damage * (1f - characterStatsData.blockThreshold));
-                    ApplyDamage(damage, isFront, direction);
-                    return;
-                }
-
-                if (characterStatesData.deflectFlag)
-                {
-                    switch (attackType)
-                    {
-                        case AttackTypes.normal_attack:
-                            attacker.GetComponent<CharacterDebuffController>().Deflected();
-                            return;
-                    }
-                }
+                damage = (int)((float)damage * (1f - characterStatsData.blockThreshold));
+                ApplyDamage(damage, isFront, direction);
+                onGetHit?.Invoke(damage, false);
+                return;
             }
 
-            ApplyDamage(damage, isFront, direction);
+            if (characterStatesData.deflectFlag)
+            {
+                switch (attackType)
+                {
+                    case AttackTypes.normal_attack:
+                        attacker.GetComponent<CharacterDebuffController>().Deflected();
+                        onGetHit?.Invoke(0, true);
+                        return;
+                }
+            }
+        }
+
+        ApplyDamage(damage, isFront, direction);
+        onGetHit?.Invoke(damage, false);
     }
 
 }

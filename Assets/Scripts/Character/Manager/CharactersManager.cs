@@ -36,6 +36,7 @@ public class CharactersManager : MonoBehaviour
     private List<GameObject> characters;
     private List<Action> flyingHandlers;
     private List<Action<String, String>> animationHandlers;
+    private List<Action<int, bool>> getHitHandlers;
 
     [Header("Prefab")]
     [SerializeField] private GameObject characterPrefab;
@@ -57,6 +58,7 @@ public class CharactersManager : MonoBehaviour
         characters = new List<GameObject>();
         flyingHandlers = new List<Action>();
         animationHandlers = new List<Action<String, String>>();
+        getHitHandlers = new List<Action<int, bool>>();
 
         onCharacterHealthChange += handleCharacterHealthChange;
 
@@ -80,6 +82,10 @@ public class CharactersManager : MonoBehaviour
             Action<String, String> animationHandler = HandleCharacterPlayAnimation(player);
             character.GetComponent<CharacterAnimationService>().onPlayAnimation += animationHandler;
             animationHandlers.Add(animationHandler);
+
+            Action<int, bool> getHitHandler = handleCharacterGetHit(player);
+            character.GetComponent<CharacterTakeDamageController>().onGetHit += getHitHandler;
+            getHitHandlers.Add(getHitHandler);
 
             characters.Add(character);
 
@@ -129,6 +135,7 @@ public class CharactersManager : MonoBehaviour
             if (characters[i] != null)
                 characters[i].GetComponent<CharacterMovementController>().endFlying -= flyingHandlers[i];
                 characters[i].GetComponent<CharacterAnimationService>().onPlayAnimation -= animationHandlers[i];
+                characters[i].GetComponent<CharacterTakeDamageController>().onGetHit -= getHitHandlers[i];
         }
         
         onCharacterHealthChange -= handleCharacterHealthChange;
@@ -320,7 +327,8 @@ public class CharactersManager : MonoBehaviour
         controller.ApplyPhysicsCollider(characterStatesDTO.physicsColliderRadius, characterStatesDTO.physicsColliderHeight);
         controller.ApplyStates(characterStatesDTO);
 
-        onCharacterHealthChange?.Invoke(player, (float)characterStatesDTO.currentEndurance / (float)character.GetComponent<CharacterStatsData>().endurance);
+        if (characterStatesDTO.currentEndurance != character.GetComponent<CharacterStatsData>().endurance)
+            onCharacterHealthChange?.Invoke(player, (float)characterStatesDTO.currentEndurance / (float)character.GetComponent<CharacterStatsData>().endurance);
     }
 
     // Switch Character mode
@@ -435,5 +443,27 @@ public class CharactersManager : MonoBehaviour
 
         if (characterCustomizies.frontHair?.itemSO != null)
             controller.SetHairColors(characterCustomizies.frontHair.primaryColor, characterCustomizies.frontHair.secondaryColor, characterCustomizies.frontHair.tertiaryColor);
+    }
+
+    Action<int, bool> handleCharacterGetHit(string player)
+    {
+        return (damage, isDeflected) =>
+        {
+            PlayerCharacterGetHit(player, damage, isDeflected);
+        };
+    }
+
+    public void PlayerCharacterGetHit(string player, int damage, bool isDeflected)
+    {
+        HostPacketSender.instance.sendHitEvent(player, damage, isDeflected);
+
+        GameObject character = characters[MatchManager.instance.GetPlayerIndex(player)];
+
+        Vector3 startPos = character.transform.position;
+
+        if (!isDeflected)
+            DamagePopupManager.instance.Show(startPos, player.Equals(PlayerData.instance.username), damage);
+        else 
+            DamagePopupManager.instance.ShowDeflected(startPos, player.Equals(PlayerData.instance.username));
     }
 }

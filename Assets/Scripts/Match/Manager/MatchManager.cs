@@ -208,6 +208,9 @@ public class MatchManager : MonoBehaviour
 
     public void StartSurrender()
     {
+        if (MatchFinishManager.instance.isFinish)
+            return;
+
         if (HostPacketSender.instance != null)
             HostPacketSender.instance.sendSurrender();
 
