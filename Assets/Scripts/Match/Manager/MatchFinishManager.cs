@@ -47,9 +47,6 @@ public class MatchFinishManager : MonoBehaviour
 
     IEnumerator EndMatch(string winner)
     {
-        if (!MatchManager.instance.IsPlayerHost())
-            yield return new WaitForSecondsRealtime(1f);
-
         PlayerMatchService.instance.FinishMatch(
             MatchData.matchId, 
             winner,
@@ -63,7 +60,7 @@ public class MatchFinishManager : MonoBehaviour
             }
         );
 
-        yield return new WaitForSecondsRealtime(MatchManager.instance.IsPlayerHost() ? 5f : 4f);
+        yield return new WaitForSecondsRealtime(5f);
 
         P2PManager.instance.DisconnectFromPeer();
 
