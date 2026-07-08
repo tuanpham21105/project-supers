@@ -10,8 +10,10 @@ public class CameraController : MonoBehaviour
     private Transform verticalRotator;
     private Transform cameraObject;
     [SerializeField] private Transform character;
+    [SerializeField] private SpeedLinesVfxController speedLinesVfxController;
     private float yaw;
     private float pitch;
+    private Camera _cam;
     [Header("Collision Settings")]
     [SerializeField] private float cameraRadius = 0.2f;
     [SerializeField] private Vector3 offset = new Vector3(0, 1.5f, -5f);
@@ -19,6 +21,12 @@ public class CameraController : MonoBehaviour
     [SerializeField] private LayerMask includeLayers = ~0;
     [Tooltip("Layers the camera should ignore.")]
     [SerializeField] private LayerMask excludeLayers;
+
+    [SerializeField] private int minFov = 70;
+    [SerializeField] private int maxFov = 120;
+    [SerializeField] private int maxPow2MoveSpeed = 10000;
+    [SerializeField] private float fovSmoothTime = 0.2f;
+    private float fovVelocity;
 
     void Awake()
     {
@@ -36,6 +44,8 @@ public class CameraController : MonoBehaviour
         horizontalRotator = transform;
         verticalRotator = transform.GetChild(0);
         cameraObject = verticalRotator.GetChild(0);
+
+        _cam = cameraObject.GetComponent<Camera>();
 
         // Initialize from current rotation
         yaw = horizontalRotator.eulerAngles.y;
@@ -93,5 +103,26 @@ public class CameraController : MonoBehaviour
     public void SetCharacter(Transform gameObject)
     {
         character = gameObject;
+    }
+
+    void FixedUpdate()
+    {
+        SetCameraWithMoveSpeed();
+    }
+
+    void SetCameraWithMoveSpeed()
+    {
+        float pow2MoveSpeed = character.GetComponent<CharacterStatesData>().currentPow2AllSpeed;
+
+        speedLinesVfxController.SetMoveSpeed(pow2MoveSpeed);
+
+        float t = Mathf.Clamp01(pow2MoveSpeed / maxPow2MoveSpeed);
+        float targetFov = Mathf.Lerp(minFov, maxFov, t);
+
+        _cam.fieldOfView = Mathf.SmoothDamp(
+            _cam.fieldOfView,
+            targetFov,
+            ref fovVelocity,
+            fovSmoothTime);
     }
 }

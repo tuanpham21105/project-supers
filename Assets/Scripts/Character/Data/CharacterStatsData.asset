@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a55cca460aea240ac0432f9fbe1a90, type: 3}
   m_Name: CharacterStatsData
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  sprintAdditionalSpeed: 15
-  flySpeed: 15
-  flySprintAdditionalSpeed: 25
+  moveSpeed: 15
+  sprintAdditionalSpeed: 30
+  flySpeed: 30
+  flySprintAdditionalSpeed: 40
   jumpForce: 10
   dashForce: 80
   dashDuration: 0.125
