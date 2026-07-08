@@ -25,6 +25,11 @@ public class CameraController : MonoBehaviour
         instance = this;
     }
 
+    void OnDestroy()
+    {
+        instance = null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

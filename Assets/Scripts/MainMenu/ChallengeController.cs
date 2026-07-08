@@ -22,6 +22,7 @@ public class ChallengeController : MonoBehaviour
 
     void OnDestroy()
     {
+        instance = null;
         WebSocketService.instance.OnMessageReceived -= handleWsMessage;
     }
 

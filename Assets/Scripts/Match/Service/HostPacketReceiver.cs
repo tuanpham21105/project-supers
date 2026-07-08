@@ -41,6 +41,7 @@ public class HostPacketReceiver : MonoBehaviour
 
     void OnDestroy()
     {
+        instance = null;
         foreach (Action<string> a in clientInputHandlers)
         {
             p2PManager.OnReliableData -= a;

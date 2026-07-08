@@ -26,6 +26,8 @@ public class PlayerInputHandler : MonoBehaviour
 
     void OnDestroy()
     {
+        instance = null;
+        
         CharactersManager.instance.onCharacterFlyingInterrupted -= HandleFlyingInterrupted;
 
         ClientPacketReceiver.instance.onFlyingInterrupted -= HandleFlyingInterrupted;

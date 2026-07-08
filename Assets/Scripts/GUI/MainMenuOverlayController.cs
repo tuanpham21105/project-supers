@@ -37,6 +37,8 @@ public class MainMenuOverlayController : MonoBehaviour
 
     private void OnDestroy()
     {
+        instance = null;
+        
         Application.logMessageReceived -= OnLogReceived;
 
         if (MatchMakingController.instance != null)

@@ -16,6 +16,11 @@ public class MainMenuSidebarUiController : MonoBehaviour
         instance = this;
     }
 
+    void OnDestroy()
+    {
+        instance = null;
+    }
+
     void Start()
     {
         // SetupSidebarUi();

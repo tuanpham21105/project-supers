@@ -13,4 +13,9 @@ public class MapData : MonoBehaviour
     {
         instance = this;
     }
+
+    void OnDestroy()
+    {
+        instance = null;
+    }
 }

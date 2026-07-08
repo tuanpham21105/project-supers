@@ -122,6 +122,8 @@ public class CharactersManager : MonoBehaviour
 
     void OnDestroy()
     {
+        instance = null;
+
         for (int i = 0; i < characters.Count; i++)
         {
             if (characters[i] != null)

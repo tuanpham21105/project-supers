@@ -16,6 +16,11 @@ public class MainMenuHeaderUiController : MonoBehaviour
         instance = this;
     }
 
+    void OnDestroy()
+    {
+        instance = null;
+    }
+
     void Start()
     {
         // SetHeaderUsername();

@@ -38,6 +38,8 @@ public class StoreUiController : WindowUiController
 
     public void OnDestroy()
     {
+        instance = null;
+        
         accessoriesColorPalleteUiController.onColorsChange -= handleColorsChange;
     }
 

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 435935074465477712}
   - component: {fileID: 6601398203980619561}
   - component: {fileID: 1976118207672884788}
+  - component: {fileID: 173090971728084900}
   m_Layer: 0
   m_Name: MatchManager
   m_TagString: Untagged
@@ -131,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9784463de78777536968c95d8538e674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsConnected: 1
   reconnectDelay: 2
   reconnectWait: 5
 --- !u!114 &1976118207672884788
@@ -145,6 +147,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2de1cc2cd558f2d88e24d28d89522ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &173090971728084900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4667420697186241756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66bbf43f0a8963364810a022b62b8559, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 5502654289541596181, guid: 9c1272450aed9fbedb6e5767c20d3a36, type: 3}
+  poolInitialSize: 50
 --- !u!1001 &1748965641454634394
 PrefabInstance:
   m_ObjectHideFlags: 0

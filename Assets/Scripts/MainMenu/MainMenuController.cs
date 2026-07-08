@@ -14,6 +14,11 @@ public class MainMenuController : MonoBehaviour
         instance = this;
     }
 
+    void OnDestroy()
+    {
+        instance = null;
+    }
+
     void Start()
     {
         SetupPlayerAccount();

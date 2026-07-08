@@ -102,6 +102,11 @@ public class HostPacketSender : MonoBehaviour
         P2PManager.instance.SendJsonUnreliable(packet);
     }
 
+    public void sendPlayerCharacterEvent()
+    {
+        
+    }
+
     public void sendLostFocus()
     {
         if (P2PManager.instance == null)

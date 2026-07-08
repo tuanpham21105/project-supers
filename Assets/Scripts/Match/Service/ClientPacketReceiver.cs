@@ -34,7 +34,7 @@ public class ClientPacketReceiver : MonoBehaviour
 
     void OnDestroy()
     {
-
+        instance = null;
         P2PManager.instance.OnReliableData -= handleReceiveMessage;
         P2PManager.instance.OnUnreliableData -= handleReceiveMessage;
     }

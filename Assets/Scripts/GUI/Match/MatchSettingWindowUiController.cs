@@ -14,6 +14,11 @@ public class MatchSettingWindowUiController : WindowUiController
         instance = this;
     }
 
+    void OnDestroy()
+    {
+        instance = null;
+    }
+
     public override void Initialize()
     {
         base.Initialize();

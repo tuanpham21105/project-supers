@@ -14,6 +14,11 @@ public class MainMenuCharacterModelController : MonoBehaviour
         instance = this;
     }
 
+    void OnDestroy()
+    {
+        instance = null;
+    }
+
     public void PutOnAccessory(AccessoryItemSO itemSo, AccessoryProperties properties)
     {
         characterAccessoriesController.PutOn(itemSo, properties);

@@ -21,6 +21,9 @@ public class MatchConnectionManager : MonoBehaviour
 
     void Start()
     {
+        if (MatchManager.instance.GetPlayers().Count <= 1) 
+            return;
+
         if (P2PManager.instance.IsConnected)
             P2PManager.instance.OnDisconnected += handleOnPeerDisconnected;
         else    

@@ -124,6 +124,8 @@ public class MatchManager : MonoBehaviour
 
     void OnDestroy()
     {
+        instance = null;
+        
         if (IsPlayerHost())
         {
             // TabVisibilityService.instance.OnTabVisible -= handleGainFocus;
