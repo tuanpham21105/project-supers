@@ -194,7 +194,7 @@ MonoBehaviour:
   damageForMaxScale: 1000
   allySizeMultiplier: 0.6
   horizontalRandomness: 2
-  duration: 1
+  duration: 2
   moveCurve:
     serializedVersion: 2
     m_Curve:
