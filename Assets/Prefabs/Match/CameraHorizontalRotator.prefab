@@ -181,4 +181,5 @@ MonoBehaviour:
     m_Bits: 448
   minFov: 70
   maxFov: 120
-  maxPow2MoveSpeed: 10000
+  maxPow2MoveSpeed: 5000
+  fovSmoothTime: 0.2
