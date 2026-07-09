@@ -13,7 +13,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private SpeedLinesVfxController speedLinesVfxController;
     private float yaw;
     private float pitch;
-    private Camera _cam;
+    [SerializeField] private Camera _cam;
+    [SerializeField] private Camera targetVfxCamera;
     [Header("Collision Settings")]
     [SerializeField] private float cameraRadius = 0.2f;
     [SerializeField] private Vector3 offset = new Vector3(0, 1.5f, -5f);
@@ -45,7 +46,7 @@ public class CameraController : MonoBehaviour
         verticalRotator = transform.GetChild(0);
         cameraObject = verticalRotator.GetChild(0);
 
-        _cam = cameraObject.GetComponent<Camera>();
+        // _cam = cameraObject.GetComponent<Camera>();
 
         // Initialize from current rotation
         yaw = horizontalRotator.eulerAngles.y;
@@ -124,5 +125,7 @@ public class CameraController : MonoBehaviour
             targetFov,
             ref fovVelocity,
             fovSmoothTime);
+
+        targetVfxCamera.fieldOfView = _cam.fieldOfView;
     }
 }

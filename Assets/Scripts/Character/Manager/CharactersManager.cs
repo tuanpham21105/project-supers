@@ -96,6 +96,7 @@ public class CharactersManager : MonoBehaviour
                 CameraController.instance.SetCharacter(character.transform);
                 ApplyCharacterCustomize(player, playerData.characterCustomizies);
                 ApplyCharacterAccessories(player, playerData.characterAccessories);
+                character.GetComponent<CharacterObjectsData>().targetVfx.SetActive(false);
             }
             else
             {

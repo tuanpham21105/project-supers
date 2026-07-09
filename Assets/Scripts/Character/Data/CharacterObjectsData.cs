@@ -69,6 +69,9 @@ public class CharacterObjectsData : MonoBehaviour
     public GameObject leftThighAccessories;
     public GameObject leftThighMesh;
 
+    [Header("VFX")]
+    public GameObject targetVfx;
+
     void Start()
     {
         if (characterObject == null) characterObject = gameObject;
