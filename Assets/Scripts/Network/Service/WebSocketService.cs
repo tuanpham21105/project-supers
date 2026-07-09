@@ -18,6 +18,7 @@ public class WebSocketService : MonoBehaviour
     public event Action<WsMessage> OnMessageReceived;
     public event Action OnConnected;
     public event Action OnDisconnected;
+    public bool IsConnected => _ws != null && _ws.State == WebSocketState.Open;
 
     void Awake()
     {

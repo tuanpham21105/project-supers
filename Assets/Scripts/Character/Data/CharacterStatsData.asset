@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: CharacterStatsData
   m_EditorClassIdentifier: 
   moveSpeed: 15
-  sprintAdditionalSpeed: 30
-  flySpeed: 30
+  sprintAdditionalSpeed: 15
+  flySpeed: 20
   flySprintAdditionalSpeed: 40
   jumpForce: 20
-  dashForce: 100
-  dashDuration: 0.125
+  dashForce: 40
+  dashDuration: 0.08
   dashCooldown: 1
   endurance: 5000
   knockOutThreshold: 0.35

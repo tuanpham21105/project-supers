@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using com.cyborgAssets.inspectorButtonPro;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class MainMenuController : MonoBehaviour
 
     void Start()
     {
-        SetupPlayerAccount();
+        SetupPlayerAccountAsync();
     }
 
     [ProButton]
@@ -30,7 +31,7 @@ public class MainMenuController : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void SetupPlayerAccount()
+    public async Task SetupPlayerAccountAsync()
     {
         if (PlayerAuthService.instance.IsLoggedIn())
         {
@@ -49,6 +50,12 @@ public class MainMenuController : MonoBehaviour
                 MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
 
                 MainMenuCharacterModelController.instance.SetCharacterCustomiziesFromPlayerData();
+
+                if (!WebSocketService.instance.IsConnected)
+                {
+                    await WebSocketService.instance.Connect();
+                    WebSocketService.instance.OnDisconnected += handleWsConnectFailed;
+                }
             }
         }
         else

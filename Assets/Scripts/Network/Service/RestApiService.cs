@@ -184,7 +184,8 @@ public class RestApiService : MonoBehaviour
                     }
                 }
 
-                Debug.LogError($"[REST] {method} {url} → {req.responseCode} | Error: {finalErrorMsg}");
+                Debug.LogWarning($"[REST] {method} {url} → {req.responseCode} | Error: {finalErrorMsg}");
+
                 onError?.Invoke(req.responseCode, finalErrorMsg);
                 yield break;
             }
