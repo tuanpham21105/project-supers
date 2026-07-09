@@ -91,7 +91,7 @@ public class CharacterSyncController : MonoBehaviour
         statesData.moveFlag = statesDto.moveFlag;
         statesData.jumpFlag = statesDto.jumpFlag;
         statesData.sprintFlag = statesDto.sprintFlag;
-        statesData.dashFlag = statesDto.dashFlag;
+        statesData.DashFlag = statesDto.dashFlag;
         statesData.dashCooldownFlag = statesDto.dashCooldownFlag;
         statesData.flyFlag = statesDto.flyFlag;
         statesData.flyUpFlag = statesDto.flyUpFlag;

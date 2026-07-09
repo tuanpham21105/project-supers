@@ -16,17 +16,17 @@ MonoBehaviour:
   sprintAdditionalSpeed: 30
   flySpeed: 30
   flySprintAdditionalSpeed: 40
-  jumpForce: 10
-  dashForce: 80
+  jumpForce: 20
+  dashForce: 100
   dashDuration: 0.125
   dashCooldown: 1
   endurance: 5000
-  knockOutThreshold: 0.01
+  knockOutThreshold: 0.35
   blockThreshold: 0.7
   normalAttackDamage: 100
-  strikeAttackDamage: 100
+  strikeAttackDamage: 200
   damageKnockAwayRatio: 0.4
   maxCombineAttackAngleSize: 60
-  sqrMoveSpeedDamageThreshold: 0.5
+  sqrMoveSpeedDamageThreshold: 0.3
   continueAttackWindow: 0.5
   deflectComboWindow: 0.5

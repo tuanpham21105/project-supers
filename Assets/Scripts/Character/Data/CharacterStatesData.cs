@@ -62,7 +62,7 @@ public class CharacterStatesData : MonoBehaviour
             moveFlag = false;
             jumpFlag = false;
             sprintFlag = false;
-            dashFlag = false;
+            DashFlag = false;
             flyFlag = false;
             flyUpFlag = false;
             flyDownFlag = false;
@@ -154,4 +154,21 @@ public class CharacterStatesData : MonoBehaviour
     public float currentPow2AllSpeed;
 
     public bool isFront;
+
+    //
+    public event Action<bool> onDashFlagChange;
+    public bool DashFlag
+    {
+        get
+        {
+            return dashFlag;
+        }
+        set
+        {
+            if (value != dashFlag)
+                onDashFlagChange?.Invoke(value);
+                
+            dashFlag = value;
+        }
+    }
 }

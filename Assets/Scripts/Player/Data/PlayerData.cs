@@ -182,7 +182,23 @@ public class PlayerData : MonoBehaviour
     public long exp;
     public long levelsUpExp;
 
+    private int masterVolume = 100;
+
+    public int MasterVolume
+    {
+        get
+        {
+            return masterVolume;
+        }
+        set
+        {
+            masterVolume = value;
+            onMasterVolumeChange?.Invoke(masterVolume);
+        }
+    }
+
     public event Action onPointsChange;
+    public event Action<int> onMasterVolumeChange;
     
     void Awake()
     {

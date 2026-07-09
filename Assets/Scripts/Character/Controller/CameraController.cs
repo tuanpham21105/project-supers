@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private int minFov = 70;
     [SerializeField] private int maxFov = 120;
-    [SerializeField] private int maxPow2MoveSpeed = 10000;
+    [SerializeField] private int maxPow2MoveSpeed = 5000;
     [SerializeField] private float fovSmoothTime = 0.2f;
     private float fovVelocity;
 

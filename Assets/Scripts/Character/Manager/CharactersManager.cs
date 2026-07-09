@@ -179,7 +179,7 @@ public class CharactersManager : MonoBehaviour
             states.moveFlag = statesData.moveFlag;
             states.jumpFlag = statesData.jumpFlag;
             states.sprintFlag = statesData.sprintFlag;
-            states.dashFlag = statesData.dashFlag;
+            states.dashFlag = statesData.DashFlag;
             states.dashCooldownFlag = statesData.dashCooldownFlag;
             states.flyFlag = statesData.flyFlag;
             states.flyUpFlag = statesData.flyUpFlag;

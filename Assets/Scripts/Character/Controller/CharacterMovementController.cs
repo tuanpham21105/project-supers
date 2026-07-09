@@ -86,7 +86,7 @@ public class CharacterMovementController : MonoBehaviour
                                          !characterStatesData.blockFlag;
 
         // Skip normal movement if dashing to prevent force accumulation
-        if (characterStatesData.dashFlag) return;
+        if (characterStatesData.DashFlag) return;
 
         // Prevent movement during body actions (like strike attacks)
         if (characterStatesData.bodyActionFlag)
@@ -239,7 +239,7 @@ public class CharacterMovementController : MonoBehaviour
 
     private IEnumerator DashCoroutine()
     {
-        characterStatesData.dashFlag = true;
+        characterStatesData.DashFlag = true;
         characterStatesData.bodyActionFlag = true; // Dash is a body action
 
         // Calculate dash direction: prioritizing actual movement direction (velocity)
@@ -269,7 +269,7 @@ public class CharacterMovementController : MonoBehaviour
 
         yield return new WaitForSeconds(characterStatsData.dashDuration);
 
-        characterStatesData.dashFlag = false;
+        characterStatesData.DashFlag = false;
         characterStatesData.bodyActionFlag = false;
         characterStatesData.dashCooldownFlag = true;
 
@@ -302,7 +302,7 @@ public class CharacterMovementController : MonoBehaviour
 
     public void Dash()
     {
-        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) 
+        if (characterStatesData.DashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) 
             if (!characterStatesData.attackFlag)
                 return;
 
