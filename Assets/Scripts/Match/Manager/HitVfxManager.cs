@@ -69,7 +69,7 @@ public class HitVfxManager : MonoBehaviour
         popup.ShowDeflected(worldPosition, isAlly, this);
 
         HitVfxParticleSystem vfx = GetDeflectVfxFromPool();
-        vfx.Show(worldPosition, 0, ReturnDeflectVfxToPool);
+        vfx.Show(worldPosition, vfx.maxDamage, ReturnDeflectVfxToPool);
     }
 
     private DamagePopup GetFromPool()

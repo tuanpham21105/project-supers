@@ -9,7 +9,7 @@ public class HitVfxParticleSystem : MonoBehaviour
     [Header("Size range")]
     [SerializeField] private float minSize = 1;
     [SerializeField] private float maxSize = 5;
-    [SerializeField] private int maxDamage = 1000;
+    [SerializeField] public int maxDamage = 1000;
 
     void Awake()
     {

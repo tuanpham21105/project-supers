@@ -302,7 +302,10 @@ public class CharacterMovementController : MonoBehaviour
 
     public void Dash()
     {
-        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) return;
+        if (characterStatesData.dashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) 
+            if (!characterStatesData.attackFlag)
+                return;
+
         StartCoroutine(DashCoroutine());
     }
 
