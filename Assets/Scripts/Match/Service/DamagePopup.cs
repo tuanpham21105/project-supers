@@ -61,7 +61,7 @@ public class DamagePopup : MonoBehaviour
     private Vector3 _startPos;
     private Vector3 _endPos;
     private float _baseFontSize;
-    private DamagePopupManager _manager;
+    private HitVfxManager _manager;
     private Coroutine _routine;
 
     private static Material _sharedAlwaysOnTopMaterial;
@@ -86,7 +86,7 @@ public class DamagePopup : MonoBehaviour
         }
     }
 
-    public void Show(Vector3 worldPosition, bool isAlly, float damage, DamagePopupManager manager)
+    public void Show(Vector3 worldPosition, bool isAlly, float damage, HitVfxManager manager)
     {
         _manager = manager;
         transform.position = worldPosition;
@@ -121,7 +121,7 @@ public class DamagePopup : MonoBehaviour
         _routine = StartCoroutine(AnimateRoutine());
     }
 
-    public void ShowDeflected(Vector3 worldPosition, bool isAlly,  DamagePopupManager manager)
+    public void ShowDeflected(Vector3 worldPosition, bool isAlly,  HitVfxManager manager)
     {
         _manager = manager;
         transform.position = worldPosition;

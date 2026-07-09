@@ -161,8 +161,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66bbf43f0a8963364810a022b62b8559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5502654289541596181, guid: 9c1272450aed9fbedb6e5767c20d3a36, type: 3}
-  poolInitialSize: 20
+  damgePopupPrefab: {fileID: 5502654289541596181, guid: 9c1272450aed9fbedb6e5767c20d3a36, type: 3}
+  hitVfxParticleSystem: {fileID: 6244955281769738188, guid: 22716a71c31425506ad0f0a1f4db3885, type: 3}
+  deflectVfxParticleSystem: {fileID: 8647840097648783507, guid: a5d28315bb71f29cda4e6e4966362308, type: 3}
+  damagePopupPoolInitialSize: 20
+  hitVfxPoolInitialSize: 12
+  deflectVfxPoolInitialSize: 8
 --- !u!1001 &1748965641454634394
 PrefabInstance:
   m_ObjectHideFlags: 0
