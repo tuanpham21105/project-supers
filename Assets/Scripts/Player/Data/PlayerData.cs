@@ -197,6 +197,8 @@ public class PlayerData : MonoBehaviour
         }
     }
 
+    public Emblem emblem = new Emblem();
+
     public event Action onPointsChange;
     public event Action<int> onMasterVolumeChange;
     

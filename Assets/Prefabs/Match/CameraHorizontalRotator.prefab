@@ -156,7 +156,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 503
+    m_Bits: 2551
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -264,7 +264,7 @@ MonoBehaviour:
     m_Bits: 55
   excludeLayers:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 4032
   minFov: 70
   maxFov: 120
   maxPow2MoveSpeed: 5000

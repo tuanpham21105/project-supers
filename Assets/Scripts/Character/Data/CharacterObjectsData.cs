@@ -29,6 +29,7 @@ public class CharacterObjectsData : MonoBehaviour
     [Header("Chest Accessories")]
     public GameObject neckAccessories;
     public GameObject backAccessories;
+    public GameObject chestAccessories;
     public GameObject chestMesh;
 
     [Header("Hip Accessories")]

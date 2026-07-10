@@ -143,6 +143,7 @@ public class MainMenuController : MonoBehaviour
                 PlayerData.instance.levels = response.levels;
                 PlayerData.instance.exp = response.exp;
                 PlayerData.instance.levelsUpExp = response.levelsUpExp;
+                PlayerData.instance.emblem = Emblem.FromJson(response.emblem);
                 Debug.Log($"[MainMenuController] Player inventory loaded");
                 
                 MainMenuHeaderUiController.instance.SetPoints();

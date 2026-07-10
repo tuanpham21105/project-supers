@@ -4,4 +4,5 @@ public class PlayerInventoryResponse
     public int levels;
     public long exp;
     public long levelsUpExp;
+    public string emblem;
 }

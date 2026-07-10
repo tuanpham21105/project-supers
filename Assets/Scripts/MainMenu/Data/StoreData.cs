@@ -76,4 +76,6 @@ public class StoreData : MonoBehaviour
                 return null;
         }
     }
+
+    [SerializeField] public List<Shape> shapesList = new List<Shape>();
 }

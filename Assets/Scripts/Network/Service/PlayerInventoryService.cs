@@ -76,4 +76,16 @@ public class PlayerInventoryService : MonoBehaviour
             onError
         ));
     }
+
+    public void SavePlayerEmblem(EmblemRequest request, Action<EmblemResponse> onSuccess, Action<long, string> onError)
+    {
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<EmblemResponse>(
+            "PATCH",
+            "/api/player/inventory/emblem",
+            request,
+            null,
+            onSuccess,
+            onError
+        ));
+    }
 }
