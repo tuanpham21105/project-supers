@@ -240,7 +240,6 @@ public class CharacterMovementController : MonoBehaviour
     private IEnumerator DashCoroutine()
     {
         characterStatesData.DashFlag = true;
-        characterStatesData.bodyActionFlag = true; // Dash is a body action
 
         // Calculate dash direction: prioritizing actual movement direction (velocity)
         Vector3 currentVelocity = characterObjectService.Velocity;
@@ -270,7 +269,6 @@ public class CharacterMovementController : MonoBehaviour
         yield return new WaitForSeconds(characterStatsData.dashDuration);
 
         characterStatesData.DashFlag = false;
-        characterStatesData.bodyActionFlag = false;
         characterStatesData.dashCooldownFlag = true;
 
         yield return new WaitForSeconds(characterStatsData.dashCooldown);
@@ -302,9 +300,11 @@ public class CharacterMovementController : MonoBehaviour
 
     public void Dash()
     {
-        if (characterStatesData.DashFlag || characterStatesData.dashCooldownFlag || characterStatesData.bodyActionFlag) 
-            if (!characterStatesData.attackFlag)
-                return;
+        if (characterStatesData.DashFlag || characterStatesData.dashCooldownFlag)
+            return;
+        
+        if (characterStatesData.bodyActionFlag && characterStatesData.currentProcessAction != CharacterProcessAction.strike_attack)
+            return;
 
         StartCoroutine(DashCoroutine());
     }
