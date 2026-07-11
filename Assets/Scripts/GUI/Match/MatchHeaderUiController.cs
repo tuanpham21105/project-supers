@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class MatchHeaderUiController : MonoBehaviour
 {
+    public static MatchHeaderUiController instance;
+
     [SerializeField] private GameObject leftSide;
     [SerializeField] private GameObject middlePart;
     [SerializeField] private GameObject rightSide;
@@ -17,6 +19,14 @@ public class MatchHeaderUiController : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI rightPlayerUsername;
     [SerializeField] private Image rightPlayerHealthBar;
+    
+    [SerializeField] private RawImage leftEmblem;
+    [SerializeField] private RawImage rightEmblem;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -27,6 +37,8 @@ public class MatchHeaderUiController : MonoBehaviour
 
     void OnDestroy()
     {
+        instance = null;
+
         if (CharactersManager.instance != null)
             CharactersManager.instance.onCharacterHealthChange -= SetPlayerHealth;
     }
@@ -55,6 +67,20 @@ public class MatchHeaderUiController : MonoBehaviour
         else
         {
             rightPlayerHealthBar.fillAmount = healthPercent;
+        }
+    }
+
+    public void SetPlayerEmblem(String player, Material material)
+    {
+
+        Texture tex = material.GetTexture("_ShadowTex");
+        if (PlayerData.instance.username.CompareTo(player) == 0)
+        {
+            leftEmblem.texture = tex;
+        }
+        else
+        {
+            rightEmblem.texture = tex;
         }
     }
 }

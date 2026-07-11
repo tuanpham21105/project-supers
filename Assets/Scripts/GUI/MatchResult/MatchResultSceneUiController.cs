@@ -17,6 +17,11 @@ public class MatchResultSceneUiController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI pointsTextField;
     [SerializeField] private TextMeshProUGUI diffTextField;
     [SerializeField] private TextMeshProUGUI remainSecondsTextField;
+    [SerializeField] private Image logoImage;
+    [SerializeField] private Sprite winSprite;
+    [SerializeField] private Sprite loseSprite;
+    [SerializeField] private Sprite tieSprite;
+    [SerializeField] private Sprite proccessingSprite;
     [SerializeField] private int autoReturnTime = 10;
     private Coroutine autoReturnCoroutine;
 
@@ -37,14 +42,17 @@ public class MatchResultSceneUiController : MonoBehaviour
                     if (response.winnerUsername.Equals(""))
                     {
                         tieLabel.SetActive(true);
+                        logoImage.sprite = tieSprite;
                     }
                     else if (response.winnerUsername.Equals(PlayerData.instance.username))
                     {
                         winLabel.SetActive(true);
+                        logoImage.sprite = winSprite;
                     }
                     else
                     {
                         loseLabel.SetActive(true);
+                        logoImage.sprite = loseSprite;
                     }
                 }
             },

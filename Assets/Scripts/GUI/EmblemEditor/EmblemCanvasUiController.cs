@@ -126,5 +126,7 @@ public class EmblemCanvasUiController : MonoBehaviour
 
         if (emblem.decals.Count > 0)
             SetSelectedIndex(0);
+        
+        selectedMarkerObject.SetActive(false);
     }
 }

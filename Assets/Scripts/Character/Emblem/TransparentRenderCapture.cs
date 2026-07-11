@@ -29,7 +29,6 @@ public class TransparentRenderCapture : MonoBehaviour
         captureCamera.gameObject.SetActive(false);
     }
 
-    [ProButton]
     public Material Capture(Emblem emblem)
     {
         captureCamera.enabled = true;

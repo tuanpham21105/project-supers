@@ -96,7 +96,7 @@ public class CharactersManager : MonoBehaviour
                 CameraController.instance.SetCharacter(character.transform);
                 ApplyCharacterCustomize(player, playerData.characterCustomizies);
                 ApplyCharacterAccessories(player, playerData.characterAccessories);
-                ApplyEmblem(character.GetComponent<CharacterAccessoriesController>(), PlayerData.instance.emblem);
+                ApplyEmblem(player, character.GetComponent<CharacterAccessoriesController>(), PlayerData.instance.emblem);
                 character.GetComponent<CharacterObjectsData>().targetVfx.SetActive(false);
             }
             else
@@ -112,7 +112,7 @@ public class CharactersManager : MonoBehaviour
                         CharacterAccessoriesSet accessoriesSet = CharacterAccessoriesSet.MapFromResponse(response);
                         ApplyCharacterAccessories(capturedPlayer, accessoriesSet);
                         OtherPlayerAccessoriesSetResponse otherResponse = response as OtherPlayerAccessoriesSetResponse;
-                        ApplyEmblem(character.GetComponent<CharacterAccessoriesController>(), Emblem.FromJson(otherResponse.emblem));
+                        ApplyEmblem(player, character.GetComponent<CharacterAccessoriesController>(), Emblem.FromJson(otherResponse.emblem));
 
                     },
                     (code, message) =>
@@ -472,8 +472,11 @@ public class CharactersManager : MonoBehaviour
             HitVfxManager.instance.ShowDeflected(startPos, player.Equals(PlayerData.instance.username));
     }
 
-    void ApplyEmblem(CharacterAccessoriesController accessoriesController, Emblem emblem)
+    void ApplyEmblem(string player, CharacterAccessoriesController accessoriesController, Emblem emblem)
     {
-        accessoriesController.SetEmblem(TransparentRenderCapture.instance.Capture(emblem));
+        Material emblemMat = TransparentRenderCapture.instance.Capture(emblem);
+        accessoriesController.SetEmblem(emblemMat);
+        if (emblem.decals.Count != 0)
+            MatchHeaderUiController.instance.SetPlayerEmblem(player, emblemMat);
     }
 }

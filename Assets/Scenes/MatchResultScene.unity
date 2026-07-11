@@ -179,7 +179,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 584d31df5d3446035ba5685c1ecee683, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e82535fcb31b188a885bd7c9b87dd440, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -976,6 +976,11 @@ MonoBehaviour:
   pointsTextField: {fileID: 496779618}
   diffTextField: {fileID: 112053971}
   remainSecondsTextField: {fileID: 19907911}
+  logoImage: {fileID: 509464528}
+  winSprite: {fileID: 21300000, guid: 00bca6eed1511b9d4a20bf82fd1e1a8d, type: 3}
+  loseSprite: {fileID: 21300000, guid: 4558fdaaff7d359a8b77002f86c09c8b, type: 3}
+  tieSprite: {fileID: 21300000, guid: 621199a73e28286b192685720b83fafc, type: 3}
+  proccessingSprite: {fileID: 21300000, guid: 10e76890dd3a9c18f95456bbb4915d04, type: 3}
   autoReturnTime: 10
 --- !u!1 &383849018
 GameObject:
@@ -1318,9 +1323,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5cbf0e340a7effeac9dc740e7a79d6cc, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
+  m_Sprite: {fileID: 21300000, guid: 10e76890dd3a9c18f95456bbb4915d04, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -2600,6 +2605,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 130644137}
     m_Modifications:
+    - target: {fileID: 2254070180607731212, guid: 93a0d32d69aedb57fa1f89de4a0d264a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5cbf0e340a7effeac9dc740e7a79d6cc, type: 3}
     - target: {fileID: 3143430000644915113, guid: 93a0d32d69aedb57fa1f89de4a0d264a, type: 3}
       propertyPath: m_Name
       value: Return To Main Menu Button
