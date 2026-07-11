@@ -231,6 +231,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: EmblemLayerItemUiController, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 8894896374147156047, guid: 26a3c0b14cd264f75ad9eea998f6fb81, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5f4d0a9cd89c9bbe186646e47fabdab0, type: 3}
     m_RemovedComponents:
     - {fileID: 5209361635127681782, guid: 26a3c0b14cd264f75ad9eea998f6fb81, type: 3}
     m_RemovedGameObjects:

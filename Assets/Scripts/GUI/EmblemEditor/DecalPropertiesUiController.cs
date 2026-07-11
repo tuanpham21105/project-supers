@@ -21,7 +21,7 @@ public class DecalPropertiesUiController : MonoBehaviour
     
     private float posStep = 0.01f;
     private float scaleStep = 0.1f;
-    private int rotateStep = 30;
+    private float rotateStep = 22.5f;
 
     void OnEnable()
     {
@@ -56,7 +56,7 @@ public class DecalPropertiesUiController : MonoBehaviour
 
     public void handleRotateChange()
     {
-        onRotateChange?.Invoke(Mathf.CeilToInt(rotateSlider.value) * rotateStep);
+        onRotateChange?.Invoke(Mathf.CeilToInt(rotateSlider.value * rotateStep));
     }
 
     public void SetProperties(Color color, float xPos, float yPos, float scale, int rotate)

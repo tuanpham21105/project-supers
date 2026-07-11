@@ -8,6 +8,7 @@ public class EmblemCanvasUiController : MonoBehaviour
     [SerializeField] private RectTransform content;
     [SerializeField] private RectTransform decalPrefab;
 
+    [SerializeField] private GameObject selectedMarkerObject;
     [SerializeField] private List<RectTransform> decalObjects = new List<RectTransform>();
 
     [SerializeField] private int decalSelectedIndex;
@@ -16,9 +17,12 @@ public class EmblemCanvasUiController : MonoBehaviour
 
     public void ClearContent()
     {
-        for (int i = content.childCount - 1; i >= 0; i--)
+        selectedMarkerObject.SetActive(false);
+        selectedMarkerObject.transform.SetParent(content, false);
+
+        for (int i = decalObjects.Count - 1; i >= 0; i--)
         {
-            Destroy(content.GetChild(i).gameObject);
+            Destroy(decalObjects[i].gameObject);
         }
 
         decalObjects.Clear();
@@ -32,19 +36,33 @@ public class EmblemCanvasUiController : MonoBehaviour
 
     public void RemoveDecalByIndex(int index)
     {
+        if (index == decalSelectedIndex)
+        {
+            selectedMarkerObject.SetActive(false);
+            selectedMarkerObject.transform.SetParent(content, false);
+        }
+
         Destroy(decalObjects[index].gameObject);
         decalObjects.RemoveAt(index);
+
+        if (decalObjects.Count == 0)
+            selectedMarkerObject.SetActive(false);
     }
 
     public void SetSelectedIndex(int index)
     {
         decalSelectedIndex = index;
+        selectedMarkerObject.transform.SetParent(SelectedDecal, false);
+        selectedMarkerObject.GetComponent<Image>().sprite = SelectedDecal.GetComponent<Image>().sprite;
+        selectedMarkerObject.SetActive(true);
     }
 
     public void SetShape(int shapeIndex)
     {
         Sprite sprite = StoreData.instance.shapesList[shapeIndex].shape;
         SelectedDecal.GetComponent<Image>().sprite = sprite;
+        
+        SetSelectedIndex(decalSelectedIndex);
     }
 
     public void SetColor(Color color)
@@ -105,5 +123,8 @@ public class EmblemCanvasUiController : MonoBehaviour
             SetRotate(decal.rotate);
             SetScale(decal.scale);
         }
+
+        if (emblem.decals.Count > 0)
+            SetSelectedIndex(0);
     }
 }
