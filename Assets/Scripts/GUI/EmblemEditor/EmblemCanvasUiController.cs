@@ -87,4 +87,23 @@ public class EmblemCanvasUiController : MonoBehaviour
     {
         SelectedDecal.localScale = new Vector3(scale, scale, scale);
     }
+
+    public void ApplyEmblem(Emblem emblem)
+    {
+        ClearContent();
+
+        for (int i = 0; i < emblem.decals.Count; i++)
+        {
+            Decal decal = emblem.decals[i];
+            AddNewDecal();
+            decalSelectedIndex = i;
+
+            SetShape(decal.shapeIndex);
+            SetColor(decal.color);
+            SetXPos(decal.x);
+            SetYPos(decal.y);
+            SetRotate(decal.rotate);
+            SetScale(decal.scale);
+        }
+    }
 }

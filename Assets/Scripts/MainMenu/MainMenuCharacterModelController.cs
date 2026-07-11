@@ -110,4 +110,9 @@ public class MainMenuCharacterModelController : MonoBehaviour
     {
         characterAccessoriesController.SetHairColors(primary, secondary, tertiary);
     }
+
+    public void SetEmblem(Material material)
+    {
+        characterAccessoriesController.SetEmblem(material);
+    }
 }

@@ -39,6 +39,18 @@ public class EmblemEditorWindowUiController : WindowUiController
 
     public override void OnCloseWindow()
     {
+        shapesListUiControiller.onShapeSelected -= HandleShapeSelected;
+
+        emblemLayersListUiController.onLayerSelected -= HandleLayerSelected;
+        emblemLayersListUiController.onAddNewLayer -= HandleAddNewLayer;
+        emblemLayersListUiController.onLayerDeleted -= HandleLayerDeleted;
+
+        decalPropertiesUiController.onColorSelected -= HandleColorSelected;
+        decalPropertiesUiController.onXPosChange -= HandleXPosChange;
+        decalPropertiesUiController.onYPosChange -= HandleYPosChange;
+        decalPropertiesUiController.onScaleChange -= HandleScaleChange;
+        decalPropertiesUiController.onRotateChange -= HandleRotateChange;
+        
         PlayerInventoryService.instance.SavePlayerEmblem(
             new EmblemRequest() {
                 emblem = tempEmblem.ToJson()
@@ -46,6 +58,7 @@ public class EmblemEditorWindowUiController : WindowUiController
             (response) =>
             {
                 PlayerData.instance.emblem = tempEmblem.Clone();
+                MainMenuCharacterModelController.instance.SetEmblem(TransparentRenderCapture.instance.Capture(tempEmblem));
             },
             (statusCode, error) =>
             {

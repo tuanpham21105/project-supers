@@ -73,6 +73,11 @@ public class CharacterObjectsData : MonoBehaviour
     [Header("VFX")]
     public GameObject targetVfx;
 
+    [Header("Emblem")]
+    public RenderTexture emblemRenderTexture;
+    public Material emblemMaterial;
+    public Projector emblemProjector;
+
     void Start()
     {
         if (characterObject == null) characterObject = gameObject;

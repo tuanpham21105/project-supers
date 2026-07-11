@@ -192,7 +192,7 @@ Projector:
   m_AspectRatio: 1
   m_Orthographic: 1
   m_OrthographicSize: 0.145
-  m_Material: {fileID: 2100000, guid: 8d52babcced4bc25996cec7974f1e4b9, type: 2}
+  m_Material: {fileID: 2100000, guid: c09b4fca9194b0dde9656f31675063eb, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
     m_Bits: 2039
@@ -591,6 +591,7 @@ MonoBehaviour:
   leftThighAccessories: {fileID: 3791644158866179267}
   leftThighMesh: {fileID: 6731418301863043194}
   targetVfx: {fileID: 3918502986670443991}
+  emblemProjector: {fileID: 2561432373445923320}
 --- !u!114 &8430288180539170764
 MonoBehaviour:
   m_ObjectHideFlags: 0

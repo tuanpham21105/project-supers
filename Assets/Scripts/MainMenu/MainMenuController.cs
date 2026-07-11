@@ -51,6 +51,8 @@ public class MainMenuController : MonoBehaviour
 
                 MainMenuCharacterModelController.instance.SetCharacterCustomiziesFromPlayerData();
 
+                MainMenuCharacterModelController.instance.SetEmblem(TransparentRenderCapture.instance.Capture(PlayerData.instance.emblem));
+
                 if (!WebSocketService.instance.IsConnected)
                 {
                     await WebSocketService.instance.Connect();
@@ -148,6 +150,7 @@ public class MainMenuController : MonoBehaviour
                 
                 MainMenuHeaderUiController.instance.SetPoints();
                 MainMenuHeaderUiController.instance.SetLevels();
+                MainMenuCharacterModelController.instance.SetEmblem(TransparentRenderCapture.instance.Capture(PlayerData.instance.emblem));
             },
             (code, message) =>
             {

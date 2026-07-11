@@ -96,6 +96,7 @@ public class CharactersManager : MonoBehaviour
                 CameraController.instance.SetCharacter(character.transform);
                 ApplyCharacterCustomize(player, playerData.characterCustomizies);
                 ApplyCharacterAccessories(player, playerData.characterAccessories);
+                ApplyEmblem(character.GetComponent<CharacterAccessoriesController>(), PlayerData.instance.emblem);
                 character.GetComponent<CharacterObjectsData>().targetVfx.SetActive(false);
             }
             else
@@ -105,11 +106,14 @@ public class CharactersManager : MonoBehaviour
                     player,
                     (response) =>
                     {
-                        CharacterCustomiziesSet character = new CharacterCustomiziesSet();
-                        character.convertFromResponse(response.character);
-                        ApplyCharacterCustomize(player, character);
-                        CharacterAccessoriesSet set = CharacterAccessoriesSet.MapFromResponse(response);
-                        ApplyCharacterAccessories(capturedPlayer, set);
+                        CharacterCustomiziesSet characterSet = new CharacterCustomiziesSet();
+                        characterSet.convertFromResponse(response.character);
+                        ApplyCharacterCustomize(player, characterSet);
+                        CharacterAccessoriesSet accessoriesSet = CharacterAccessoriesSet.MapFromResponse(response);
+                        ApplyCharacterAccessories(capturedPlayer, accessoriesSet);
+                        OtherPlayerAccessoriesSetResponse otherResponse = response as OtherPlayerAccessoriesSetResponse;
+                        ApplyEmblem(character.GetComponent<CharacterAccessoriesController>(), Emblem.FromJson(otherResponse.emblem));
+
                     },
                     (code, message) =>
                     {
@@ -466,5 +470,10 @@ public class CharactersManager : MonoBehaviour
             HitVfxManager.instance.Show(startPos, player.Equals(PlayerData.instance.username), damage);
         else 
             HitVfxManager.instance.ShowDeflected(startPos, player.Equals(PlayerData.instance.username));
+    }
+
+    void ApplyEmblem(CharacterAccessoriesController accessoriesController, Emblem emblem)
+    {
+        accessoriesController.SetEmblem(TransparentRenderCapture.instance.Capture(emblem));
     }
 }

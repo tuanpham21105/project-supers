@@ -374,4 +374,27 @@ public class CharacterAccessoriesController : MonoBehaviour
         block.SetColor("baseColorFactor", color);
         renderer.SetPropertyBlock(block, materialIndex);
     }
+
+    //
+    public void SetEmblem(Material material)
+    {
+        if (characterObjectsData.emblemMaterial != null)
+        {
+            // Lấy texture đang gán trong material RA TRƯỚC khi destroy material
+            Texture tex = characterObjectsData.emblemMaterial.GetTexture("_ShadowTex");
+
+            Destroy(characterObjectsData.emblemMaterial);
+            characterObjectsData.emblemMaterial = null;
+
+            // Destroy texture lấy được, ép kiểu về RenderTexture để gọi Release()
+            if (tex is RenderTexture rt)
+            {
+                rt.Release();
+                Destroy(rt);
+            }
+        }
+
+        characterObjectsData.emblemMaterial = material;
+        characterObjectsData.emblemProjector.material = material;
+    }
 }

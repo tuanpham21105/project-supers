@@ -41,9 +41,9 @@ public class PlayerInventoryService : MonoBehaviour
         ));
     }
 
-    public void GetPlayerAccessoriesSetByUsername(String username, Action<PlayerAccessoriesSetResponse> onSuccess, Action<long, string> onError)
+    public void GetPlayerAccessoriesSetByUsername(String username, Action<OtherPlayerAccessoriesSetResponse> onSuccess, Action<long, string> onError)
     {
-        StartCoroutine(RestApiService.instance.SendRequestWithJwt<PlayerAccessoriesSetResponse>(
+        StartCoroutine(RestApiService.instance.SendRequestWithJwt<OtherPlayerAccessoriesSetResponse>(
             "GET",
             "/api/player/inventory/accessories/" + username,
             null,
