@@ -117,6 +117,10 @@ public class MatchMakingController : MonoBehaviour
 
     public void handleMatchMakingSuccess(MatchResponse response)
     {
+        MatchData.hostPlayer = "";
+        MatchData.matchId = "";
+        MatchData.players.Clear();
+
         onStartMatchMakingSuccess?.Invoke();
 
         isMatchMaking = true;
