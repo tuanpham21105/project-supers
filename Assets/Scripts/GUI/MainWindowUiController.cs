@@ -11,6 +11,20 @@ public class MainWindowUiController : WindowUiController
     [SerializeField] private GameObject battleCostDisplayText;
     [SerializeField] private Button challengeButton;
 
+    public override void OnCloseWindow()
+    {
+        base.OnCloseWindow();
+
+        MainMenuCharacterModelController.instance.SetActiveRotateCharacter(false);
+    }
+
+    public override void OnOpenWindow()
+    {
+        base.OnOpenWindow();
+
+        MainMenuCharacterModelController.instance.SetActiveRotateCharacter(true);
+    }
+
     void OnDestroy()
     {
         MatchMakingController.instance.onStartMatchMakingSuccess -= handleStartMatchMakingSuccess;

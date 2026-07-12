@@ -54,6 +54,8 @@ public class StoreUiController : WindowUiController
         accessoriesColorPalleteUiController.SelectColorLevel(0);
 
         RecalculateTotalCost();
+
+        MainMenuCharacterModelController.instance.SetActiveRotateCharacter(true);
     }
 
     public override void OnCloseWindow()
@@ -61,6 +63,8 @@ public class StoreUiController : WindowUiController
         base.OnCloseWindow();
 
         MainMenuCharacterModelController.instance.SetPlayerCharacterAccessoriesFromPlayerData();
+
+        MainMenuCharacterModelController.instance.SetActiveRotateCharacter(false);
     }
 
     public void SelectType(StoreItemsType type)

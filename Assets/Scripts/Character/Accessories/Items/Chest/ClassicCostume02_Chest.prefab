@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 8016334663482915699}
   - component: {fileID: 1239995366215596795}
   - component: {fileID: 3182752274747754881}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: chest_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}

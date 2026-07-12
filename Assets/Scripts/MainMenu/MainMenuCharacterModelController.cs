@@ -8,6 +8,7 @@ public class MainMenuCharacterModelController : MonoBehaviour
     public static MainMenuCharacterModelController instance;
 
     [SerializeField] private CharacterAccessoriesController characterAccessoriesController;
+    [SerializeField] private DragRotateObject dragRotateObject;
 
     void Awake()
     {
@@ -114,5 +115,10 @@ public class MainMenuCharacterModelController : MonoBehaviour
     public void SetEmblem(Material material)
     {
         characterAccessoriesController.SetEmblem(material);
+    }
+
+    public void SetActiveRotateCharacter(bool state)
+    {
+        dragRotateObject.SetEnabled(state);
     }
 }

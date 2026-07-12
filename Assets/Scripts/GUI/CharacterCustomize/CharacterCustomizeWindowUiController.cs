@@ -65,6 +65,8 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         tempCharacterCustomizies = PlayerData.instance.characterCustomizies.Clone();
 
         OpenContentByType(CharacterCustomizeType.Races);
+
+        MainMenuCharacterModelController.instance.SetActiveRotateCharacter(true);
     }
 
     public override void OnCloseWindow()
@@ -86,6 +88,8 @@ public class CharacterCustomizeWindowUiController : WindowUiController
         hairCustomiziesUiController.onPickColor -= handlePickHairColors;
 
         Save();
+
+        MainMenuCharacterModelController.instance.SetActiveRotateCharacter(false);
     }
 
     void Save()
