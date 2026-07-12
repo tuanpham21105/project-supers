@@ -175,6 +175,7 @@ public class MatchConnectionManager : MonoBehaviour
     {
         Debug.Log($"[MatchConnectionManager] Reconnecting failed");
 
-        MatchFinishManager.instance.Finish();
+        Debug.LogWarning("Peer fail");
+        MatchFinishManager.instance.Finish("");
     }
 }

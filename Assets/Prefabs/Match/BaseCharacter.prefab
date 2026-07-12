@@ -591,6 +591,8 @@ MonoBehaviour:
   leftThighAccessories: {fileID: 3791644158866179267}
   leftThighMesh: {fileID: 6731418301863043194}
   targetVfx: {fileID: 3918502986670443991}
+  emblemRenderTexture: {fileID: 0}
+  emblemMaterial: {fileID: 0}
   emblemProjector: {fileID: 2561432373445923320}
 --- !u!114 &8430288180539170764
 MonoBehaviour:
@@ -630,7 +632,7 @@ MonoBehaviour:
   deflectedFlag: 0
   deadFlag: 0
   fallFlag: 0
-  currentEndurance: 0
+  currentEndurance: 10
   controlledMoveSpeed: 0
   inputAxes: {x: 0, y: 0}
   lookInput: {x: 0, y: 0, z: 0}

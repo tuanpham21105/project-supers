@@ -27,6 +27,8 @@ public class MatchFinishManager : MonoBehaviour
         if (isFinish)
             return;
 
+        Debug.LogWarning($"Match Finish {winner}");
+
         isFinish = true;
 
         if (winner.Equals(""))
@@ -52,7 +54,7 @@ public class MatchFinishManager : MonoBehaviour
             winner,
             (response) =>
             {
-                Debug.LogError($"[MatchFinishManager] {response.message}");
+                Debug.Log($"[MatchFinishManager] {response.message}");
             },
             (code, error) =>
             {
@@ -62,7 +64,7 @@ public class MatchFinishManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(5f);
 
-        P2PManager.instance.DisconnectFromPeer();
+        P2PManager.instance.DestroyPeer();
 
         SceneService.instance.LoadScene("MatchResultScene");
     }

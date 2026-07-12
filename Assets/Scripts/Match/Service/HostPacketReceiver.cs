@@ -55,6 +55,12 @@ public class HostPacketReceiver : MonoBehaviour
         {
             Packet packet = JsonConvert.DeserializeObject<Packet>(data);
 
+            if (packet.matchId != MatchData.matchId)
+            {
+                Debug.LogWarning($"[HostPacketReceiver] Ignored stale packet from matchId={packet.matchId}, current={MatchData.matchId}");
+                return;
+            }
+
             if (packet.type.CompareTo("ACTION") == 0)
             {
                 ActionEventPacket packet1 = JsonConvert.DeserializeObject<ActionEventPacket>(data);

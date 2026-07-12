@@ -43,6 +43,12 @@ public class ClientPacketReceiver : MonoBehaviour
     {
         Packet packet = JsonConvert.DeserializeObject<Packet>(data);
 
+        if (packet.matchId != MatchData.matchId)
+        {
+            Debug.LogWarning($"[ClientPacketReceiver] Ignored stale packet from matchId={packet.matchId}, current={MatchData.matchId}");
+            return;
+        }
+
         if (packet.type.CompareTo("FLYING_INTERRUPTED") == 0)
         {
             FlyingInterruptedEventPacket packet1 = JsonConvert.DeserializeObject<FlyingInterruptedEventPacket>(data);
@@ -68,6 +74,7 @@ public class ClientPacketReceiver : MonoBehaviour
         }
         else if (packet.type.CompareTo("SURRENDER") == 0)
         {
+            Debug.LogWarning("Receive Surrender");
             MatchManager.instance.AcknowledgeSurrender();
         }
         else if (packet.type.CompareTo("HIT_EVENT") == 0)

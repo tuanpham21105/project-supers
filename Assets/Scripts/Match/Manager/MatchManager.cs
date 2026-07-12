@@ -219,6 +219,8 @@ public class MatchManager : MonoBehaviour
 
     public void AcknowledgeSurrender()
     {
+        Debug.LogWarning("Acknowledge Surrender");
+
         ClientPacketSender.instance.sendSurrenderAcknowledge();
 
         MatchFinishManager.instance.Finish(PlayerData.instance.username);

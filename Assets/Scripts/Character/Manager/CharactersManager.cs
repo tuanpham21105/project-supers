@@ -410,6 +410,7 @@ public class CharactersManager : MonoBehaviour
             {
                 if (!player.Equals(p))
                 {
+                    Debug.LogWarning($"{player} health = 0");
                     MatchFinishManager.instance.Finish(p);
                 }
             }

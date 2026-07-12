@@ -12,7 +12,14 @@ public class ChallengeController : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Start()
@@ -24,6 +31,19 @@ public class ChallengeController : MonoBehaviour
     {
         instance = null;
         WebSocketService.instance.OnMessageReceived -= handleWsMessage;
+
+        // Dọn dẹp các handler đang chờ Peer Ready, tránh gọi vào object đã bị destroy
+        if (_pendingChallengeHandler != null)
+        {
+            P2PManager.instance.OnReady -= _pendingChallengeHandler;
+            _pendingChallengeHandler = null;
+        }
+
+        if (_pendingResponseChallengeHandler != null)
+        {
+            P2PManager.instance.OnReady -= _pendingResponseChallengeHandler;
+            _pendingResponseChallengeHandler = null;
+        }
     }
 
     void handleWsMessage(WsMessage wsMessage)
@@ -47,11 +67,24 @@ public class ChallengeController : MonoBehaviour
         }
     }
 
+    private Action _pendingChallengeHandler;
+
     public void SendChallenge(string username)
     {
         if (!P2PManager.instance.IsInitialized)
-        { 
-            P2PManager.instance.OnReady += SendChallengeWaitForPeerReady(username);
+        {
+            // Hủy đăng ký challenge đang chờ trước đó (nếu có) — tránh gửi trùng
+            if (_pendingChallengeHandler != null)
+                P2PManager.instance.OnReady -= _pendingChallengeHandler;
+
+            _pendingChallengeHandler = () =>
+            {
+                P2PManager.instance.OnReady -= _pendingChallengeHandler; // tự unsubscribe sau khi chạy
+                _pendingChallengeHandler = null;
+                RealSendChallenge(username);
+            };
+
+            P2PManager.instance.OnReady += _pendingChallengeHandler;
             P2PManager.instance.Init(PlayerData.instance.username);
         }
         else
@@ -60,17 +93,10 @@ public class ChallengeController : MonoBehaviour
         }
     }
 
-    Action SendChallengeWaitForPeerReady(string username)
-    {
-        return () =>
-        {
-            RealSendChallenge(username);
-        };
-    }
-
     void RealSendChallenge(string username)
     {
-        P2PManager.instance.OnReady -= SendChallengeWaitForPeerReady(username);
+        // Không cần -= ở đây nữa — việc unsubscribe đã được xử lý
+        // ngay bên trong _pendingChallengeHandler ở SendChallenge()
 
         PlayerMatchService.instance.ChallengePlayer(
             new ChallengeRequest()
@@ -88,11 +114,24 @@ public class ChallengeController : MonoBehaviour
         );
     }
 
+    private Action _pendingResponseChallengeHandler;
+
     public void ResponseChallenge(string id, bool state)
     {
         if (!P2PManager.instance.IsInitialized)
-        { 
-            P2PManager.instance.OnReady += ResponseChallengeWaitForPeerReady(id, state);
+        {
+            // Hủy đăng ký response đang chờ trước đó (nếu có) — tránh xử lý trùng
+            if (_pendingResponseChallengeHandler != null)
+                P2PManager.instance.OnReady -= _pendingResponseChallengeHandler;
+
+            _pendingResponseChallengeHandler = () =>
+            {
+                P2PManager.instance.OnReady -= _pendingResponseChallengeHandler; // tự unsubscribe sau khi chạy
+                _pendingResponseChallengeHandler = null;
+                RealResponseChallenge(id, state);
+            };
+
+            P2PManager.instance.OnReady += _pendingResponseChallengeHandler;
             P2PManager.instance.Init(PlayerData.instance.username);
         }
         else
@@ -101,21 +140,13 @@ public class ChallengeController : MonoBehaviour
         }
     }
 
-    Action ResponseChallengeWaitForPeerReady(string id, bool state)
-    {
-        return () =>
-        {
-            RealResponseChallenge(id, state);
-        };
-    }
-
     void RealResponseChallenge(string id, bool state)
     {
-        P2PManager.instance.OnReady -= ResponseChallengeWaitForPeerReady(id, state);
+        // Không cần -= ở đây nữa — việc unsubscribe đã được xử lý
+        // ngay bên trong _pendingResponseChallengeHandler ở ResponseChallenge()
 
         if (state)
         {
-
             MatchMakingController.instance.CancelMatchMaking();
         }
 

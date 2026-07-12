@@ -7,6 +7,7 @@ using UnityEngine;
 public class Packet
 {
     public string type;
+    public string matchId = MatchData.matchId;
 }
 
 [Serializable]
