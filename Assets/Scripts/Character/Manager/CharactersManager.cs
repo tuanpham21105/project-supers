@@ -468,7 +468,11 @@ public class CharactersManager : MonoBehaviour
         Vector3 startPos = character.transform.position;
 
         if (!isDeflected)
+        {
             HitVfxManager.instance.Show(startPos, player.Equals(PlayerData.instance.username), damage);
+            if (player == PlayerData.instance.username) 
+                MatchHurtOverlayUiController.instance.PlayerGetHit();
+        }
         else 
             HitVfxManager.instance.ShowDeflected(startPos, player.Equals(PlayerData.instance.username));
     }

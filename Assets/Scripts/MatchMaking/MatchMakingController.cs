@@ -112,7 +112,12 @@ public class MatchMakingController : MonoBehaviour
 
     void handlePeerError(string msg)
     {
-        
+        P2PManager.instance.OnReady -= handlePeerConnectionReady;
+        P2PManager.instance.OnError -= handlePeerError;
+
+        onStartMatchMakingFailed?.Invoke(msg);
+
+        Debug.LogError($"[MatchMaking] Start match making failed, can't connect to relay server");
     }
 
     public void handleMatchMakingSuccess(MatchResponse response)
@@ -260,6 +265,7 @@ public class MatchMakingController : MonoBehaviour
     {
         isMatchMaking = false;
         P2PManager.instance.OnReliableData -= handlePacketReceived;
+        P2PManager.instance.OnError -= handlePeerError;
         SceneService.instance.LoadScene("BattleScene");
     }
 }
