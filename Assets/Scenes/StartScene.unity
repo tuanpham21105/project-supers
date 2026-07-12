@@ -7274,7 +7274,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 392915915}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d199486f036a370a28606705d102fc93, type: 3}
   m_Name: 
@@ -13539,8 +13539,8 @@ MonoBehaviour:
         tertiaryColor: {r: 1, g: 1, b: 1, a: 1}
   characterCustomizies:
     races:
-      itemSO: {fileID: 11400000, guid: 1beae9bc59d99f5968780189f433471d, type: 2}
-      skinColor: {r: 1, g: 0, b: 0, a: 1}
+      itemSO: {fileID: 11400000, guid: b906e73d17fafb79db9f6e36f5f1072a, type: 2}
+      skinColor: {r: 1, g: 0.87647355, b: 0.7028302, a: 1}
     eyes:
       itemSO: {fileID: 11400000, guid: 9e78357ae788f7260bd81a79c5a3c06c, type: 2}
       irisColor: {r: 0, g: 0, b: 0, a: 1}

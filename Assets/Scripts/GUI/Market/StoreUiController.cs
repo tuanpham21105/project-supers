@@ -208,7 +208,7 @@ public class StoreUiController : WindowUiController
     private PlayerAccessoryItemRequest BuildAccessoryItemRequest(StoreItemsType type)
     {
         CharacterAccessory accessory = storeAccessories.TypeToAccessory(type);
-        if (string.IsNullOrEmpty(accessory.itemCode)) return null;
+        if (string.IsNullOrEmpty(accessory.itemCode) || accessory.itemCode == "NONE") return null;
 
         return new PlayerAccessoryItemRequest
         {

@@ -34,19 +34,32 @@ public class AccessoriesItemListUiController : WindowUiController
 
         if (remoteList.itemsList == null)
             return;
+        
+        AddItem(localList.findByCode("NONE"), new StoreItemResponse()
+        {
+            itemCode = "NONE",
+            owned = true
+        }).DeactivateOwned();
 
         foreach (StoreItemResponse remoteItem in remoteList.itemsList)
         {
             AccessoryItemSO localItem = localList.findByCode(remoteItem.itemCode);
             if (localItem == null) continue;
 
-            GameObject itemObject = Instantiate(itemPrefab, itemListObject);
-            AccessoriesItemUiController itemController = itemObject.GetComponent<AccessoriesItemUiController>();
-            itemController.SetItem(localItem.code, localItem.image, remoteItem.price, remoteItem.owned, remoteItem.properties);
-            itemController.onSelected += handleItemSelect;
-
-            itemUis.Add(localItem.code, itemController);
+            AddItem(localItem, remoteItem);
         }
+    }
+
+    AccessoriesItemUiController AddItem(AccessoryItemSO localItem, StoreItemResponse remoteItem)
+    {
+        GameObject itemObject = Instantiate(itemPrefab, itemListObject);
+        AccessoriesItemUiController itemController = itemObject.GetComponent<AccessoriesItemUiController>();
+        itemController.SetItem(localItem.code, localItem.image, remoteItem.price, remoteItem.owned, remoteItem.properties);
+        itemController.onSelected += handleItemSelect;
+
+        itemUis.Add(localItem.code, itemController);
+
+        return itemController;
     }
 
     void handleItemSelect(String itemCode, AccessoryProperties properties)

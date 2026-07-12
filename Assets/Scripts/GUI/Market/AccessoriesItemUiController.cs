@@ -55,4 +55,11 @@ public class AccessoriesItemUiController : MonoBehaviour
     public int GetPrice() => isOwned ? 0 : price;
 
     public AccessoryProperties GetAccessoryProperties() => accessoryProperties;
+
+    public void DeactivateOwned()
+    {
+        valueTitleObject.SetActive(false);
+        ownedTitleObject.SetActive(false);
+        isOwned = true;
+    }
 }
