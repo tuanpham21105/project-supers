@@ -52,6 +52,11 @@ public class EmblemLayersListUiController : MonoBehaviour
 
         onAddNewLayer?.Invoke();
         SelectItem(items.Count - 1);
+
+        if (items.Count == maxLayers)
+        {
+            addNewButton.interactable = false;
+        }
     }
 
     public void InitNewLayer()
@@ -105,6 +110,11 @@ public class EmblemLayersListUiController : MonoBehaviour
 
         int newIndex = selectedIndex >= index ? Mathf.Clamp(selectedIndex - 1, 0, items.Count - 1) : selectedIndex;
         SelectItem(newIndex);
+
+        if (items.Count < maxLayers)
+        {
+            addNewButton.interactable = true;
+        }
     }
 
     private bool IsValidIndex(int index)

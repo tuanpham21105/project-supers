@@ -29,6 +29,8 @@ public class LoginWindowUiController : WindowUiController
             (response) =>
             {
                 Debug.Log("[LoginWindowUiController] Login successful.");
+                PlayerData.instance.email = "";
+                PlayerData.instance.username = "";
                 SceneService.instance.ReloadCurrentScene();
             },
             (code, message) =>

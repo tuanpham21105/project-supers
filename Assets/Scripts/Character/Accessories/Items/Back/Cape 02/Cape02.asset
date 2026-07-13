@@ -15,7 +15,7 @@ MonoBehaviour:
   code: BACK2
   itemName: Cape2
   part: 4
-  image: {fileID: 21300000, guid: 1711f624a0038f6aba0d678404ca9c4b, type: 3}
+  image: {fileID: 21300000, guid: fb48ee9833164945aa0c191ce9e5df59, type: 3}
   itemPrefab: {fileID: 6486913095051103598, guid: 7d5ead473abd7f8199469357040920a6, type: 3}
   defaultProperties:
     primaryColor: {r: 1, g: 0, b: 0, a: 1}

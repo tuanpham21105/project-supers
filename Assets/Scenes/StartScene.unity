@@ -13549,7 +13549,7 @@ MonoBehaviour:
     mouth:
       itemSO: {fileID: 11400000, guid: 08b3856dfff5593838e5f9902f725fd7, type: 2}
     topHair:
-      itemSO: {fileID: 11400000, guid: 99b14e63b26ab442ba5176d215d74d14, type: 2}
+      itemSO: {fileID: 11400000, guid: 4359c010c948bfb0d839b8d42e1f6b4d, type: 2}
       primaryColor: {r: 0, g: 0, b: 0, a: 1}
       secondaryColor: {r: 0, g: 0, b: 0, a: 1}
       tertiaryColor: {r: 0, g: 0, b: 0, a: 1}
@@ -13559,7 +13559,7 @@ MonoBehaviour:
       secondaryColor: {r: 0, g: 0, b: 0, a: 1}
       tertiaryColor: {r: 0, g: 0, b: 0, a: 1}
     sideHair:
-      itemSO: {fileID: 11400000, guid: 5eaca7ada8a2db7fa8fc8d352a41f90d, type: 2}
+      itemSO: {fileID: 11400000, guid: 52660d728f11f8adf81b5cc14ea2ddae, type: 2}
       primaryColor: {r: 0, g: 0, b: 0, a: 1}
       secondaryColor: {r: 0, g: 0, b: 0, a: 1}
       tertiaryColor: {r: 0, g: 0, b: 0, a: 1}

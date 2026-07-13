@@ -15,7 +15,7 @@ MonoBehaviour:
   code: GLOVES1
   itemName: Gloves1
   part: 6
-  image: {fileID: 21300000, guid: e1c47a9507acf6dcda950219fecbb347, type: 3}
+  image: {fileID: 21300000, guid: 913178cea792f6ac3a9e2cef66a77378, type: 3}
   itemPrefab: {fileID: 2583108241132471431, guid: e2387a13b590c4678b4f1b79a0094b0b, type: 3}
   defaultProperties:
     primaryColor: {r: 1, g: 0, b: 0, a: 1}

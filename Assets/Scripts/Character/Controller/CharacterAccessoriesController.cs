@@ -263,6 +263,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         target.GetComponent<MeshRenderer>().sharedMaterial = original;
     }
 
+    [ProButton]
     void SetCharacterEyes(CharacterCustomizeItemSO itemSO)
     {
         CharacterCustomizeEyesSO eyesSO = itemSO as CharacterCustomizeEyesSO;
@@ -279,6 +280,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         renderer.sharedMaterials = materials;
     }
 
+    [ProButton]
     void SetCharacterMouth(CharacterCustomizeItemSO itemSO)
     {
         CharacterCustomizeMouthSO mouthSO = itemSO as CharacterCustomizeMouthSO;
@@ -286,6 +288,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         SetMaterial(mouthSO.mouthMaterial, characterObjectsData.mouthMesh);
     }
 
+    [ProButton]
     void SetCharacterHair(AccessoriesPiecePart part, CharacterCustomizeItemSO itemSO)
     {
         CharacterCustomizeHairSO hairSO = itemSO as CharacterCustomizeHairSO;
@@ -318,6 +321,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         SetMesh(hairSO.hair, hairMesh);
     }
 
+    [ProButton]
     public void SetRacesColor(Color skinColor)
     {
         SetColorInternal(characterObjectsData.headMesh.GetComponent<Renderer>(), 0, skinColor);
@@ -334,6 +338,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         SetColorInternal(characterObjectsData.leftThighMesh.GetComponent<Renderer>(), 0, skinColor);
     }
 
+    [ProButton]
     public void SetEyesColors(Color irisColor, Color scleraColor, Color eyelidColor)
     {
         Renderer renderer = characterObjectsData.eyesMesh.GetComponent<Renderer>();
@@ -342,6 +347,7 @@ public class CharacterAccessoriesController : MonoBehaviour
         SetColorInternal(renderer, 2, eyelidColor);
     }
 
+    [ProButton]
     public void SetHairColors(Color primaryColor, Color secondaryColor, Color tertiaryColor)
     {
         Renderer fRenderer = characterObjectsData.frontHairMesh.GetComponent<Renderer>();

@@ -49,6 +49,8 @@ public class SignUpUiWindow : WindowUiController
             (response) =>
             {
                 Debug.Log("[SignUpWindowUiController] Sign up successful.");
+                PlayerData.instance.email = "";
+                PlayerData.instance.username = "";
                 SceneService.instance.ReloadCurrentScene();
             },
             (code, message) =>

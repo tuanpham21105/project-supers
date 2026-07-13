@@ -15,7 +15,7 @@ MonoBehaviour:
   code: CHEST3
   itemName: Chest3
   part: 3
-  image: {fileID: 21300000, guid: 8984c8f057820c577be61701513a9635, type: 3}
+  image: {fileID: 21300000, guid: ec9731eec4ea3443abceec0f4f60063a, type: 3}
   itemPrefab: {fileID: 8473233712316375262, guid: 137df9f3fcd04e8768da99f1ac5a5cf6, type: 3}
   defaultProperties:
     primaryColor: {r: 1, g: 0, b: 0, a: 1}

@@ -15,7 +15,7 @@ MonoBehaviour:
   code: HAT3
   itemName: Hat3
   part: 0
-  image: {fileID: 21300000, guid: 8ec519cc15e4c623bbd52a3889862d76, type: 3}
+  image: {fileID: 21300000, guid: da3dbbcd0004a8883b592e0de59f73ce, type: 3}
   itemPrefab: {fileID: 8101992400668956851, guid: 64c2963dc413609d6a4ac6550bde772c, type: 3}
   defaultProperties:
     primaryColor: {r: 0.21975517, g: 1, b: 0, a: 1}

@@ -21,20 +21,20 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PBRGraph
-  m_Shader: {fileID: -6465566751694194690, guid: 478ce3626be7a5f4ea58d6b13f05a2e4, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 59541e6caf586ca4f96ccf48a4813a51, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _BUILTIN_ALPHATEST_ON
   - _BUILTIN_AlphaClip
-  - _VOLUME_TRANSMISSION_OFF
+  - _VERTEX_COLORS_ON
   m_InvalidKeywords:
   - _ALPHATEST_ON
-  - _VERTEX_COLORS_ON
+  - _VOLUME_TRANSMISSION_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: -1
   stringTagMap:
     RenderType: TransparentCutout
   disabledShaderPasses: []
@@ -127,9 +127,10 @@ Material:
     - _SHEEN: 0
     - _SPECULAR: 0
     - _TEXTURE_TRANSFORM: 0
+    - _VERTEX_COLORS: 1
     - _VOLUME_ON: 0
     - _VOLUME_TRANSMISSION: 0
-    - alphaCutoff: 1
+    - alphaCutoff: 0.5
     - anisotropyRotation: 0
     - anisotropyStrength: 0
     - anisotropyTextureRotation: 0
@@ -164,7 +165,7 @@ Material:
     - occlusionStrength: 1
     - occlusionTextureRotation: 0
     - occlusionTextureTexCoord: 0
-    - roughnessFactor: 1
+    - roughnessFactor: 0
     - sheenColorTextureRotation: 0
     - sheenColorTextureTexCoord: 0
     - sheenRoughnessFactor: 0

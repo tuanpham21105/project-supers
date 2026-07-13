@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   code: EYES 2
   itemName: Eyes 2
-  itemSprite: {fileID: 21300000, guid: 8ec519cc15e4c623bbd52a3889862d76, type: 3}
+  itemSprite: {fileID: 21300000, guid: 5e2905954fb9e486f9cb0b63e4f32d4c, type: 3}
   type: 1
-  pupilMaterial: {fileID: 2100000, guid: da3b052b27c28f85f8faa412ab7c7b03, type: 2}
-  irisMaterial: {fileID: 2100000, guid: da3b052b27c28f85f8faa412ab7c7b03, type: 2}
-  scleraMaterial: {fileID: 2100000, guid: da3b052b27c28f85f8faa412ab7c7b03, type: 2}
-  eyelidMaterial: {fileID: 2100000, guid: da3b052b27c28f85f8faa412ab7c7b03, type: 2}
+  irisMaterial: {fileID: 2100000, guid: 3aff997b09e80730c9f8e5954dcf448a, type: 2}
+  scleraMaterial: {fileID: 2100000, guid: 3f4269b59dc664abb91d1c7435cd7d5a, type: 2}
+  eyelidMaterial: {fileID: 2100000, guid: 3837876fab03502c5a5fd8d8a3cf44eb, type: 2}

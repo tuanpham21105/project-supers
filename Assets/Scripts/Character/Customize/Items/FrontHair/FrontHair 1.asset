@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: FrontHair 1
   itemSprite: {fileID: 21300000, guid: aae762ad6dc4d5e32a2f430b7059486a, type: 3}
   type: 3
-  hair: {fileID: 7487258051666970041, guid: c5f7ebe643e9581979fd58e5ef949ddc, type: 3}
-  primaryMaterial: {fileID: 2100000, guid: 6b33f44830ac768c398ec762e813a2ea, type: 2}
-  secondaryMaterial: {fileID: 2100000, guid: 6b33f44830ac768c398ec762e813a2ea, type: 2}
-  tertiaryMaterial: {fileID: 2100000, guid: 6b33f44830ac768c398ec762e813a2ea, type: 2}
+  hair: {fileID: -6233137902780526822, guid: 5bfd1368e0c0a2b8b99fc2f58f3ab901, type: 3}
+  primaryMaterial: {fileID: 2100000, guid: 22d6357efd85d1499b36234f60117127, type: 2}
+  secondaryMaterial: {fileID: 2100000, guid: 9de5a25f6a516cc419952886803cfbe3, type: 2}
+  tertiaryMaterial: {fileID: 2100000, guid: 0f4a2970f321e6263b41131040771ede, type: 2}

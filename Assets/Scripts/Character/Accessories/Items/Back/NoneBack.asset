@@ -15,7 +15,7 @@ MonoBehaviour:
   code: NONE
   itemName: NONEBACK
   part: 4
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 031475c58047933c1bf51be43590e3ae, type: 3}
   itemPrefab: {fileID: 0}
   defaultProperties:
     primaryColor: {r: 1, g: 1, b: 1, a: 1}

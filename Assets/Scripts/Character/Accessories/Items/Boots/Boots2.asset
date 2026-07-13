@@ -15,7 +15,7 @@ MonoBehaviour:
   code: BOOTS2
   itemName: Boots2
   part: 9
-  image: {fileID: 21300000, guid: 7c67138da94eab19c9865174fbda0337, type: 3}
+  image: {fileID: 21300000, guid: c611402ea1936071490e99bfdd8eace2, type: 3}
   itemPrefab: {fileID: 2202109906390591679, guid: f2e665a5565ca89a6b97f543498cfa0f, type: 3}
   defaultProperties:
     primaryColor: {r: 1, g: 0, b: 0, a: 1}
