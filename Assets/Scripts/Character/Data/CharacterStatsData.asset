@@ -24,8 +24,8 @@ MonoBehaviour:
   knockOutThreshold: 0.35
   blockThreshold: 0.7
   normalAttackDamage: 100
-  strikeAttackDamage: 200
-  damageKnockAwayRatio: 0.4
+  strikeAttackDamage: 300
+  damageKnockAwayRatio: 0.3
   maxCombineAttackAngleSize: 60
   sqrMoveSpeedDamageThreshold: 0.3
   continueAttackWindow: 0.5

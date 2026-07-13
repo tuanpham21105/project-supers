@@ -404,6 +404,8 @@ public class CharactersManager : MonoBehaviour
 
     void handleCharacterHealthChange(String player, float healthPercent)
     {
+        MatchHeaderUiController.instance.SetPlayerHealth(player, healthPercent);
+
         if (healthPercent <= 0)
         {
             foreach (String p in MatchManager.instance.GetPlayers())

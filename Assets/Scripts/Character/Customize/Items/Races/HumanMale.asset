@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   code: HUMANMALE
   itemName: Human Male
-  itemSprite: {fileID: 21300000, guid: 77126c55c45337da59049881498f9a5d, type: 3}
+  itemSprite: {fileID: 21300000, guid: 2834808415630cbfe8e45db4b83cd1cc, type: 3}
   type: 0
   headMesh: {fileID: 5507760748409398153, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}
   earsMesh: {fileID: -7708679493021786734, guid: 0b599dafa84d50f98b955c0d6ed6216a, type: 3}

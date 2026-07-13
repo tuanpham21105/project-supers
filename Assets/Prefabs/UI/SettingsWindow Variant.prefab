@@ -1632,7 +1632,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1128319164545712522, guid: cbc1ac59fc1ec0f91abc33d2bf5386ce, type: 3}
       propertyPath: m_text
-      value: Game Setiings
+      value: Game Settings
       objectReference: {fileID: 0}
     - target: {fileID: 1128319164545712522, guid: cbc1ac59fc1ec0f91abc33d2bf5386ce, type: 3}
       propertyPath: m_fontSize

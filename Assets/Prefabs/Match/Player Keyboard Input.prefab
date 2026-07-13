@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7164072246339193565}
   - component: {fileID: 1963563638818687621}
   - component: {fileID: 6724145364871430464}
-  - component: {fileID: 347299579735352545}
   m_Layer: 0
   m_Name: Player Keyboard Input
   m_TagString: Untagged
@@ -47,76 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 5
-  forwardKey:
-    name: Move Forward
-    key: 119
-    mode: 0
-    action: 3
-  backwardKey:
-    name: Move Backward
-    key: 115
-    mode: 0
-    action: 3
-  strafeLeftKey:
-    name: Strafe Left
-    key: 97
-    mode: 0
-    action: 3
-  strafeRightKey:
-    name: Strafe Right
-    key: 100
-    mode: 0
-    action: 3
-  jumpKey:
-    name: Jump
-    key: 32
-    mode: 0
-    action: 3
-  sprintKey:
-    name: Sprint
-    key: 304
-    mode: 0
-    action: 3
-  dashKey:
-    name: Dash
-    key: 304
-    mode: 0
-    action: 3
-  toggleFlyKey:
-    name: Toggle Fly
-    key: 32
-    mode: 1
-    action: 2
-  flyUpKey:
-    name: Fly Up
-    key: 32
-    mode: 0
-    action: 1
-  flyDownKey:
-    name: Fly Down
-    key: 306
-    mode: 0
-    action: 1
-  normalAttackKey:
-    name: Normal Attack
-    key: 323
-    mode: 0
-    action: 3
-  strikeAttackKey:
-    name: Strike Attack
-    key: 101
-    mode: 0
-    action: 3
-  blockKey:
-    name: Block
-    key: 324
-    mode: 0
-    action: 1
-  deflectKey:
-    name: Deflect
-    key: 324
-    mode: 0
-    action: 0
 --- !u!114 &6724145364871430464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe35abd0cc1286f469b1820fbfb90320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInputHandler: {fileID: 0}
   cameraController: {fileID: 0}
   prevSprintInput: 0
   prevDashInput: 0
@@ -163,16 +93,3 @@ MonoBehaviour:
   doubleClickThreshold: 0.3
   holdThreshold: 0.2
   lookSmoothing: 0.05
---- !u!114 &347299579735352545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1075016108543639428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df71071585e6141e48be9ab8e5396064, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInputController: {fileID: 6724145364871430464}

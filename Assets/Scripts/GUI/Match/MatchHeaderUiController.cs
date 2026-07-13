@@ -31,21 +31,16 @@ public class MatchHeaderUiController : MonoBehaviour
     void Start()
     {
         SetupUi();
-
-        CharactersManager.instance.onCharacterHealthChange += SetPlayerHealth;
     }
 
     void OnDestroy()
     {
         instance = null;
-
-        if (CharactersManager.instance != null)
-            CharactersManager.instance.onCharacterHealthChange -= SetPlayerHealth;
     }
 
     void SetupUi()
     {
-        foreach (String player in MatchManager.instance.GetPlayers())
+        foreach (String player in MatchData.players)
         {
             if (PlayerData.instance.username.CompareTo(player) == 0)
             {
@@ -58,7 +53,7 @@ public class MatchHeaderUiController : MonoBehaviour
         }
     }
 
-    void SetPlayerHealth(String player, float healthPercent)
+    public void SetPlayerHealth(String player, float healthPercent)
     {
         if (PlayerData.instance.username.CompareTo(player) == 0)
         {

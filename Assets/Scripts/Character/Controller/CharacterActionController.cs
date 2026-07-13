@@ -29,6 +29,8 @@ public class CharacterActionController : MonoBehaviour
     
     public event Action onFlyingInterrupted;
 
+    private event Action onUpdateActions;
+
     void Start()
     {
         characterMovementController = GetComponent<CharacterMovementController>();
@@ -36,12 +38,18 @@ public class CharacterActionController : MonoBehaviour
         characterDefenseController = GetComponent<CharacterDefenseController>();
 
         characterMovementController.endFlying += HandleFlyingInterrupted;
+
+        if (MatchData.hostPlayer == PlayerData.instance.username) 
+            onUpdateActions += UpdateActions;
     }
 
     void Update()
     {
-        if (!MatchManager.instance.IsPlayerHost()) return;
+        onUpdateActions?.Invoke();
+    }
 
+    void UpdateActions()
+    {
         MoveDirection();
         Sprint();
         Dash();
@@ -58,6 +66,9 @@ public class CharacterActionController : MonoBehaviour
     void OnDestroy()
     {
         characterMovementController.endFlying -= HandleFlyingInterrupted;
+
+        if (MatchData.hostPlayer != PlayerData.instance.username) 
+            onUpdateActions -= UpdateActions;
     }
 
     void HandleFlyingInterrupted()
