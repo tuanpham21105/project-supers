@@ -21,6 +21,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public bool prevStrikeAttackInput;
     public bool prevBlockInput;
     public bool prevDeflectInput;
+    public bool prevTargetLockInput;
     public bool prevForwardInput;
     public bool prevBackwardInput;
     public bool prevLeftInput;
@@ -36,6 +37,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
     public bool strikeAttackInput;
     public bool blockInput;
     public bool deflectInput;
+    public bool targetLockInput;
     public float verticalRotationInput;
     public float horizontalRotationInput;
     public bool forwardInput;
@@ -92,6 +94,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         StrikeAttackInput();
         DeflectInput();
         BlockInput();
+        TargetLockInput();
     }
 
     // private void FixedUpdate()
@@ -244,6 +247,15 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         // StartCoroutine(HandleOnceActivation(prevDeflectInput, deflectInput, keybinds.deflectKey, CharacterActions.Deflect));
     }
 
+    public override void TargetLockInput()
+    {
+        prevTargetLockInput = targetLockInput;
+        targetLockInput = ProcessInput("Target Lock", keybinds.keybinds["Target Lock"], targetLockInput);
+
+        if (targetLockInput != prevTargetLockInput)
+            playerInputHandler.HandleTargetLock(targetLockInput);
+    }
+
     public override void RotationInput()
     {
         float targetMouseX = Input.GetAxis("Mouse X") * keybinds.mouseSensitivity;
@@ -253,8 +265,7 @@ public class PlayerKeyboadAndMouseInputController : PlayerInputController
         smoothLookInput.x = Mathf.Lerp(smoothLookInput.x, targetMouseX, 1f / lookSmoothing * Time.deltaTime);
         smoothLookInput.y = Mathf.Lerp(smoothLookInput.y, targetMouseY, 1f / lookSmoothing * Time.deltaTime);
 
-        if (cameraController != null) cameraController.Rotate(smoothLookInput);
-        playerInputHandler.ControlCharacterRotation(cameraController.GetCameraDirection());
+        playerInputHandler.ControlCharacterRotation(smoothLookInput);
     }
 
     public override void OpenSettingInput()

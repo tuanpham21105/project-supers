@@ -323,6 +323,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8932587340592901938, guid: 5c03391781709f460b7aad4dc4f0edbe, type: 3}
+      propertyPath: offset.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8932587340592901938, guid: 5c03391781709f460b7aad4dc4f0edbe, type: 3}
+      propertyPath: offset.z
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8932587340592901938, guid: 5c03391781709f460b7aad4dc4f0edbe, type: 3}
       propertyPath: speedLinesVfxController
       value: 
       objectReference: {fileID: 1983045855753587860}

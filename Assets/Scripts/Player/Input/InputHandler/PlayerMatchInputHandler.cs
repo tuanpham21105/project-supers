@@ -48,11 +48,13 @@ public class PlayerMatchInputHandler : PlayerInputHandler
 
     public override void ControlCharacterRotation(Vector3 direction)
     {
+        if (CameraController.instance != null) CameraController.instance.Rotate(direction);
+
         if (MatchManager.instance.IsPlayerHost())
-            CharactersManager.instance.ControlCharacterRotation(PlayerData.instance.username, direction);
+            CharactersManager.instance.ControlCharacterRotation(PlayerData.instance.username, CameraController.instance.GetCameraDirection());
         else
             if (ClientPacketSender.instance != null) 
-                ClientPacketSender.instance.sendControlRotation(direction);
+                ClientPacketSender.instance.sendControlRotation(CameraController.instance.GetCameraDirection());
     }
 
     public override void OpenSetting()
@@ -63,5 +65,10 @@ public class PlayerMatchInputHandler : PlayerInputHandler
     public override void HandleCloseSetting()
     {
         playerInputController.HandleCloseSetting();
+    }
+
+    public override void HandleTargetLock(bool state)
+    {
+        CharactersManager.instance.TargetLock(state);
     }
 }

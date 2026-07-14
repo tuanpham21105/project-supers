@@ -72,6 +72,7 @@ public class CharacterObjectsData : MonoBehaviour
 
     [Header("VFX")]
     public GameObject targetVfx;
+    public GameObject targetLockVfx;
 
     [Header("Emblem")]
     public RenderTexture emblemRenderTexture;

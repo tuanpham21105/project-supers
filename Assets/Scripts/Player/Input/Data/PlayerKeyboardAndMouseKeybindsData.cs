@@ -70,9 +70,10 @@ public class PlayerKeyboardAndMouseKeybindsData : MonoBehaviour
         { "Strike Attack", new Keybind(KeyCode.E,            KeyMode.Click,       ActivateAction.Any) },
         { "Block",         new Keybind(KeyCode.Mouse1,       KeyMode.Click,       ActivateAction.Hold) },
         { "Deflect",       new Keybind(KeyCode.Mouse1,       KeyMode.Click,       ActivateAction.Once) },
-        { "Skill 1",       new Keybind(KeyCode.Alpha1,       KeyMode.Click,       ActivateAction.Once) },
-        { "Skill 2",       new Keybind(KeyCode.Alpha2,       KeyMode.Click,       ActivateAction.Once) },
-        { "Skill 3",       new Keybind(KeyCode.Alpha3,       KeyMode.Click,       ActivateAction.Once) },
+        { "Target Lock",   new Keybind(KeyCode.Q,            KeyMode.Click,       ActivateAction.Toggle) },
+        // { "Skill 1",       new Keybind(KeyCode.Alpha1,       KeyMode.Click,       ActivateAction.Once) },
+        // { "Skill 2",       new Keybind(KeyCode.Alpha2,       KeyMode.Click,       ActivateAction.Once) },
+        // { "Skill 3",       new Keybind(KeyCode.Alpha3,       KeyMode.Click,       ActivateAction.Once) },
     };
 
     public static String convertKeybindsToString(Dictionary<string, Keybind> keybinds)

@@ -487,4 +487,42 @@ public class CharactersManager : MonoBehaviour
         if (emblem.decals.Count != 0)
             MatchHeaderUiController.instance.SetPlayerEmblem(player, emblemMat);
     }
+
+    public void TargetLock(bool state)
+    {
+        if (state)
+        {
+            Transform nearest = FindNearestEnemy();
+            if (nearest != null)
+            {
+                CameraController.instance.TargetLock(nearest);
+            }
+        }
+        else
+        {
+            CameraController.instance.RemoveTargetLock();
+        }
+    }
+
+    private Transform FindNearestEnemy()
+    {
+        String username = PlayerData.instance.username;
+        Transform playerTransform = characters[matchData.GetPlayerIndex(username)].transform;
+        float nearestDistance = float.MaxValue;
+        Transform nearest = null;
+
+        for (int i = 0; i < characters.Count; i++)
+        {
+            if (matchData.GetPlayers()[i] == username) continue;
+
+            float dist = Vector3.SqrMagnitude(characters[i].transform.position - playerTransform.position);
+            if (dist < nearestDistance)
+            {
+                nearestDistance = dist;
+                nearest = characters[i].transform;
+            }
+        }
+
+        return nearest;
+    }
 }

@@ -16,4 +16,6 @@ public abstract class PlayerInputHandler : MonoBehaviour
     public abstract void OpenSetting();
 
     public abstract void HandleCloseSetting();
+
+    public abstract void HandleTargetLock(bool state);
 }

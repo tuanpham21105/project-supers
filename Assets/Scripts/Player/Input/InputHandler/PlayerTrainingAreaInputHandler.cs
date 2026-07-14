@@ -41,7 +41,9 @@ public class PlayerTrainingAreaInputHandler : PlayerInputHandler
 
     public override void ControlCharacterRotation(Vector3 direction)
     {
-        TrainingCharacterManager.instance.ControlCharacterRotation(direction);
+        if (CameraController.instance != null) CameraController.instance.Rotate(direction);
+
+        TrainingCharacterManager.instance.ControlCharacterRotation(CameraController.instance.GetCameraDirection());
     }
 
     public override void OpenSetting()
@@ -52,5 +54,10 @@ public class PlayerTrainingAreaInputHandler : PlayerInputHandler
     public override void HandleCloseSetting()
     {
         playerInputController.HandleCloseSetting();
+    }
+
+    public override void HandleTargetLock(bool state)
+    {
+        DummyCharacterManager.instance.DummyTargetLock(state);
     }
 }

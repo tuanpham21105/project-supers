@@ -21,5 +21,6 @@ public abstract class PlayerInputController : MonoBehaviour
     public abstract void RotationInput();
     public abstract void BlockInput();
     public abstract void DeflectInput();
+    public abstract void TargetLockInput();
 }
 

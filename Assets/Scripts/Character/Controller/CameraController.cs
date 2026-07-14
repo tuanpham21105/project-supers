@@ -29,6 +29,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float fovSmoothTime = 0.2f;
     private float fovVelocity;
 
+    [Header("Target Lock Settings")]
+    private bool isTargetLocking;
+    private Transform targetLockTarget;
+    [SerializeField] private float targetLockMaxRotateSpeed = 360f;
+
     void Awake()
     {
         instance = this;
@@ -93,12 +98,32 @@ public class CameraController : MonoBehaviour
 
     public void Rotate(Vector2 lookInput)
     {
+        if (isTargetLocking) return;
+
         yaw += lookInput.x;
         pitch -= lookInput.y;
         pitch = Mathf.Clamp(pitch, -89f, 89f);
 
         horizontalRotator.rotation = Quaternion.Euler(0, yaw, 0);
         verticalRotator.localRotation = Quaternion.Euler(pitch, 0, 0);
+    }
+
+    public void TargetLock(Transform target)
+    {
+        isTargetLocking = true;
+        targetLockTarget = target;
+        target.GetComponent<CharacterObjectsData>().targetLockVfx.SetActive(true);
+    }
+
+    public void RemoveTargetLock()
+    {
+        targetLockTarget.GetComponent<CharacterObjectsData>().targetLockVfx.SetActive(false);
+        isTargetLocking = false;
+        targetLockTarget = null;
+
+        yaw = horizontalRotator.eulerAngles.y;
+        pitch = verticalRotator.localEulerAngles.x;
+        if (pitch > 180) pitch -= 360;
     }
 
     public void SetCharacter(Transform gameObject)
@@ -109,6 +134,19 @@ public class CameraController : MonoBehaviour
     void FixedUpdate()
     {
         SetCameraWithMoveSpeed();
+
+        if (isTargetLocking && targetLockTarget != null)
+        {
+            Vector3 dir = targetLockTarget.position - horizontalRotator.position;
+            if (dir.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(dir);
+                horizontalRotator.rotation = Quaternion.RotateTowards(
+                    horizontalRotator.rotation,
+                    targetRot,
+                    targetLockMaxRotateSpeed * Time.fixedDeltaTime);
+            }
+        }
     }
 
     void SetCameraWithMoveSpeed()

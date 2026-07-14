@@ -165,4 +165,12 @@ public class DummyCharacterManager : MonoBehaviour
             HitVfxManager.instance.ShowDeflected(startPos, true);
         }
     }
+
+    public void DummyTargetLock(bool state)
+    {
+        if (state && dummy != null)
+            CameraController.instance.TargetLock(dummy.transform);
+        else 
+            CameraController.instance.RemoveTargetLock();
+    }
 }

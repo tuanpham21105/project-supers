@@ -269,3 +269,4 @@ MonoBehaviour:
   maxFov: 120
   maxPow2MoveSpeed: 5000
   fovSmoothTime: 0.2
+  targetLockMaxRotateSpeed: 360
