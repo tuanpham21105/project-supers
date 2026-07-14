@@ -1471,6 +1471,9 @@ MonoBehaviour:
   characterTakeDamageController: {fileID: 6952369856490630090}
   hitAudioClip: {fileID: 8300000, guid: 73235c5402bb3700e90a6e112827f3d3, type: 3}
   deflectedAudioClip: {fileID: 8300000, guid: fa6ba546dda95296fa7ebbec5cd0b94f, type: 3}
+  minVolume: 0.75
+  maxVolume: 2
+  maxDamage: 1000
 --- !u!1001 &2160947177915246468
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,6 +10,10 @@ public class HitSfxController : MonoBehaviour
     [SerializeField] private AudioClip hitAudioClip;
     [SerializeField] private AudioClip deflectedAudioClip;
 
+    [SerializeField] private float minVolume = 0.5f;
+    [SerializeField] private float maxVolume = 2f;
+    [SerializeField] private int maxDamage = 1000;
+
     void Start()
     {
         if (characterTakeDamageController != null)
@@ -26,11 +30,12 @@ public class HitSfxController : MonoBehaviour
         }
     }
 
+    [ProButton]
     void handleGetHit(int damage, bool isDeflected) 
     {
-        if (!isDeflected)
-            GetComponent<AudioSource>().PlayOneShot(hitAudioClip);     
-        else 
-            GetComponent<AudioSource>().PlayOneShot(deflectedAudioClip);     
+        float volume = isDeflected ? 1f : Mathf.Lerp(minVolume, maxVolume, (float)damage / maxDamage);
+
+        AudioClip clip = isDeflected ? deflectedAudioClip : hitAudioClip;
+        GetComponent<AudioSource>().PlayOneShot(clip, volume);
     }
 }
