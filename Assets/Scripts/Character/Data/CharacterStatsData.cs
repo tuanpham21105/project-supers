@@ -6,7 +6,7 @@ public class CharacterStatsData : MonoBehaviour
 {
     // [Constant]
     [Header("Constant")]
-    [SerializeField] private CharacterStatsSO characterStatsSO;
+    [SerializeField] public CharacterStatsSO characterStatsSO;
     public float moveSpeed;
     public float sprintAdditionalSpeed;
     public float flySpeed;

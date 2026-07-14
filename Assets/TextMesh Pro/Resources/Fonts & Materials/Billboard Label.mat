@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DamagePopup Material
+  m_Name: Billboard Label
   m_Shader: {fileID: 4800000, guid: 1a64cea3f975d2e2c8e3c04f75d6d20c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -85,7 +85,7 @@ Material:
     - _DistortionStrengthScaled: 0
     - _DstBlend: 0
     - _EmissionEnabled: 0
-    - _FaceDilate: 0.12
+    - _FaceDilate: 0.34
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
     - _FixedSize: 0.001
@@ -106,12 +106,12 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0
+    - _OutlineWidth: 0.339
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.9
-    - _ScaleRatioB: 0.62325
-    - _ScaleRatioC: 0.62325
+    - _ScaleRatioB: 0.42525
+    - _ScaleRatioC: 0.42525
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

@@ -17,7 +17,7 @@ public class PlayerTrainingAreaInputHandler : PlayerInputHandler
         
         TrainingCharacterManager.instance.onCharacterFlyingInterrupted += HandleFlyingInterrupted;
 
-        MatchSettingWindowUiController.instance.onCloseWindow += HandleCloseSetting;
+        TrainingAreaSettingWindowUiController.instance.onCloseWindow += HandleCloseSetting;
     }
 
     void OnDestroy()
@@ -26,7 +26,7 @@ public class PlayerTrainingAreaInputHandler : PlayerInputHandler
         
         TrainingCharacterManager.instance.onCharacterFlyingInterrupted -= HandleFlyingInterrupted;
 
-        MatchSettingWindowUiController.instance.onCloseWindow -= HandleCloseSetting;
+        TrainingAreaSettingWindowUiController.instance.onCloseWindow -= HandleCloseSetting;
     }
 
     public void HandleFlyingInterrupted()
@@ -46,7 +46,7 @@ public class PlayerTrainingAreaInputHandler : PlayerInputHandler
 
     public override void OpenSetting()
     {
-        MatchSettingWindowUiController.instance.OpenWindow();
+        TrainingAreaSettingWindowUiController.instance.OpenWindow();
     }
 
     public override void HandleCloseSetting()

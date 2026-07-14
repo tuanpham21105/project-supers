@@ -5,6 +5,7 @@ using com.cyborgAssets.inspectorButtonPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[Serializable]
 public enum CharacterActions
 {
     MoveForward,

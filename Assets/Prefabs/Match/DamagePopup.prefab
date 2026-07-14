@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1829069050044354517}
   - component: {fileID: 7119391716468304934}
   - component: {fileID: 5502654289541596181}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DamagePopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_text: 1,000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e9fa33362b6b3564dbb8a85d49d1e206, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -185,12 +185,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tmp: {fileID: 7119391716468304934}
-  enemyColor: {r: 1, g: 0.15, b: 0.15, a: 1}
+  enemyColor: {r: 1, g: 0, b: 0, a: 1}
   allyColor: {r: 1, g: 0.85, b: 0.1, a: 1}
   minDistance: 3
   maxDistance: 4
-  minFontSize: 3.5
-  maxFontSize: 5
+  minFontSize: 4
+  maxFontSize: 8
   damageForMaxScale: 1000
   allySizeMultiplier: 0.6
   horizontalRandomness: 2

@@ -62,7 +62,7 @@ public class PlayerKeyboardAndMouseKeybindsData : MonoBehaviour
         { "Strafe Right",  new Keybind(KeyCode.D,            KeyMode.Click,       ActivateAction.Any) },
         { "Jump",          new Keybind(KeyCode.Space,        KeyMode.Click,       ActivateAction.Any) },
         { "Sprint",        new Keybind(KeyCode.LeftShift,    KeyMode.Click,       ActivateAction.Hold) },
-        { "Dash",          new Keybind(KeyCode.LeftShift,    KeyMode.Click,       ActivateAction.Any) },
+        { "Dash",          new Keybind(KeyCode.F,            KeyMode.Click,       ActivateAction.Any) },
         { "Toggle Fly",    new Keybind(KeyCode.Space,        KeyMode.DoubleClick, ActivateAction.Toggle) },
         { "Fly Up",        new Keybind(KeyCode.Space,        KeyMode.Click,       ActivateAction.Hold) },
         { "Fly Down",      new Keybind(KeyCode.LeftControl,  KeyMode.Click,       ActivateAction.Hold) },

@@ -12,9 +12,15 @@ public class MatchHurtOverlayUiController : MonoBehaviour
 
     private Coroutine showOverlayCoroutine;
 
-    void Start()
+    void Awake()
     {
         instance = this;
+
+        gameObject.SetActive(false);
+    }
+
+    void Start()
+    {
     }
 
     void OnDestroy()
@@ -27,13 +33,13 @@ public class MatchHurtOverlayUiController : MonoBehaviour
         if (showOverlayCoroutine != null)
             StopCoroutine(showOverlayCoroutine);
 
+        hurtOverlay.SetActive(true);
+
         showOverlayCoroutine = StartCoroutine(showHurtOverlay());
     }
 
     IEnumerator showHurtOverlay()
     {
-        hurtOverlay.SetActive(true);
-
         yield return new WaitForSeconds(onTime);
 
         hurtOverlay.SetActive(false);

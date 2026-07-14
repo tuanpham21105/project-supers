@@ -289,12 +289,11 @@ public class TrainingCharacterManager : MonoBehaviour
     {
         Vector3 startPos = character.transform.position;
 
+        character.GetComponent<CharacterStatesData>().currentEndurance =  character.GetComponent<CharacterStatsData>().endurance;
+
         if (!isDeflected)
         {
             HitVfxManager.instance.Show(startPos, true, damage);
-
-            float healthPercent = (float)character.GetComponent<CharacterStatesData>().currentEndurance / (float)character.GetComponent<CharacterStatsData>().endurance;
-            onCharacterHealthChange?.Invoke(healthPercent);
 
             MatchHurtOverlayUiController.instance.PlayerGetHit();
         }
