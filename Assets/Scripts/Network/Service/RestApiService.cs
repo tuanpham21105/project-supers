@@ -8,6 +8,8 @@ using UnityEngine.Networking;
 
 public class RestApiService : MonoBehaviour
 {
+    [SerializeField] private NetworkDataSO developmentNetwordData;
+    [SerializeField] private NetworkDataSO deploymentNetworkData;
     [SerializeField] private NetworkDataSO networkData;
 
     [SerializeField] private string baseUrl = "";
@@ -22,6 +24,14 @@ public class RestApiService : MonoBehaviour
 
     void Awake()
     {
+        #if UNITY_EDITOR
+            networkData = developmentNetwordData;
+        #else
+            networkData = Debug.isDebugBuild
+                ? developmentNetwordData
+                : deploymentNetworkData;
+        #endif
+        
         if (instance == null)
         {
             instance = this;

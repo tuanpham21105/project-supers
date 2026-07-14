@@ -112,11 +112,15 @@ public class CameraController : MonoBehaviour
     {
         isTargetLocking = true;
         targetLockTarget = target;
+        if (target.GetComponent<CharacterObjectsData>().targetVfx != null)
+            target.GetComponent<CharacterObjectsData>().targetVfx.SetActive(false);
         target.GetComponent<CharacterObjectsData>().targetLockVfx.SetActive(true);
     }
 
     public void RemoveTargetLock()
     {
+        if (targetLockTarget.GetComponent<CharacterObjectsData>().targetVfx != null)
+            targetLockTarget.GetComponent<CharacterObjectsData>().targetVfx.SetActive(true);
         targetLockTarget.GetComponent<CharacterObjectsData>().targetLockVfx.SetActive(false);
         isTargetLocking = false;
         targetLockTarget = null;

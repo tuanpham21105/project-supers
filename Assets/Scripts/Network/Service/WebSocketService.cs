@@ -7,7 +7,10 @@ using UnityEngine;
 
 public class WebSocketService : MonoBehaviour
 {
+    [SerializeField] private NetworkDataSO developmentNetwordData;
+    [SerializeField] private NetworkDataSO deploymentNetworkData;
     [SerializeField] private NetworkDataSO networkData;
+
 
     [SerializeField] private string baseUrl = "";
     private string basePath = "/ws/";
@@ -22,6 +25,14 @@ public class WebSocketService : MonoBehaviour
 
     void Awake()
     {
+        #if UNITY_EDITOR
+            networkData = developmentNetwordData;
+        #else
+            networkData = Debug.isDebugBuild
+                ? developmentNetwordData
+                : deploymentNetworkData;
+        #endif
+
         if (instance == null)
         {
             instance = this;
