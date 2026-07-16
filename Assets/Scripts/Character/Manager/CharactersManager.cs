@@ -38,12 +38,18 @@ public class CharactersManager : MonoBehaviour
     private List<Action> flyingHandlers;
     private List<Action<String, String>> animationHandlers;
     private List<Action<int, bool>> getHitHandlers;
+    private List<Action> dashStartHandlers;
+    private List<Action<float>> dashCooldownStartHandlers;
+    private List<Action> dashCooldownEndHandlers;
 
     [Header("Prefab")]
     [SerializeField] private GameObject characterPrefab;
 
     public event Action<String> onCharacterFlyingInterrupted;
     public event Action<String, float> onCharacterHealthChange;
+    public event Action<String> onCharacterDashStart;
+    public event Action<String, float> onCharacterDashCooldownStart;
+    public event Action<String> onCharacterDashCooldownEnd;
 
     void Awake()
     {
@@ -60,6 +66,9 @@ public class CharactersManager : MonoBehaviour
         flyingHandlers = new List<Action>();
         animationHandlers = new List<Action<String, String>>();
         getHitHandlers = new List<Action<int, bool>>();
+        dashStartHandlers = new List<Action>();
+        dashCooldownStartHandlers = new List<Action<float>>();
+        dashCooldownEndHandlers = new List<Action>();
 
         onCharacterHealthChange += handleCharacterHealthChange;
 
@@ -77,7 +86,7 @@ public class CharactersManager : MonoBehaviour
             character.transform.LookAt(MapData.instance.transform);
 
             Action handler = HandleCharacterFlyingInterrupted(player);
-            character.GetComponent<CharacterMovementController>().endFlying += handler;
+            character.GetComponent<CharacterActionController>().onFlyingInterrupted += handler;
             flyingHandlers.Add(handler);
 
             Action<String, String> animationHandler = HandleCharacterPlayAnimation(player);
@@ -87,6 +96,18 @@ public class CharactersManager : MonoBehaviour
             Action<int, bool> getHitHandler = handleCharacterGetHit(player);
             character.GetComponent<CharacterTakeDamageController>().onGetHit += getHitHandler;
             getHitHandlers.Add(getHitHandler);
+
+            Action dashStartHandler = HandleCharacterDashStart(player);
+            character.GetComponent<CharacterActionController>().onDashStart += dashStartHandler;
+            dashStartHandlers.Add(dashStartHandler);
+
+            Action<float> dashCooldownStartHandler = HandleCharacterDashCooldownStart(player);
+            character.GetComponent<CharacterActionController>().onDashCooldownStart += dashCooldownStartHandler;
+            dashCooldownStartHandlers.Add(dashCooldownStartHandler);
+
+            Action dashCooldownEndHandler = HandleCharacterDashCooldownEnd(player);
+            character.GetComponent<CharacterActionController>().onDashCooldownEnd += dashCooldownEndHandler;
+            dashCooldownEndHandlers.Add(dashCooldownEndHandler);
 
             characters.Add(character);
 
@@ -139,9 +160,12 @@ public class CharactersManager : MonoBehaviour
         for (int i = 0; i < characters.Count; i++)
         {
             if (characters[i] != null)
-                characters[i].GetComponent<CharacterMovementController>().endFlying -= flyingHandlers[i];
+                characters[i].GetComponent<CharacterActionController>().onFlyingInterrupted -= flyingHandlers[i];
                 characters[i].GetComponent<CharacterAnimationService>().onPlayAnimation -= animationHandlers[i];
                 characters[i].GetComponent<CharacterTakeDamageController>().onGetHit -= getHitHandlers[i];
+                characters[i].GetComponent<CharacterActionController>().onDashStart -= dashStartHandlers[i];
+                characters[i].GetComponent<CharacterActionController>().onDashCooldownStart -= dashCooldownStartHandlers[i];
+                characters[i].GetComponent<CharacterActionController>().onDashCooldownEnd -= dashCooldownEndHandlers[i];
         }
         
         onCharacterHealthChange -= handleCharacterHealthChange;
@@ -153,6 +177,27 @@ public class CharactersManager : MonoBehaviour
             if (HostPacketSender.instance != null) 
                 HostPacketSender.instance.sendPlayerCharacterFlyingInterrupted(player);
             onCharacterFlyingInterrupted?.Invoke(player);
+        };
+    }
+
+    Action HandleCharacterDashStart(String player)
+    {
+        return () => {
+            onCharacterDashStart?.Invoke(player);
+        };
+    }
+
+    Action<float> HandleCharacterDashCooldownStart(String player)
+    {
+        return (duration) => {
+            onCharacterDashCooldownStart?.Invoke(player, duration);
+        };
+    }
+
+    Action HandleCharacterDashCooldownEnd(String player)
+    {
+        return () => {
+            onCharacterDashCooldownEnd?.Invoke(player);
         };
     }
 

@@ -9,6 +9,7 @@ public class CharacterActionController : MonoBehaviour
     private CharacterMovementController characterMovementController;
     private CharacterAttackController characterAttackController;
     private CharacterDefenseController characterDefenseController;
+    private CharacterStatsData characterStatsData;
 
     [Header("Runtime")]
 
@@ -28,6 +29,9 @@ public class CharacterActionController : MonoBehaviour
     [SerializeField] private bool rightInput;
     
     public event Action onFlyingInterrupted;
+    public event Action onDashStart;
+    public event Action<float> onDashCooldownStart;
+    public event Action onDashCooldownEnd;
 
     private event Action onUpdateActions;
 
@@ -36,8 +40,12 @@ public class CharacterActionController : MonoBehaviour
         characterMovementController = GetComponent<CharacterMovementController>();
         characterAttackController = GetComponent<CharacterAttackController>();
         characterDefenseController = GetComponent<CharacterDefenseController>();
+        characterStatsData = GetComponent<CharacterStatsData>();
 
         characterMovementController.endFlying += HandleFlyingInterrupted;
+        characterMovementController.onDashStart += onDashStart;
+        characterMovementController.onDashCooldownStart += onDashCooldownStart;
+        characterMovementController.onDashCooldownEnd += onDashCooldownEnd;
 
         if (MatchData.hostPlayer == PlayerData.instance.username) 
             onUpdateActions += UpdateActions;
@@ -66,6 +74,9 @@ public class CharacterActionController : MonoBehaviour
     void OnDestroy()
     {
         characterMovementController.endFlying -= HandleFlyingInterrupted;
+        characterMovementController.onDashStart -= onDashStart;
+        characterMovementController.onDashCooldownStart -= onDashCooldownStart;
+        characterMovementController.onDashCooldownEnd -= onDashCooldownEnd;
 
         if (MatchData.hostPlayer != PlayerData.instance.username) 
             onUpdateActions -= UpdateActions;
@@ -224,4 +235,19 @@ public class CharacterActionController : MonoBehaviour
         characterMovementController.Rotate(direction);
     }
 
+    //
+    public void EmitDashStart()
+    {
+        onDashStart?.Invoke();
+    }
+
+    public void EmitDashCooldownStart()
+    {
+        onDashCooldownStart?.Invoke(characterStatsData.dashCooldown);
+    }
+
+    public void EmitDashCooldownEnd()
+    {
+        onDashCooldownEnd?.Invoke();
+    }
 }

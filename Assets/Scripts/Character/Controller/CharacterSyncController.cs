@@ -17,10 +17,12 @@ public class CharacterSyncController : MonoBehaviour
 {
     [Header("Dependencies")]
     private CharacterAnimationService characterAnimationController;
+    private CharacterActionController characterActionController;
 
     void Start()
     {
         characterAnimationController = GetComponent<CharacterAnimationService>();
+        characterActionController = GetComponent<CharacterActionController>();
     }
 
     [ProButton]
@@ -83,6 +85,9 @@ public class CharacterSyncController : MonoBehaviour
     {
         CharacterStatesData statesData = GetComponent<CharacterStatesData>();
 
+        bool oldDashFlag = statesData.DashFlag;
+        bool oldDashCooldownFlag = statesData.dashCooldownFlag;
+
         if (Enum.TryParse(statesDto.currentProcessAction, out CharacterProcessAction processAction))
         {
             statesData.currentProcessAction = processAction;
@@ -93,6 +98,18 @@ public class CharacterSyncController : MonoBehaviour
         statesData.sprintFlag = statesDto.sprintFlag;
         statesData.DashFlag = statesDto.dashFlag;
         statesData.dashCooldownFlag = statesDto.dashCooldownFlag;
+
+        if (!oldDashFlag && statesData.DashFlag)
+            characterActionController.EmitDashStart();
+
+        if (!oldDashCooldownFlag && statesData.dashCooldownFlag)
+        {
+            characterActionController.EmitDashCooldownStart();
+        }
+
+        if (oldDashCooldownFlag && !statesData.dashCooldownFlag)
+            characterActionController.EmitDashCooldownEnd();
+
         statesData.flyFlag = statesDto.flyFlag;
         statesData.flyUpFlag = statesDto.flyUpFlag;
         statesData.flyDownFlag = statesDto.flyDownFlag;

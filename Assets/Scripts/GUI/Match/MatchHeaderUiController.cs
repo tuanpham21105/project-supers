@@ -16,9 +16,11 @@ public class MatchHeaderUiController : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI leftPlayerUsername;
     [SerializeField] private Image leftPlayerHealthBar;
+    [SerializeField] private DashCooldownBarUiController leftPlayerDashCooldownBar;
 
     [SerializeField] private TextMeshProUGUI rightPlayerUsername;
     [SerializeField] private Image rightPlayerHealthBar;
+    [SerializeField] private DashCooldownBarUiController rightPlayerDashCooldownBar;
     
     [SerializeField] private RawImage leftEmblem;
     [SerializeField] private RawImage rightEmblem;
@@ -31,10 +33,21 @@ public class MatchHeaderUiController : MonoBehaviour
     void Start()
     {
         SetupUi();
+
+        CharactersManager.instance.onCharacterDashStart += handleDashStart;
+        CharactersManager.instance.onCharacterDashCooldownStart += handleDashStartCooldown;
+        CharactersManager.instance.onCharacterDashCooldownEnd += handleDashCooldownEnd;
     }
 
     void OnDestroy()
     {
+        if (CharactersManager.instance != null)
+        {
+            CharactersManager.instance.onCharacterDashStart -= handleDashStart;
+            CharactersManager.instance.onCharacterDashCooldownStart -= handleDashStartCooldown;
+            CharactersManager.instance.onCharacterDashCooldownEnd -= handleDashCooldownEnd;
+        }
+
         instance = null;
     }
 
@@ -77,5 +90,27 @@ public class MatchHeaderUiController : MonoBehaviour
         {
             rightEmblem.texture = tex;
         }
+    }
+
+    void handleDashStart(String player)
+    {
+        GetDashCooldownBar(player).StartDash();
+    }
+
+    void handleDashStartCooldown(String player, float duration)
+    {
+        GetDashCooldownBar(player).StartDashCooldown(duration);
+    }
+
+    void handleDashCooldownEnd(String player)
+    {
+        GetDashCooldownBar(player).EndDashCooldown();
+    }
+
+    DashCooldownBarUiController GetDashCooldownBar(String player)
+    {
+        if (PlayerData.instance.username.CompareTo(player) == 0)
+            return leftPlayerDashCooldownBar;
+        return rightPlayerDashCooldownBar;
     }
 }

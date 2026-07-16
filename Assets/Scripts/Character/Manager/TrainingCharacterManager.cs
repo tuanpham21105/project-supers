@@ -19,6 +19,9 @@ public class TrainingCharacterManager : MonoBehaviour
     private GameObject character;
     private Action flyingHandler;
     private Action<int, bool> getHitHandler;
+    private Action dashStartHandler;
+    private Action<float> dashCooldownStartHandler;
+    private Action dashCooldownEndHandler;
 
     [Header("Spawn")]
     [SerializeField] private GameObject characterPrefab;
@@ -29,6 +32,9 @@ public class TrainingCharacterManager : MonoBehaviour
     // ─────────────────────────────────────────────
     public event Action onCharacterFlyingInterrupted;
     public event Action<float> onCharacterHealthChange; // healthPercent 0-1
+    public event Action onCharacterDashStart;
+    public event Action<float> onCharacterDashCooldownStart;
+    public event Action onCharacterDashCooldownEnd;
 
     void Awake()
     {
@@ -57,10 +63,19 @@ public class TrainingCharacterManager : MonoBehaviour
         character.transform.LookAt(character.transform.position + Vector3.forward);
 
         flyingHandler = HandleCharacterFlyingInterrupted();
-        character.GetComponent<CharacterMovementController>().endFlying += flyingHandler;
+        character.GetComponent<CharacterActionController>().onFlyingInterrupted += flyingHandler;
 
         getHitHandler = HandleCharacterGetHit();
         character.GetComponent<CharacterTakeDamageController>().onGetHit += getHitHandler;
+
+        dashStartHandler = HandleDashStart();
+        character.GetComponent<CharacterActionController>().onDashStart += dashStartHandler;
+
+        dashCooldownStartHandler = HandleDashCooldownStart();
+        character.GetComponent<CharacterActionController>().onDashCooldownStart += dashCooldownStartHandler;
+
+        dashCooldownEndHandler = HandleDashCooldownEnd();
+        character.GetComponent<CharacterActionController>().onDashCooldownEnd += dashCooldownEndHandler;
 
         CameraController.instance.SetCharacter(character.transform);
         ApplyCharacterCustomize(playerData.characterCustomizies);
@@ -83,8 +98,11 @@ public class TrainingCharacterManager : MonoBehaviour
 
         if (character != null)
         {
-            character.GetComponent<CharacterMovementController>().endFlying -= flyingHandler;
+            character.GetComponent<CharacterActionController>().onFlyingInterrupted -= flyingHandler;
             character.GetComponent<CharacterTakeDamageController>().onGetHit -= getHitHandler;
+            character.GetComponent<CharacterActionController>().onDashStart -= dashStartHandler;
+            character.GetComponent<CharacterActionController>().onDashCooldownStart -= dashCooldownStartHandler;
+            character.GetComponent<CharacterActionController>().onDashCooldownEnd -= dashCooldownEndHandler;
         }
     }
 
@@ -93,6 +111,30 @@ public class TrainingCharacterManager : MonoBehaviour
         return () =>
         {
             onCharacterFlyingInterrupted?.Invoke();
+        };
+    }
+
+    Action HandleDashStart()
+    {
+        return () =>
+        {
+            onCharacterDashStart?.Invoke();
+        };
+    }
+
+    Action<float> HandleDashCooldownStart()
+    {
+        return (duration) =>
+        {
+            onCharacterDashCooldownStart?.Invoke(duration);
+        };
+    }
+
+    Action HandleDashCooldownEnd()
+    {
+        return () =>
+        {
+            onCharacterDashCooldownEnd?.Invoke();
         };
     }
 

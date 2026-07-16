@@ -17,6 +17,9 @@ public class CharacterMovementController : MonoBehaviour
 
     // [Event]
     public event Action endFlying;
+    public event Action onDashStart;
+    public event Action<float> onDashCooldownStart;
+    public event Action onDashCooldownEnd;
 
     private void Start()
     {
@@ -266,12 +269,18 @@ public class CharacterMovementController : MonoBehaviour
 
         characterObjectService.Dash(dashDirection.normalized, characterStatsData.dashForce, characterStatsData.dashDuration);
 
+        onDashStart?.Invoke();
+
         yield return new WaitForSeconds(characterStatsData.dashDuration);
+
+        onDashCooldownStart?.Invoke(characterStatsData.dashCooldown);
 
         characterStatesData.DashFlag = false;
         characterStatesData.dashCooldownFlag = true;
 
         yield return new WaitForSeconds(characterStatsData.dashCooldown);
+
+        onDashCooldownEnd?.Invoke();
 
         characterStatesData.dashCooldownFlag = false;
     }
