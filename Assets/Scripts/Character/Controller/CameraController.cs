@@ -139,15 +139,40 @@ public class CameraController : MonoBehaviour
     {
         SetCameraWithMoveSpeed();
 
+        RotateOnTargetLock();
+    }
+
+    void RotateOnTargetLock()
+    {    
         if (isTargetLocking && targetLockTarget != null)
         {
-            Vector3 dir = targetLockTarget.position - horizontalRotator.position;
-            if (dir.sqrMagnitude > 0.01f)
+            Vector3 toTarget = targetLockTarget.position - horizontalRotator.position;
+
+            if (toTarget.sqrMagnitude > 0.0001f)
             {
-                Quaternion targetRot = Quaternion.LookRotation(dir);
-                horizontalRotator.rotation = Quaternion.RotateTowards(
-                    horizontalRotator.rotation,
-                    targetRot,
+                // ─── Yaw: chỉ dùng hướng theo mặt phẳng ngang (bỏ Y) ───
+                Vector3 flatDir = new Vector3(toTarget.x, 0f, toTarget.z);
+
+                if (flatDir.sqrMagnitude > 0.0001f)
+                {
+                    Quaternion targetYawRot = Quaternion.LookRotation(flatDir, Vector3.up);
+                    horizontalRotator.rotation = Quaternion.RotateTowards(
+                        horizontalRotator.rotation,
+                        targetYawRot,
+                        targetLockMaxRotateSpeed * Time.fixedDeltaTime);
+                }
+
+                // ─── Pitch: tính góc lên/xuống, áp riêng vào verticalRotator (local) ───
+                float horizontalDistance = flatDir.magnitude;
+                float verticalDelta = toTarget.y;
+
+                // dấu trừ vì quy ước hiện tại: pitch dương = nhìn xuống, pitch âm = nhìn lên
+                float targetPitch = -Mathf.Atan2(verticalDelta, horizontalDistance) * Mathf.Rad2Deg;
+
+                Quaternion targetPitchRot = Quaternion.Euler(targetPitch, 0, 0);
+                verticalRotator.localRotation = Quaternion.RotateTowards(
+                    verticalRotator.localRotation,
+                    targetPitchRot,
                     targetLockMaxRotateSpeed * Time.fixedDeltaTime);
             }
         }
