@@ -83,7 +83,7 @@ public class CharactersManager : MonoBehaviour
             Transform spawnPoint = MapData.instance.getSpawnPoints()[i]; 
 
             GameObject character = Instantiate(characterPrefab, spawnPoint.position, Quaternion.identity);
-            character.transform.LookAt(MapData.instance.transform);
+            character.transform.forward = spawnPoint.forward;
 
             Action handler = HandleCharacterFlyingInterrupted(player);
             character.GetComponent<CharacterActionController>().onFlyingInterrupted += handler;
@@ -134,7 +134,7 @@ public class CharactersManager : MonoBehaviour
                         CharacterAccessoriesSet accessoriesSet = CharacterAccessoriesSet.MapFromResponse(response);
                         ApplyCharacterAccessories(capturedPlayer, accessoriesSet);
                         OtherPlayerAccessoriesSetResponse otherResponse = response as OtherPlayerAccessoriesSetResponse;
-                        ApplyEmblem(player, character.GetComponent<CharacterAccessoriesController>(), Emblem.FromJson(otherResponse.emblem));
+                        ApplyEmblem(player, character.GetComponent<CharacterAccessoriesController>(), Emblem.FromValueObject(otherResponse.emblem));
 
                     },
                     (code, message) =>

@@ -2,6 +2,6 @@ using System;
 
 public class KeyboardConfigurationRequest
 {
-    public String configuration;
+    public KeyboardConfigValueObject configuration;
     public float mouseSensitivity;
 }

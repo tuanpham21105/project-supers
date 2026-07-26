@@ -213,7 +213,7 @@ public class StoreUiController : WindowUiController
         return new PlayerAccessoryItemRequest
         {
             itemCode = accessory.itemCode,
-            properties = accessory.properties.ToJson()
+            properties = accessory.properties.ToValueObject()
         };
     }
 

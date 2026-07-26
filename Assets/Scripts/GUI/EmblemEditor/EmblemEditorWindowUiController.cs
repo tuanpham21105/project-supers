@@ -53,7 +53,7 @@ public class EmblemEditorWindowUiController : WindowUiController
         
         PlayerInventoryService.instance.SavePlayerEmblem(
             new EmblemRequest() {
-                emblem = tempEmblem.ToJson()
+                emblem = tempEmblem.ToValueObject()
             },
             (response) =>
             {

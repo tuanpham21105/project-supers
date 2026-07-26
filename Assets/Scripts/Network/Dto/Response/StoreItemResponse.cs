@@ -5,5 +5,5 @@ public class StoreItemResponse
     public String itemCode;
     public int price;
     public bool owned;
-    public string properties;
+    public AccessoryPropertiesValueObject properties;
 }

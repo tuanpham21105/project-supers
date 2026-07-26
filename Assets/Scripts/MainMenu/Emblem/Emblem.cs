@@ -1,25 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using UnityEngine;
-
-// ─────────────────────────────────────────────
-// Custom Converter — lưu Color dưới dạng chuỗi hex trong JSON
-// ─────────────────────────────────────────────
-// public class ColorHexConverter : JsonConverter<Color>
-// {
-//     public override void WriteJson(JsonWriter writer, Color value, JsonSerializer serializer)
-//     {
-//         writer.WriteValue("#" + ColorUtility.ToHtmlStringRGBA(value));
-//     }
-
-//     public override Color ReadJson(JsonReader reader, Type objectType, Color existingValue, bool hasExistingValue, JsonSerializer serializer)
-//     {
-//         string hex = (string)reader.Value;
-//         ColorUtility.TryParseHtmlString(hex, out Color color);
-//         return color;
-//     }
-// }
 
 [Serializable]
 public class Decal
@@ -50,11 +31,6 @@ public class Emblem
 {
     public List<Decal> decals = new List<Decal>();
 
-    private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings
-    {
-        Converters = { new ColorHexConverter() }
-    };
-
     public Emblem Clone()
     {
         Emblem clone = new Emblem();
@@ -68,16 +44,54 @@ public class Emblem
         return clone;
     }
 
-    public string ToJson()
+    public EmblemValueObject ToValueObject()
     {
-        return JsonConvert.SerializeObject(this, _settings);
+        var vo = new EmblemValueObject();
+        vo.decals = new List<DecalValueObject>();
+
+        for (int i = 0; i < decals.Count; i++)
+        {
+            var d = decals[i];
+            vo.decals.Add(new DecalValueObject
+            {
+                shapeIndex = d.shapeIndex,
+                color = ColorUtility.ToHtmlStringRGBA(d.color),
+                xPos = d.x,
+                yPos = d.y,
+                scale = d.scale,
+                rotate = d.rotate
+            });
+        }
+
+        return vo;
     }
 
-    public static Emblem FromJson(string json)
+    public static Emblem FromValueObject(EmblemValueObject vo)
     {
-        if (string.IsNullOrEmpty(json))
+        if (vo == null || vo.decals == null)
             return new Emblem();
 
-        return JsonConvert.DeserializeObject<Emblem>(json, _settings);
+        var emblem = new Emblem();
+        emblem.decals = new List<Decal>();
+
+        for (int i = 0; i < vo.decals.Count; i++)
+        {
+            var d = vo.decals[i];
+            Color color = Color.white;
+            if (!string.IsNullOrEmpty(d.color))
+                ColorUtility.TryParseHtmlString("#" + d.color, out color);
+
+            emblem.decals.Add(new Decal
+            {
+                shapeIndex = d.shapeIndex,
+                color = color,
+                x = d.xPos,
+                y = d.yPos,
+                scale = d.scale,
+                rotate = d.rotate
+            });
+        }
+
+        return emblem;
     }
 }

@@ -1,4 +1,4 @@
 public class OtherPlayerAccessoriesSetResponse : PlayerAccessoriesSetResponse
 {
-    public string emblem;
+    public EmblemValueObject emblem;
 }

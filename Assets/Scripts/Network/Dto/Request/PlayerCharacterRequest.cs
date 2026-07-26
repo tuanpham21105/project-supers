@@ -1,14 +1,14 @@
 public class PlayerCharacterRequest
 {
     public string racesCode;
-    public string racesProperties;
+    public RacesPropertiesValueObject racesProperties;
     public string eyesCode;
-    public string eyesProperties;
+    public EyesPropertiesValueObject eyesProperties;
     public string mouthCode;
     public string frontHairCode;
-    public string frontHairProperties;
+    public HairPropertiesValueObject frontHairProperties;
     public string topHairCode;
-    public string topHairProperties;
+    public HairPropertiesValueObject topHairProperties;
     public string sideHairCode;
-    public string sideHairProperties;
+    public HairPropertiesValueObject sideHairProperties;
 }

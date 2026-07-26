@@ -1,4 +1,4 @@
 public class EmblemRequest
 {
-    public string emblem;
+    public EmblemValueObject emblem;
 }

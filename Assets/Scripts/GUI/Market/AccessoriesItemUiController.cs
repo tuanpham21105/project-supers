@@ -23,14 +23,14 @@ public class AccessoriesItemUiController : MonoBehaviour
 
     public event Action<string, AccessoryProperties> onSelected;
 
-    public void SetItem(string code, Sprite sprite, int value, bool isOwned, string properties)
+    public void SetItem(string code, Sprite sprite, int value, bool isOwned, AccessoryPropertiesValueObject properties)
     {
         this.code = code;
         this.image.sprite = sprite;
         price = value;
         valueTextField.text = BigNumberStringify.decorate(price);
         this.isOwned = isOwned;
-        accessoryProperties = AccessoryProperties.FromJson(properties);
+        accessoryProperties = AccessoryProperties.FromValueObject(properties);
         if (isOwned) 
             SetOwned();
     }

@@ -1,30 +1,5 @@
 using System;
-using Newtonsoft.Json;
 using UnityEngine;
-
-public class ColorHexConverter : JsonConverter<Color>
-{
-    public override Color ReadJson(JsonReader reader, Type objectType, Color existingValue, bool hasExistingValue, JsonSerializer serializer)
-    {
-        if (reader.TokenType != JsonToken.String)
-            return existingValue;
-
-        var hex = reader.Value as string;
-        if (string.IsNullOrEmpty(hex))
-            return default;
-
-        if (!hex.StartsWith("#"))
-            hex = "#" + hex;
-
-        ColorUtility.TryParseHtmlString(hex, out Color color);
-        return color;
-    }
-
-    public override void WriteJson(JsonWriter writer, Color value, JsonSerializer serializer)
-    {
-        writer.WriteValue(ColorUtility.ToHtmlStringRGBA(value));
-    }
-}
 
 [Serializable]
 public class CharacterCustomiziesSet
@@ -75,16 +50,39 @@ public class CharacterCustomiziesSet
         return new PlayerCharacterRequest
         {
             racesCode = races?.itemSO?.code,
-            racesProperties = races?.ToPropertiesJson(),
+            racesProperties = races != null ? new RacesPropertiesValueObject
+            {
+                skinColor = ColorUtility.ToHtmlStringRGBA(races.skinColor)
+            } : null,
             eyesCode = eyes?.itemSO?.code,
-            eyesProperties = eyes?.ToPropertiesJson(),
+            eyesProperties = eyes != null ? new EyesPropertiesValueObject
+            {
+                irisColor = ColorUtility.ToHtmlStringRGBA(eyes.irisColor),
+                scleraColor = ColorUtility.ToHtmlStringRGBA(eyes.scleraColor),
+                eyebrowEyelidColor = ColorUtility.ToHtmlStringRGBA(eyes.eyebrowEyelidColor)
+            } : null,
             mouthCode = mouth?.itemSO?.code,
             frontHairCode = frontHair?.itemSO?.code,
-            frontHairProperties = frontHair?.ToPropertiesJson(),
+            frontHairProperties = frontHair != null ? new HairPropertiesValueObject
+            {
+                primaryColor = ColorUtility.ToHtmlStringRGBA(frontHair.primaryColor),
+                secondaryColor = ColorUtility.ToHtmlStringRGBA(frontHair.secondaryColor),
+                tertiaryColor = ColorUtility.ToHtmlStringRGBA(frontHair.tertiaryColor)
+            } : null,
             topHairCode = topHair?.itemSO?.code,
-            topHairProperties = topHair?.ToPropertiesJson(),
+            topHairProperties = topHair != null ? new HairPropertiesValueObject
+            {
+                primaryColor = ColorUtility.ToHtmlStringRGBA(topHair.primaryColor),
+                secondaryColor = ColorUtility.ToHtmlStringRGBA(topHair.secondaryColor),
+                tertiaryColor = ColorUtility.ToHtmlStringRGBA(topHair.tertiaryColor)
+            } : null,
             sideHairCode = sideHair?.itemSO?.code,
-            sideHairProperties = sideHair?.ToPropertiesJson(),
+            sideHairProperties = sideHair != null ? new HairPropertiesValueObject
+            {
+                primaryColor = ColorUtility.ToHtmlStringRGBA(sideHair.primaryColor),
+                secondaryColor = ColorUtility.ToHtmlStringRGBA(sideHair.secondaryColor),
+                tertiaryColor = ColorUtility.ToHtmlStringRGBA(sideHair.tertiaryColor)
+            } : null,
         };
     }
 
@@ -94,8 +92,8 @@ public class CharacterCustomiziesSet
         {
             races = new CharacterCustomizeRaces();
             races.itemSO = StoreData.instance.GetCustomizeListByType(CharacterCustomizeType.Races).findByCode(response.racesCode);
-            if (response.racesProperties != null)
-                races.FromPropertiesJson(response.racesProperties);
+            if (response.racesProperties != null && !string.IsNullOrEmpty(response.racesProperties.skinColor))
+                ColorUtility.TryParseHtmlString("#" + response.racesProperties.skinColor, out races.skinColor);
         }
 
         if (response.eyesCode != null)
@@ -103,7 +101,14 @@ public class CharacterCustomiziesSet
             eyes = new CharacterCustomizeEyes();
             eyes.itemSO = StoreData.instance.GetCustomizeListByType(CharacterCustomizeType.Eyes).findByCode(response.eyesCode);
             if (response.eyesProperties != null)
-                eyes.FromPropertiesJson(response.eyesProperties);
+            {
+                if (!string.IsNullOrEmpty(response.eyesProperties.irisColor))
+                    ColorUtility.TryParseHtmlString("#" + response.eyesProperties.irisColor, out eyes.irisColor);
+                if (!string.IsNullOrEmpty(response.eyesProperties.scleraColor))
+                    ColorUtility.TryParseHtmlString("#" + response.eyesProperties.scleraColor, out eyes.scleraColor);
+                if (!string.IsNullOrEmpty(response.eyesProperties.eyebrowEyelidColor))
+                    ColorUtility.TryParseHtmlString("#" + response.eyesProperties.eyebrowEyelidColor, out eyes.eyebrowEyelidColor);
+            }
         }
 
         if (response.mouthCode != null)
@@ -117,7 +122,14 @@ public class CharacterCustomiziesSet
             frontHair = new CharacterCustomizeHair();
             frontHair.itemSO = StoreData.instance.GetCustomizeListByType(CharacterCustomizeType.Front_Hair).findByCode(response.frontHairCode);
             if (response.frontHairProperties != null)
-                frontHair.FromPropertiesJson(response.frontHairProperties);
+            {
+                if (!string.IsNullOrEmpty(response.frontHairProperties.primaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.frontHairProperties.primaryColor, out frontHair.primaryColor);
+                if (!string.IsNullOrEmpty(response.frontHairProperties.secondaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.frontHairProperties.secondaryColor, out frontHair.secondaryColor);
+                if (!string.IsNullOrEmpty(response.frontHairProperties.tertiaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.frontHairProperties.tertiaryColor, out frontHair.tertiaryColor);
+            }
         }
 
         if (response.topHairCode != null)
@@ -125,7 +137,14 @@ public class CharacterCustomiziesSet
             topHair = new CharacterCustomizeHair();
             topHair.itemSO = StoreData.instance.GetCustomizeListByType(CharacterCustomizeType.Top_Hair).findByCode(response.topHairCode);
             if (response.topHairProperties != null)
-                topHair.FromPropertiesJson(response.topHairProperties);
+            {
+                if (!string.IsNullOrEmpty(response.topHairProperties.primaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.topHairProperties.primaryColor, out topHair.primaryColor);
+                if (!string.IsNullOrEmpty(response.topHairProperties.secondaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.topHairProperties.secondaryColor, out topHair.secondaryColor);
+                if (!string.IsNullOrEmpty(response.topHairProperties.tertiaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.topHairProperties.tertiaryColor, out topHair.tertiaryColor);
+            }
         }
 
         if (response.sideHairCode != null)
@@ -133,7 +152,14 @@ public class CharacterCustomiziesSet
             sideHair = new CharacterCustomizeHair();
             sideHair.itemSO = StoreData.instance.GetCustomizeListByType(CharacterCustomizeType.Side_Hair).findByCode(response.sideHairCode);
             if (response.sideHairProperties != null)
-                sideHair.FromPropertiesJson(response.sideHairProperties);
+            {
+                if (!string.IsNullOrEmpty(response.sideHairProperties.primaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.sideHairProperties.primaryColor, out sideHair.primaryColor);
+                if (!string.IsNullOrEmpty(response.sideHairProperties.secondaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.sideHairProperties.secondaryColor, out sideHair.secondaryColor);
+                if (!string.IsNullOrEmpty(response.sideHairProperties.tertiaryColor))
+                    ColorUtility.TryParseHtmlString("#" + response.sideHairProperties.tertiaryColor, out sideHair.tertiaryColor);
+            }
         }
     }
 }
@@ -150,25 +176,11 @@ public class CharacterCustomize
             itemSO = itemSO,
         };
     }
-
-    public virtual string ToPropertiesJson() => "{}";
-    public virtual void FromPropertiesJson(string json) { }
-
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this);
-    }
-
-    public static CharacterCustomize FromJson(string json)
-    {
-        return JsonConvert.DeserializeObject<CharacterCustomize>(json);
-    }
 }
 
 [Serializable]
 public class CharacterCustomizeRaces : CharacterCustomize
 {
-    [JsonConverter(typeof(ColorHexConverter))]
     public Color skinColor = Color.red;
 
     public new CharacterCustomizeRaces Clone()
@@ -179,39 +191,13 @@ public class CharacterCustomizeRaces : CharacterCustomize
             skinColor = skinColor,
         };
     }
-
-    public new string ToPropertiesJson()
-    {
-        var settings = new JsonSerializerSettings();
-        settings.Converters.Add(new ColorHexConverter());
-        return JsonConvert.SerializeObject(new { skinColor }, settings);
-    }
-
-    public new void FromPropertiesJson(string json)
-    {
-        JsonConvert.PopulateObject(json, this);
-    }
-
-    public new string ToJson()
-    {
-        return JsonConvert.SerializeObject(this);
-    }
-
-    public new static CharacterCustomizeRaces FromJson(string json)
-    {
-        return JsonConvert.DeserializeObject<CharacterCustomizeRaces>(json);
-    }
 }
 
 [Serializable]
 public class CharacterCustomizeEyes : CharacterCustomize
 {
-    // public Color pupilColor;
-    [JsonConverter(typeof(ColorHexConverter))]
     public Color irisColor = Color.black;
-    [JsonConverter(typeof(ColorHexConverter))]
     public Color scleraColor = Color.white;
-    [JsonConverter(typeof(ColorHexConverter))]
     public Color eyebrowEyelidColor = Color.black;
 
     public new CharacterCustomizeEyes Clone()
@@ -219,44 +205,18 @@ public class CharacterCustomizeEyes : CharacterCustomize
         return new CharacterCustomizeEyes
         {
             itemSO = itemSO,
-            // pupilColor = pupilColor,
             irisColor = irisColor,
             scleraColor = scleraColor,
             eyebrowEyelidColor = eyebrowEyelidColor,
         };
-    }
-
-    public new string ToPropertiesJson()
-    {
-        var settings = new JsonSerializerSettings();
-        settings.Converters.Add(new ColorHexConverter());
-        return JsonConvert.SerializeObject(new { irisColor, scleraColor, eyebrowEyelidColor }, settings);
-    }
-
-    public new void FromPropertiesJson(string json)
-    {
-        JsonConvert.PopulateObject(json, this);
-    }
-
-    public new string ToJson()
-    {
-        return JsonConvert.SerializeObject(this);
-    }
-
-    public new static CharacterCustomizeEyes FromJson(string json)
-    {
-        return JsonConvert.DeserializeObject<CharacterCustomizeEyes>(json);
     }
 }
 
 [Serializable]
 public class CharacterCustomizeHair : CharacterCustomize
 {
-    [JsonConverter(typeof(ColorHexConverter))]
     public Color primaryColor = Color.black;
-    [JsonConverter(typeof(ColorHexConverter))]
     public Color secondaryColor = Color.black;
-    [JsonConverter(typeof(ColorHexConverter))]
     public Color tertiaryColor = Color.black;
 
     public new CharacterCustomizeHair Clone()
@@ -268,27 +228,5 @@ public class CharacterCustomizeHair : CharacterCustomize
             secondaryColor = secondaryColor,
             tertiaryColor = tertiaryColor,
         };
-    }
-
-    public new string ToPropertiesJson()
-    {
-        var settings = new JsonSerializerSettings();
-        settings.Converters.Add(new ColorHexConverter());
-        return JsonConvert.SerializeObject(new { primaryColor, secondaryColor, tertiaryColor }, settings);
-    }
-
-    public new void FromPropertiesJson(string json)
-    {
-        JsonConvert.PopulateObject(json, this);
-    }
-
-    public new string ToJson()
-    {
-        return JsonConvert.SerializeObject(this);
-    }
-
-    public new static CharacterCustomizeHair FromJson(string json)
-    {
-        return JsonConvert.DeserializeObject<CharacterCustomizeHair>(json);
     }
 }

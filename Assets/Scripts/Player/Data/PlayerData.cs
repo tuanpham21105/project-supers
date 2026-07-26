@@ -94,7 +94,7 @@ public class CharacterAccessory
         return new CharacterAccessory
         {
             itemCode = response.itemCode,
-            properties = AccessoryProperties.FromJson(response.properties),
+            properties = AccessoryProperties.FromValueObject(response.properties),
         };
     }
 }
@@ -116,39 +116,28 @@ public class AccessoryProperties
         };
     }
 
-    public string ToJson()
+    public AccessoryPropertiesValueObject ToValueObject()
     {
-        return "{\"primaryColor\":\"#" + ColorUtility.ToHtmlStringRGBA(primaryColor)
-             + "\",\"secondaryColor\":\"#" + ColorUtility.ToHtmlStringRGBA(secondaryColor)
-             + "\",\"tertiaryColor\":\"#" + ColorUtility.ToHtmlStringRGBA(tertiaryColor) + "\"}";
+        return new AccessoryPropertiesValueObject
+        {
+            primaryColor = ColorUtility.ToHtmlStringRGBA(primaryColor),
+            secondaryColor = ColorUtility.ToHtmlStringRGBA(secondaryColor),
+            tertiaryColor = ColorUtility.ToHtmlStringRGBA(tertiaryColor)
+        };
     }
 
-    public static AccessoryProperties FromJson(string json)
+    public static AccessoryProperties FromValueObject(AccessoryPropertiesValueObject vo)
     {
-        if (string.IsNullOrEmpty(json)) return null;
+        if (vo == null) return null;
 
-        AccessoryProperties properties = new AccessoryProperties();
-
-        properties.primaryColor = ParseColor(json, "primaryColor");
-        properties.secondaryColor = ParseColor(json, "secondaryColor");
-        properties.tertiaryColor = ParseColor(json, "tertiaryColor");
-
+        var properties = new AccessoryProperties();
+        if (!string.IsNullOrEmpty(vo.primaryColor))
+            ColorUtility.TryParseHtmlString("#" + vo.primaryColor, out properties.primaryColor);
+        if (!string.IsNullOrEmpty(vo.secondaryColor))
+            ColorUtility.TryParseHtmlString("#" + vo.secondaryColor, out properties.secondaryColor);
+        if (!string.IsNullOrEmpty(vo.tertiaryColor))
+            ColorUtility.TryParseHtmlString("#" + vo.tertiaryColor, out properties.tertiaryColor);
         return properties;
-    }
-
-    private static Color ParseColor(string json, string key)
-    {
-        string hexKey = "\"" + key + "\":\"#";
-        int startIndex = json.IndexOf(hexKey);
-        if (startIndex < 0) return new Color();
-
-        startIndex += hexKey.Length;
-        int endIndex = json.IndexOf("\"", startIndex);
-        if (endIndex < 0) return new Color();
-
-        string hex = json.Substring(startIndex, endIndex - startIndex);
-        ColorUtility.TryParseHtmlString("#" + hex, out Color parsedColor);
-        return parsedColor;
     }
 }
 

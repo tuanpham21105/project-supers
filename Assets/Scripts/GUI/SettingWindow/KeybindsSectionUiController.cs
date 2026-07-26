@@ -77,9 +77,9 @@ public class KeybindsSectionUiController : MonoBehaviour
             uiKeybinds[pair.Key] = GetKeybind(pair.Key);
         }
 
-        string json = PlayerKeyboardAndMouseKeybindsData.convertKeybindsToString(uiKeybinds);
+        KeyboardConfigValueObject valueObject = PlayerKeyboardAndMouseKeybindsData.convertKeybindsToValueObject(uiKeybinds);
         KeyboardConfigurationRequest request = new KeyboardConfigurationRequest { 
-            configuration = json,
+            configuration = valueObject,
             mouseSensitivity = mouseConfigUiController.GetSensitivityFromUi()
         };
 

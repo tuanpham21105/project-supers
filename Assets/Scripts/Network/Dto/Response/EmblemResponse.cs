@@ -1,4 +1,4 @@
 public class EmblemResponse
 {
-    public string emblem;
+    public EmblemValueObject emblem;
 }

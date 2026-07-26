@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using UnityEngine;
 
 public enum KeyMode
@@ -76,36 +75,38 @@ public class PlayerKeyboardAndMouseKeybindsData : MonoBehaviour
         // { "Skill 3",       new Keybind(KeyCode.Alpha3,       KeyMode.Click,       ActivateAction.Once) },
     };
 
-    public static String convertKeybindsToString(Dictionary<string, Keybind> keybinds)
+    public static KeyboardConfigValueObject convertKeybindsToValueObject(Dictionary<string, Keybind> keybinds)
     {
-        return JsonConvert.SerializeObject(
-        keybinds,
-        new JsonSerializerSettings
+        var vo = new KeyboardConfigValueObject();
+        vo.keybinds = new List<KeybindValueObject>();
+
+        foreach (var pair in keybinds)
         {
-            Converters =
+            vo.keybinds.Add(new KeybindValueObject
             {
-                new Newtonsoft.Json.Converters.StringEnumConverter()
-            }
-        });
+                actionName = pair.Key,
+                keycode = pair.Value.key.ToString(),
+                keyMode = pair.Value.mode.ToString(),
+                activateAction = pair.Value.action.ToString()
+            });
+        }
+
+        return vo;
     }
 
-    public void setKeybindsConfig(String json)
+    public void setKeybindsConfig(KeyboardConfigValueObject vo)
     {
-        if (json.Trim() == "" || json == null) return;
+        if (vo == null || vo.keybinds == null) return;
 
-        Dictionary<string, Keybind> newKeybinds = JsonConvert.DeserializeObject<Dictionary<string, Keybind>>(
-        json,
-        new JsonSerializerSettings
+        foreach (var voKeybind in vo.keybinds)
         {
-            Converters =
-            {
-                new Newtonsoft.Json.Converters.StringEnumConverter()
-            }
-        });
+            if (string.IsNullOrEmpty(voKeybind.actionName)) continue;
 
-        foreach (var pair in newKeybinds)
-        {
-            keybinds[pair.Key] = pair.Value;
+            KeyCode keycode = (KeyCode)System.Enum.Parse(typeof(KeyCode), voKeybind.keycode);
+            KeyMode mode = (KeyMode)System.Enum.Parse(typeof(KeyMode), voKeybind.keyMode);
+            ActivateAction action = (ActivateAction)System.Enum.Parse(typeof(ActivateAction), voKeybind.activateAction);
+
+            keybinds[voKeybind.actionName] = new Keybind(keycode, mode, action);
         }
     }
 }
