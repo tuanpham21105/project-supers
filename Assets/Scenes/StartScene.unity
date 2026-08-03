@@ -7527,6 +7527,7 @@ GameObject:
   - component: {fileID: 392915919}
   - component: {fileID: 392915920}
   - component: {fileID: 392915921}
+  - component: {fileID: 392915922}
   m_Layer: 0
   m_Name: Main Menu
   m_TagString: Untagged
@@ -7604,6 +7605,18 @@ MonoBehaviour:
   rotationSpeed: 0.3
   invertDirection: 1
   ignoreWhenOverUI: 1
+--- !u!114 &392915922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392915915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fec800370e4fe7009bcaee36b2203b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &393039199
 GameObject:
   m_ObjectHideFlags: 0
