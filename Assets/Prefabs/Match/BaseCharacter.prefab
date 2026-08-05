@@ -511,6 +511,12 @@ MonoBehaviour:
   impactDecaySpeed: 2
   fastFlyRotationSpeed: 5
   normalRotationSpeed: 540
+  voxelDestroySpeedThreshold: 150
+  voxelDestroyRadius: 2
+  voxelLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  isolateVoxelFragments: 0
 --- !u!114 &2581100423338928308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1734,7 +1740,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.4
+  m_Radius: 0.6
   m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!114 &3919114745029060386
 MonoBehaviour:
@@ -1750,6 +1756,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterHitBoxesEvents: {fileID: 2008340089847332240}
   attackType: 2
+  voxelLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  isolateFragments: 0
 --- !u!1 &1346531918355050670 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1104206160547960618, guid: 967644b5c63d8ada2b4ef67874beffea, type: 3}
@@ -1779,7 +1789,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.3
+  m_Radius: 0.5
   m_Center: {x: 0, y: -0.4, z: 0}
 --- !u!114 &374283245374670385
 MonoBehaviour:
@@ -1795,6 +1805,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterHitBoxesEvents: {fileID: 2008340089847332240}
   attackType: 0
+  voxelLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  isolateFragments: 0
 --- !u!1 &1589570907045501981 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 860873981601479577, guid: 967644b5c63d8ada2b4ef67874beffea, type: 3}
@@ -1844,7 +1858,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.3
+  m_Radius: 0.5
   m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!114 &5886625562688198552
 MonoBehaviour:
@@ -1860,6 +1874,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterHitBoxesEvents: {fileID: 2008340089847332240}
   attackType: 1
+  voxelLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  isolateFragments: 0
 --- !u!1 &2489106330280636511 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4572894180204402651, guid: 967644b5c63d8ada2b4ef67874beffea, type: 3}
@@ -1939,7 +1957,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.3
+  m_Radius: 0.5
   m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!114 &108948100282980978
 MonoBehaviour:
@@ -1955,6 +1973,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterHitBoxesEvents: {fileID: 2008340089847332240}
   attackType: 1
+  voxelLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  isolateFragments: 0
 --- !u!1 &6068691412424555362 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5315770031295044838, guid: 967644b5c63d8ada2b4ef67874beffea, type: 3}
@@ -1979,7 +2001,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.3
+  m_Radius: 0.5
   m_Center: {x: 0, y: -0.4, z: 0}
 --- !u!114 &4184065019380548704
 MonoBehaviour:
@@ -1995,6 +2017,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterHitBoxesEvents: {fileID: 2008340089847332240}
   attackType: 0
+  voxelLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  isolateFragments: 0
 --- !u!1 &6246813072035320358 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5425739577202308514, guid: 967644b5c63d8ada2b4ef67874beffea, type: 3}

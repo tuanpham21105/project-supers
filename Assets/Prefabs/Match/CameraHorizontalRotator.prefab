@@ -156,7 +156,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2551
+    m_Bits: 51703
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -262,7 +262,7 @@ MonoBehaviour:
   offset: {x: 0, y: 2.75, z: -4}
   includeLayers:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 16439
   excludeLayers:
     serializedVersion: 2
     m_Bits: 4032
