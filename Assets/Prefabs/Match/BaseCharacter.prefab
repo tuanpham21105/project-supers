@@ -388,6 +388,7 @@ GameObject:
   - component: {fileID: 6057879404253952569}
   - component: {fileID: 4960533226605955257}
   - component: {fileID: 4322927498657975012}
+  - component: {fileID: 8704740697736473616}
   m_Layer: 6
   m_Name: BaseCharacter
   m_TagString: Untagged
@@ -511,12 +512,6 @@ MonoBehaviour:
   impactDecaySpeed: 2
   fastFlyRotationSpeed: 5
   normalRotationSpeed: 540
-  voxelDestroySpeedThreshold: 150
-  voxelDestroyRadius: 2
-  voxelLayerMask:
-    serializedVersion: 2
-    m_Bits: 16384
-  isolateVoxelFragments: 0
 --- !u!114 &2581100423338928308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -811,6 +806,24 @@ MonoBehaviour:
   legAccessories: {fileID: 0}
   bootsAccessories: {fileID: 0}
   racesItemSO: {fileID: 11400000, guid: b906e73d17fafb79db9f6e36f5f1072a, type: 2}
+--- !u!114 &8704740697736473616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5106734839851806242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb045ed363d3df290865abd29096d110, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  voxelDestroySpeedThreshold: 370
+  voxelDestroyRadius: 2
+  voxelLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  isolateVoxelFragments: 0
 --- !u!1 &5525359177184166986
 GameObject:
   m_ObjectHideFlags: 0
