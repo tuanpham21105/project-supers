@@ -16,6 +16,8 @@ public class MovementSfxController : MonoBehaviour
         {
             characterAnimationService.onPlayAnimation += handleAnimationPlay;
         }
+
+        GetComponent<AudioSource>().enabled = true;
     }
 
     void OnDestroy()

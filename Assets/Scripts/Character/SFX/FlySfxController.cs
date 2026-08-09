@@ -20,8 +20,14 @@ public class FlySfxController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Start()
+    {
+        GetComponent<AudioSource>().enabled = true;
+    }
+
     void FixedUpdate()
     {
+        if (!GetComponent<AudioSource>().enabled) return;
         float t = Mathf.Clamp01(characterStatesData.currentPow2AllSpeed / maxPow2MoveSpeed);
         float targetVolume = Mathf.Lerp(minVolume, maxVolume, t);
         currentVolume = Mathf.SmoothDamp(currentVolume, targetVolume, ref refVelocity, smoothTime);

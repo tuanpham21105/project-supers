@@ -9,6 +9,8 @@ public class DashSfxController : MonoBehaviour
     void Start()
     {
         characterStatesData.onDashFlagChange += handleDashFlagChange;
+
+        GetComponent<AudioSource>().enabled = true;
     }
 
     void OnDestroy()

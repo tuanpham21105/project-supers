@@ -11,8 +11,6 @@ public class WebSocketService : MonoBehaviour
     [SerializeField] private NetworkDataSO deploymentNetworkData;
     [SerializeField] private NetworkDataSO networkData;
 
-
-    [SerializeField] private string baseUrl = "";
     private string basePath = "/ws/";
     private WebSocket _ws;
 
@@ -42,8 +40,16 @@ public class WebSocketService : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
 
-        baseUrl = networkData.BaseWebSocketSchema() + networkData.BaseUrl();
+    private string ResolveBaseUrl()
+    {
+        if (ConfigLoader.IsDeploymentBuild)
+        {
+            return ConfigLoader.config.baseWebSocketSchema + ConfigLoader.config.baseUrl;
+        }
+
+        return networkData.BaseWebSocketSchema() + networkData.BaseUrl();
     }
 
     // ─────────────────────────────────────────────
@@ -52,9 +58,14 @@ public class WebSocketService : MonoBehaviour
 
     public async Task Connect()
     {
+        if (ConfigLoader.IsDeploymentBuild)
+        {
+            await ConfigLoader.LoadAsync();
+        }
+
         string token = CookieService.Get("accessToken");
         
-        string url = baseUrl + basePath + PlayerData.instance.username + "?token=" + token;
+        string url = ResolveBaseUrl() + basePath + PlayerData.instance.username + "?token=" + token;
 
         // Thêm headers vào Dictionary
         Dictionary<string, string> headers = new Dictionary<string, string>

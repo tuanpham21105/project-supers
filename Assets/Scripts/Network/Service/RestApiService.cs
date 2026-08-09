@@ -12,8 +12,6 @@ public class RestApiService : MonoBehaviour
     [SerializeField] private NetworkDataSO deploymentNetworkData;
     [SerializeField] private NetworkDataSO networkData;
 
-    [SerializeField] private string baseUrl = "";
-
     public static RestApiService instance;
 
     private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
@@ -41,8 +39,16 @@ public class RestApiService : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
 
-        baseUrl = networkData.BaseRestSchema() + networkData.BaseUrl();
+    private string ResolveBaseUrl()
+    {
+        if (ConfigLoader.IsDeploymentBuild)
+        {
+            return ConfigLoader.config.baseRestSchema + ConfigLoader.config.baseUrl;
+        }
+
+        return networkData.BaseRestSchema() + networkData.BaseUrl();
     }
     
     // ─────────────────────────────────────────────
@@ -144,7 +150,12 @@ public class RestApiService : MonoBehaviour
         Action<T> onSuccess,
         Action<long, string> onError)
     {
-        string url = baseUrl + path;
+        if (ConfigLoader.IsDeploymentBuild)
+        {
+            yield return ConfigLoader.Load();
+        }
+
+        string url = ResolveBaseUrl() + path;
         byte[] bodyBytes = null;
 
         if (body != null)

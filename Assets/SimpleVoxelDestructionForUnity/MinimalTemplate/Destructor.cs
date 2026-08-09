@@ -134,7 +134,7 @@ namespace VoxelDestructionPro.Vox
             a.maxDistance = tempAudioMaxDistance;
 
             a.Play();
-            Destroy(go, clip.length + 0.1f);
+            Destroy(go, 3f);
         }
     }
 }

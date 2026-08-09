@@ -1,0 +1,5 @@
+{
+    "baseUrl": "project-supers-client-server.cloudflared.com:8080",
+    "baseRestSchema": "https://",
+    "baseWebSocketSchema": "wss://"
+}

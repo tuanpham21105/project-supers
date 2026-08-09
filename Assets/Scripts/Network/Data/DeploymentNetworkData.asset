@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa03faef9dfc8b5f5a6cc1a4a9b3b14e, type: 3}
   m_Name: DeploymentNetworkData
   m_EditorClassIdentifier: 
-  baseUrl: blackjack-fluid-because-enhancement.trycloudflare.com
+  baseUrl: se-enhancement.trycloudflare.coment.trycloudflare.com
   baseRestSchema: https://
   baseWebSocketSchema: wss://

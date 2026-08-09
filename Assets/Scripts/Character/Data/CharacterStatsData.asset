@@ -19,7 +19,7 @@ MonoBehaviour:
   jumpForce: 10
   dashForce: 60
   dashDuration: 0.2
-  dashCooldown: 1.5
+  dashCooldown: 2
   endurance: 3000
   knockOutThreshold: 0.35
   blockThreshold: 0.5

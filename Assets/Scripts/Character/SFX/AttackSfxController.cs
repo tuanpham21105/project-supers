@@ -20,6 +20,8 @@ public class AttackSfxController : MonoBehaviour
             characterAnimationEvents.OnStrikeAttackOngoing += handleAttackOngoing(false);
             characterAnimationEvents.OnDeflectOngoing += handleDeflectOngoing;
         }
+
+        GetComponent<AudioSource>().enabled = true;
     }
 
     void OnDestroy()

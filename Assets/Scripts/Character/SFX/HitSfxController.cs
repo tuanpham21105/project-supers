@@ -20,6 +20,8 @@ public class HitSfxController : MonoBehaviour
         {
             characterTakeDamageController.onGetHit += handleGetHit;
         }
+
+        GetComponent<AudioSource>().enabled = true;
     }
 
     void OnDestroy()

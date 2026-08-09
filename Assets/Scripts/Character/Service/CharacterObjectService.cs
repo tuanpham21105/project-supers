@@ -179,7 +179,7 @@ public class CharacterObjectService : MonoBehaviour
     {
         if (isFastFly)
         {
-            GetComponent<CharacterController>().height = GetComponent<CharacterController>().radius;
+            GetComponent<CharacterController>().height = GetComponent<CharacterController>().radius * 2;
         }
         else
         {

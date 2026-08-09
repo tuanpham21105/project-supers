@@ -36564,7 +36564,6 @@ MonoBehaviour:
   developmentNetwordData: {fileID: 11400000, guid: 0a40d70c17b3298f0800f3cff7fb8545, type: 2}
   deploymentNetworkData: {fileID: 11400000, guid: 4ba76d7dcf51c901b8c5096846af254d, type: 2}
   networkData: {fileID: 11400000, guid: 0a40d70c17b3298f0800f3cff7fb8545, type: 2}
-  baseUrl: 
 --- !u!114 &1519740457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36580,7 +36579,6 @@ MonoBehaviour:
   developmentNetwordData: {fileID: 11400000, guid: 0a40d70c17b3298f0800f3cff7fb8545, type: 2}
   deploymentNetworkData: {fileID: 11400000, guid: 4ba76d7dcf51c901b8c5096846af254d, type: 2}
   networkData: {fileID: 11400000, guid: 0a40d70c17b3298f0800f3cff7fb8545, type: 2}
-  baseUrl: 
 --- !u!114 &1519740458
 MonoBehaviour:
   m_ObjectHideFlags: 0
