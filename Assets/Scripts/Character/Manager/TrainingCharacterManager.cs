@@ -312,7 +312,7 @@ public class TrainingCharacterManager : MonoBehaviour
         accessoriesController.SetEmblem(emblemMat);
 
         if (emblem.decals.Count > 0)
-            MatchHeaderUiController.instance.SetPlayerEmblem(PlayerData.instance.username, emblemMat);
+            TrainingHeaderUiController.instance.SetPlayerEmblem(emblemMat);
     }
 
     // ─────────────────────────────────────────────
